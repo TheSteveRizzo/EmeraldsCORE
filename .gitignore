@@ -1,0 +1,26 @@
+# Project exclude paths
+/out/
+
+# we use maven!
+/build.xml
+
+# maven
+/target
+
+# vim
+.*.sw[a-p]
+
+# various other potential build files
+/build
+/bin
+/dist
+/manifest.mf
+
+# Mac filesystem dust
+.DS_Store
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/

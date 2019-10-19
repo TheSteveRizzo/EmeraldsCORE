@@ -1,0 +1,14 @@
+## Staff Application config - This has to be edited to create the tables for the website. ##
+## db_host = The ip you use to connect to the db (e.g. localhost) ##
+## db_post = The port to connect to the db ##
+## db_pass = The password for the MySQL user ##
+## db_user = The username for the MySQL user ##
+## db_name = The database name that the tables will be created in ##
+## Please remember to set these options in the config.php file in /php/ in the website. ##
+db_host: "localhost"
+db_port: 3306
+db_user: "root"
+db_pass: "password"
+db_name: "applications"
+
+rank_to_promote: "helper"
