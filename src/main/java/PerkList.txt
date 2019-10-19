@@ -1,0 +1,41 @@
+MINING PERK:
+        CHANCES (BY RANK):
+            OWNER, ADMIN, MOD, YOUTUBE, DONOR 3
+                DIAMOND: 1/750
+                EMERALD: 1/2000
+            DONOR2
+                DIAMOND: 1/1000
+                EMERALD: 1/2500
+            DONOR1
+                DIAMOND: 1/1250
+                EMERALD: 1/2750
+            MEMBER:
+                DIAMOND: 1/1500
+                EMERALD: 1/3000
+            GUEST:
+                DIAMOND: N/A
+                EMERALD: N/A
+ITEMS ON PURCHASE:
+        ITEMS (BY RANK):
+                    DONOR 3
+                        DIAMOND: 512 (8*64)
+                        EMERALD: 256 (4*64)
+                        EMOTES, CRAFT, HOMES, FLY, PET?, FREE SHOP PLOT, $money, Crate?, ITEMS (GOOD PIXAXE, AXE, SHOVEL, SWORD)
+                    DONOR2
+                        DIAMOND: 384 (6*64)
+                        EMERALD: 128 (2*64)
+                    DONOR1
+                        DIAMOND: 256 (4*64)
+                        EMERALD: 64  (1*64)
+MODERATION:
+    LIST (BY RANK):
+        OWNER:
+            - BAN
+            - + PREVIOUS
+        ADMIN:
+            - TEMPORARY BAN
+            - + PREVIOUS
+        MOD/HELPER:
+            - MUTE
+            - KICK
+            - TP

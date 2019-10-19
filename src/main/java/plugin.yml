@@ -1,0 +1,28 @@
+name: EmeraldsCore
+version: "0.10"
+description: EmeraldsCore Plugin
+author: TSR
+main: com.steve_rizzo.emeraldscore.Main
+depend: [Vault, MobArena]
+soft-depend: [HolographicDisplays]
+commands:
+  rank:
+    description: Set a user's rank.
+  fly:
+    description: Set a user's ability to fly.
+  setspawn:
+    description: Set the spawn of the world.
+  spawn:
+    description: Go to the world's spawn-point.
+  bc:
+    description: Broadcast a message to the server.
+  gm:
+    description: Sets the gamemode of a player.
+  eg:
+    description: Receive a EmeraldsGames Navigator.
+  farmworld:
+    description: Go to FarmWorld!
+  kit:
+    description: Choose your kit for the MobArena!
+  floorparty:
+    description: Floor party!
