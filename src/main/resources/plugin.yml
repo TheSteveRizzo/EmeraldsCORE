@@ -1,5 +1,5 @@
 name: EmeraldsCore
-version: "0.10"
+version: ${project.version}
 description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main

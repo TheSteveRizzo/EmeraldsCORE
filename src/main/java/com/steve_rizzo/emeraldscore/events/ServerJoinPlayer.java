@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
@@ -23,6 +24,8 @@ public class ServerJoinPlayer implements Listener {
     public static Chat chat = Main.chat;
     Main serverEssentials;
 
+    private Ranks ranks = new Ranks();
+
     public static void setPlayerTabName(Player p) {
         String playerGroup = perms.getPrimaryGroup(p);
         String playerName = p.getName();
@@ -30,21 +33,17 @@ public class ServerJoinPlayer implements Listener {
         p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', prefix) + playerName);
     }
 
-    public static void firstTimeSetUserRank(String playerUUID) {
-
-    }
-
-    public static void updateUserRankWithPerms(String playerUUID) {
-
-    }
-
-    public static void retrieveUserRank(String playerUUID) {
-
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has joined The Emeralds.");
+
+        if (!e.getPlayer().hasPlayedBefore()) {
+            e.setJoinMessage(ChatColor.LIGHT_PURPLE + e.getPlayer().getName() + " has joined The Emeralds for the first time!");
+            ranks.loadFirstTimePlayer(e.getPlayer());
+        } else {
+            e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has joined The Emeralds.");
+            ranks.updateAndSaveData(e.getPlayer());
+        }
+
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
@@ -81,12 +80,13 @@ public class ServerJoinPlayer implements Listener {
 
         //Then apply this to our rocket
         fw.setFireworkMeta(fwm);
+
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        ranks.updateAndSaveData(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
-
     }
 
     private Color getColor(int i) {

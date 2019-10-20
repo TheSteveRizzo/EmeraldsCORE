@@ -14,11 +14,11 @@ public class StaffHandler extends JavaPlugin {
     public static Plugin plugin;
     public static Connection connection;
     public static String prefix = ChatColor.GRAY + "[" + ChatColor.GREEN + "EmeraldApps" + ChatColor.GRAY + "]: ";
-    private static String host = Main.host;
-    private static String port = Main.port;
-    private static String password = Main.password;
-    private static String username = Main.username;
-    private static String name = Main.name;
+    private static String host = Main.hostStaff;
+    private static String port = Main.portStaff;
+    private static String password = Main.passwordStaff;
+    private static String username = Main.usernameStaff;
+    private static String name = Main.nameStaff;
     private static Permission perms = Main.perms;
 
     public static void setRank(Player p, String rank) {

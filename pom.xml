@@ -1,24 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
-    <artifactId>ServerEssentials</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.steve_rizzo</groupId>
+    <artifactId>emeraldscore</artifactId>
+    <name>EmeraldsCore</name>
+    <version>0.10</version>
+
+    <properties>
+        <maven.compiler.source>1.12</maven.compiler.source>
+        <maven.compiler.target>1.12</maven.compiler.target>
+    </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>12</source>
-                    <target>12</target>
+                    <source>1.12</source>
+                    <target>1.12</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <repositories>
@@ -38,11 +74,13 @@
             <url>https://jitpack.io</url>
         </repository>
 
-
+        <repository>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
-
         <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -59,18 +97,26 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JitPack for MobArena -->
-        <dependency>
-            <groupId>com.github.jitpack</groupId>
-            <artifactId>maven-simple</artifactId>
-            <version>0.1</version>
-        </dependency>
-
         <!-- MobArena -->
         <dependency>
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
             <version>0.103.2</version>
+        </dependency>
+
+        <!-- Hikari -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.1</version>
+            <type>bundle</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.5</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
