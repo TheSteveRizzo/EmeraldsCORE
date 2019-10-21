@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -37,49 +38,40 @@ public class ServerJoinPlayer implements Listener {
     public void onJoin(PlayerJoinEvent e) {
 
         if (!e.getPlayer().hasPlayedBefore()) {
+
+
             e.setJoinMessage(ChatColor.LIGHT_PURPLE + e.getPlayer().getName() + " has joined The Emeralds for the first time!");
             ranks.loadFirstTimePlayer(e.getPlayer());
+
+            // Spawn 5 fireworks
+            for (int i = 0; i < 5; i++) {
+                Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+                FireworkMeta fwm = fw.getFireworkMeta();
+                addFireworkEffects(fwm);
+                fw.setFireworkMeta(fwm);
+            }
+
+            // Play a sound to inform the users about a new user joining!
+            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), "welcome.mp3", 10F, 1F);
+            }
+
         } else {
+
             e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has joined The Emeralds.");
             ranks.updateAndSaveData(e.getPlayer());
+
+            // Spawn a single firework
+            Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            FireworkMeta fwm = fw.getFireworkMeta();
+            addFireworkEffects(fwm);
+            fw.setFireworkMeta(fwm);
+
         }
 
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
-        Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
-        FireworkMeta fwm = fw.getFireworkMeta();
-
-        //Our random generator
-        Random r = new Random();
-
-        //Get the type
-        int rt = r.nextInt(4) + 1;
-        FireworkEffect.Type type = FireworkEffect.Type.BALL;
-        if (rt == 1) type = FireworkEffect.Type.BALL;
-        if (rt == 2) type = FireworkEffect.Type.BALL_LARGE;
-        if (rt == 3) type = FireworkEffect.Type.BURST;
-        if (rt == 4) type = FireworkEffect.Type.CREEPER;
-        if (rt == 5) type = FireworkEffect.Type.STAR;
-
-        //Get our random colours
-        int r1i = r.nextInt(17) + 1;
-        int r2i = r.nextInt(17) + 1;
-        Color c1 = getColor(r1i);
-        Color c2 = getColor(r2i);
-
-        //Create our effect with this
-        FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(r.nextBoolean()).build();
-
-        //Then apply the effect to the meta
-        fwm.addEffect(effect);
-
-        //Generate some random power and set it
-        int rp = r.nextInt(2) + 1;
-        fwm.setPower(rp);
-
-        //Then apply this to our rocket
-        fw.setFireworkMeta(fwm);
 
     }
 
@@ -144,5 +136,38 @@ public class ServerJoinPlayer implements Listener {
         }
 
         return c;
+    }
+
+    private FireworkMeta addFireworkEffects(FireworkMeta fwm) {
+
+        //Our random generator
+        Random r = new Random();
+
+        //Get the type
+        int rt = r.nextInt(4) + 1;
+        FireworkEffect.Type type = FireworkEffect.Type.BALL;
+        if (rt == 1) type = FireworkEffect.Type.BALL;
+        if (rt == 2) type = FireworkEffect.Type.BALL_LARGE;
+        if (rt == 3) type = FireworkEffect.Type.BURST;
+        if (rt == 4) type = FireworkEffect.Type.CREEPER;
+        if (rt == 5) type = FireworkEffect.Type.STAR;
+
+        //Get our random colours
+        int r1i = r.nextInt(17) + 1;
+        int r2i = r.nextInt(17) + 1;
+        Color c1 = getColor(r1i);
+        Color c2 = getColor(r2i);
+
+        //Create our effect with this
+        FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(r.nextBoolean()).build();
+
+        //Then apply the effect to the meta
+        fwm.addEffect(effect);
+
+        //Generate some random power and set it
+        int rp = r.nextInt(2) + 1;
+        fwm.setPower(rp);
+
+        return fwm;
     }
 }

@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore;
 
 import com.garbagemule.MobArena.MobArena;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
@@ -29,6 +30,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 public class Main extends JavaPlugin {
@@ -41,12 +44,15 @@ public class Main extends JavaPlugin {
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
     public static Main core;
     public static MobArena mobarena;
-    File spawnYML = new File(getDataFolder() + "/spawn.yml");
     private static Main instance;
-    public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
+
+    File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
+    public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
+
     private HikariDataSource hikari;
+    private FloatItem floatItem;
 
     public static Main getInstance() {
         return instance;
@@ -101,6 +107,9 @@ public class Main extends JavaPlugin {
         KitGUI kitGUI = new KitGUI();
         this.getCommand("kit").setExecutor(new KitCommand());
         Bukkit.getServer().getPluginManager().registerEvents(kitGUI, this);
+
+        floatItem = new FloatItem();
+        this.getCommand("floatitem").setExecutor(floatItem);
 
         saveDefaultConfig();
         StaffHandler.openConnection();
@@ -163,6 +172,14 @@ public class Main extends JavaPlugin {
         this.mobarena = (MobArena) plugin;
     }
 
+    public void saveYML(FileConfiguration ymlConfig, File ymlFile) {
+        try {
+            ymlConfig.save(ymlFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDisable() {
 
@@ -179,17 +196,18 @@ public class Main extends JavaPlugin {
 
         if (hikari != null) hikari.close();
 
+        Iterator it = floatItem.activeUserHolograms.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Hologram holoToDelete = (Hologram) pair.getValue();
+            it.remove();
+        }
+
+        floatItem.activeUserHolograms.clear();
+
         Bukkit.getServer().getPluginManager().disablePlugin(this);
         System.out.println(Color.RED + ChatColor.stripColor(prefix) + " has SUCCESSFULLY UNLOADED!");
 
-    }
-
-    public void saveYML(FileConfiguration ymlConfig, File ymlFile) {
-        try {
-            ymlConfig.save(ymlFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public Connection getHikari() {
@@ -205,7 +223,7 @@ public class Main extends JavaPlugin {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS Ranks(UUID varchar(36), name VARCHAR(16), rank varchar(16), date DATE)");
-            System.out.println("[EmeraldsMC - Rank Handler]: Ranks table not found. Created.");
+            System.out.println("[EmeraldsMC - Rank Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Rank Handler]: Error. See below.");
             e.printStackTrace();

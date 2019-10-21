@@ -26,9 +26,11 @@ public class FloorParty implements CommandExecutor {
             Player player = (Player) sender;
 
             if (player.hasPermission("emeraldsmc.floorparty")) {
+
                 Location loc = player.getLocation().clone().add(0.0, -1.0, 0.0);
                 int radius = 1;
                 setFloor(loc, radius, Material.OAK_WOOD);
+
             }
         }
 

@@ -73,6 +73,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <!-- HologramAPI -->
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -107,5 +112,12 @@
             <type>bundle</type>
         </dependency>
 
+        <!-- HologramAPI -->
+        <dependency>
+            <groupId>com.gmail.filoghost.holographicdisplays</groupId>
+            <artifactId>holographicdisplays-api</artifactId>
+            <version>2.4.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
