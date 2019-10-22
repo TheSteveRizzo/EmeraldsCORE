@@ -78,6 +78,11 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
+        <!-- GlowAPI -->
+        <repository>
+            <id>inventive-repo</id>
+            <url>https://repo.inventivetalent.org/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -119,5 +124,13 @@
             <version>2.4.0</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- GlowAPI (not working)-->
+        <!--<dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>glowapi</artifactId>
+            <version>1.4.10-SNAPSHOT</version>
+        </dependency>
+        -->
     </dependencies>
 </project>

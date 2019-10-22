@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Random;
 
@@ -72,12 +73,13 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
-
+        setUserGlowStatus(e.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
+        //removeUserGlowStatus(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 
@@ -170,4 +172,62 @@ public class ServerJoinPlayer implements Listener {
 
         return fwm;
     }
+
+    // Sets a user's glow.
+    private void setUserGlowStatus(Player player) {
+
+        String playerRank = perms.getPrimaryGroup(player);
+
+        if (isPermittedToUseGlow(playerRank)) {
+            // Delay until a user actually joins to set glow color.
+            Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
+                @Override
+                public void run() {
+                    GlowAPI.setGlowing(player, GlowAPI.Color.RED, player);
+                }
+            }, 20);
+        }
+    }
+
+     /*
+     private GlowAPI.Color returnGlowColor(String playerRank) {
+         switch (playerRank.toLowerCase()) {
+             case "owner":
+                 return GlowAPI.Color.RED;
+             case "admin":
+                 return GlowAPI.Color.DARK_RED;
+             case "mod":
+                 return GlowAPI.Color.AQUA;
+             case "youtuber":
+                 return GlowAPI.Color.GOLD;
+             case "elite":
+                 return GlowAPI.Color.GREEN;
+         }
+         return GlowAPI.Color.WHITE;
+     }
+      */
+
+    // Remove glow
+    private void removeUserGlowStatus(Player player) {
+
+        String playerRank = Main.perms.getPrimaryGroup(player);
+
+        if (isPermittedToUseGlow(playerRank)) {
+
+            player.setGlowing(false);
+
+        }
+    }
+
+
+    // Check if can glow
+    private boolean isPermittedToUseGlow(String rank) {
+        if ((rank.equalsIgnoreCase("elite") || (rank.equalsIgnoreCase("youtuber") ||
+                (rank.equalsIgnoreCase("mod") || (rank.equalsIgnoreCase("helper") ||
+                        (rank.equalsIgnoreCase("admin") || (rank.equalsIgnoreCase("owner"))))))))
+            return true;
+
+        return false;
+    }
+
 }

@@ -23,6 +23,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import java.awt.*;
 import java.io.File;
@@ -53,6 +56,9 @@ public class Main extends JavaPlugin {
 
     private HikariDataSource hikari;
     private FloatItem floatItem;
+
+    // For glow
+    public Team team_owner, team_admin, team_mod, team_helper, team_youtuber, team_elite;
 
     public static Main getInstance() {
         return instance;
@@ -125,6 +131,25 @@ public class Main extends JavaPlugin {
 
         createTable();
 
+        // For glow effect
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+
+        team_owner = board.registerNewTeam("Owner");
+        team_admin = board.registerNewTeam("Admin");
+        team_mod = board.registerNewTeam("Mod");
+        team_helper = board.registerNewTeam("Helper");
+        team_youtuber = board.registerNewTeam("YouTuber");
+        team_elite = board.registerNewTeam("Elite");
+
+        team_owner.setPrefix(ChatColor.RED + "");
+        team_admin.setPrefix(ChatColor.DARK_RED + "");
+        team_mod.setPrefix(ChatColor.AQUA + "");
+        team_helper.setPrefix(ChatColor.DARK_AQUA + "");
+        team_youtuber.setPrefix(ChatColor.GOLD + "");
+        team_elite.setPrefix(ChatColor.GREEN + "");
+
+        // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
     }
 
