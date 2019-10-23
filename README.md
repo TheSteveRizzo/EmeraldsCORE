@@ -2,7 +2,7 @@
 ##### The CORE plugin for the EmeraldsMC Server.
 
 ------
-#### NOTE: 
+### NOTE: 
 #####
 If you are seeing this page, you have been permitted access to the EmeraldsCORE Project. 
 
