@@ -125,12 +125,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- GlowAPI Dependency (Not Working)
+        <!-- Glow API -->
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>glowapi</artifactId>
             <version>1.4.10-SNAPSHOT</version>
         </dependency>
-        -->
     </dependencies>
 </project>
