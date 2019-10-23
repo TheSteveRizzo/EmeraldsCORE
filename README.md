@@ -2,7 +2,7 @@
 #####The CORE plugin for the EmeraldsMC Server.
 
 ------
-####NOTE: 
+#### NOTE: 
 #####
 If you are seeing this page, you have been permitted access to the EmeraldsCORE Project. 
 
@@ -15,21 +15,21 @@ By continuing to view the project and its contents, you consent to the above ter
 
 -----
 
-###How to Use:
+### How to Use:
 #####
 First, implement this project repository into your development environment (IDE). This project relies on Maven dependencies and repositories. As a result, it must be treated and built as such.
 
-#####Each package of code serves as a container with similarly-grouped classes. Please pay attention to this and stick to the format (just do the best that you can) when adding or editing features.
+Each package of code serves as a container with similarly-grouped classes. Please pay attention to this and stick to the format (just do the best that you can) when adding or editing features.
 
 -----
 
-###Developer Notes:
+### Developer Notes:
 #####
 When implementing a feature or doing *any* type of major code changes, create a SEPARATE BRANCH of the project. Once it is completed, tested, and verified, a PULL REQUEST can be made to merge the new project into the master branch of the original project.
 
 -----
 
-###JIRA Tracking:
+### JIRA Tracking:
 #####
 EmeraldsMC Core (and other projects) are to be tracked via JIRA. This allows our developers to stay on top of important releases, due dates, feature requests, etc. Using agile processes (i.e., Scrum), our tasks are created via storyboard, developed in "sprints," and are constantly being updated as a result of changing requirements and ideas.
 
@@ -37,7 +37,7 @@ Please use JIRA for every major feature, bug fix, or code remodel. If you do not
 
 -----
 
-###GamesAPI:
+### GamesAPI:
 #####
 This feature, along with most Game systems, is in early development, pending our decision to expand the network. This is put in place as a precautionary measure.
  
