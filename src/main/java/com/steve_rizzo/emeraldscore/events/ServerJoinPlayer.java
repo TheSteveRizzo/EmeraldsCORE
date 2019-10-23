@@ -79,7 +79,6 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
-        //removeUserGlowStatus(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 
@@ -183,42 +182,27 @@ public class ServerJoinPlayer implements Listener {
             Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
                 @Override
                 public void run() {
-                    GlowAPI.setGlowing(player, GlowAPI.Color.RED, player);
+                    GlowAPI.setGlowing(player, returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
                 }
             }, 20);
         }
     }
 
-     /*
-     private GlowAPI.Color returnGlowColor(String playerRank) {
-         switch (playerRank.toLowerCase()) {
-             case "owner":
-                 return GlowAPI.Color.RED;
-             case "admin":
-                 return GlowAPI.Color.DARK_RED;
-             case "mod":
-                 return GlowAPI.Color.AQUA;
-             case "youtuber":
-                 return GlowAPI.Color.GOLD;
-             case "elite":
-                 return GlowAPI.Color.GREEN;
-         }
-         return GlowAPI.Color.WHITE;
-     }
-      */
-
-    // Remove glow
-    private void removeUserGlowStatus(Player player) {
-
-        String playerRank = Main.perms.getPrimaryGroup(player);
-
-        if (isPermittedToUseGlow(playerRank)) {
-
-            player.setGlowing(false);
-
+    private GlowAPI.Color returnGlowColor(String playerRank) {
+        switch (playerRank.toLowerCase()) {
+            case "owner":
+                return GlowAPI.Color.RED;
+            case "admin":
+                return GlowAPI.Color.DARK_RED;
+            case "mod":
+                return GlowAPI.Color.AQUA;
+            case "youtuber":
+                return GlowAPI.Color.GOLD;
+            case "elite":
+                return GlowAPI.Color.GREEN;
         }
+        return GlowAPI.Color.WHITE;
     }
-
 
     // Check if can glow
     private boolean isPermittedToUseGlow(String rank) {

@@ -125,8 +125,8 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- GlowAPI (not working)-->
-        <!--<dependency>
+        <!-- GlowAPI Dependency (Not Working)
+        <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>glowapi</artifactId>
             <version>1.4.10-SNAPSHOT</version>
