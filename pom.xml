@@ -58,27 +58,27 @@
     </build>
 
     <repositories>
-        <!-- Spigot -->
+        <!-- Spigot Repo -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <!-- Vault -->
+        <!-- Vault Repo -->
         <repository>
             <id>vault-repo</id>
             <url>https://ci.ender.zone/plugin/repository/everything/net/milkbowl/vault/</url>
         </repository>
-        <!-- JitPack for MobArena -->
+        <!-- JitPack (for MobArena) Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- HologramAPI -->
+        <!-- HologramAPI Repo -->
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
-        <!-- GlowAPI -->
+        <!-- GlowAPI Repo -->
         <repository>
             <id>inventive-repo</id>
             <url>https://repo.inventivetalent.org/content/groups/public/</url>
@@ -93,7 +93,6 @@
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- Vault -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -101,22 +100,18 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- MobArena (Waiting for Maven Patch) -->
         <dependency>
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
             <version>0.103.2</version>
         </dependency>
-
         <!-- Hikari -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.4.1</version>
-            <type>bundle</type>
         </dependency>
-
         <!-- HologramAPI -->
         <dependency>
             <groupId>com.gmail.filoghost.holographicdisplays</groupId>
@@ -124,8 +119,7 @@
             <version>2.4.0</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Glow API -->
+        <!-- GlowAPI -->
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>glowapi</artifactId>
