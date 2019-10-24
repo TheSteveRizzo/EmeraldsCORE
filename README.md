@@ -1,4 +1,4 @@
-# EmeraldsCORE
+# EmeraldsCORE [![Build Status](https://travis-ci.org/thesteverizzo/EmeraldsCore.svg?branch=master)](https://travis-ci.org/TheSteveRizzo/EmeraldsCore)
 ##### The CORE plugin for the EmeraldsMC Server.
 
 ------
@@ -25,9 +25,7 @@ Each package of code serves as a container with similarly-grouped classes. Pleas
 
 ### Developer Notes:
 #####
-When implementing a feature or doing *any* type of major code changes, create a SEPARATE FORK of the project. Once it is completed, tested, and verified, a "PULL REQUEST" can be made to merge the new project into the master branch of the original project. Please use the template provided to describe the features or changes being made. 
-
-Since we are using a free Github plan, we cannot fork into our private repository. As a result, we will have to proceed a bit differently in terms of pull requests. Instead, please commit and push your work into the PULL branch (reserved for our development projects, this is the branch you will work with, implement code, and build off of). All development will take place here. Sequentially, Steve will oversee implementations made on this branch and implement changes to the MASTER branch (reserved for our deployed projects, where code builds and compiles successfully).
+When implementing a feature or doing *any* type of major code changes, create a SEPARATE FORK of the project. Once it is completed, tested, and verified, a PULL REQUEST can be made to merge the new project into the master branch of the original project. Please use the template provided to describe the features or changes being made. 
 
 -----
 
