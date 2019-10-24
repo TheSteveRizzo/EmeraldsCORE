@@ -1,4 +1,4 @@
-# EmeraldsCORE [![Build Status](https://travis-ci.org/thesteverizzo/EmeraldsCore.svg?branch=master)](https://travis-ci.org/thesteverizzo/EmeraldsCore)
+# EmeraldsCORE [![Build Status](https://travis-ci.com/thesteverizzo/EmeraldsCore.svg?branch=master)](https://travis-ci.com/thesteverizzo/EmeraldsCore)
 ##### The CORE plugin for the EmeraldsMC Server.
 
 ------
