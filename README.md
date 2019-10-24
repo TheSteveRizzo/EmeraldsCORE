@@ -25,7 +25,7 @@ Each package of code serves as a container with similarly-grouped classes. Pleas
 
 ### Developer Notes:
 #####
-When implementing a feature or doing *any* type of major code changes, create a SEPARATE BRANCH of the project. Once it is completed, tested, and verified, a PULL REQUEST can be made to merge the new project into the master branch of the original project.
+When implementing a feature or doing *any* type of major code changes, create a SEPARATE FORK of the project. Once it is completed, tested, and verified, a PULL REQUEST can be made to merge the new project into the master branch of the original project. Please use the template provided to describe the features or changes being made. 
 
 -----
 
