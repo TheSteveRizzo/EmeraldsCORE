@@ -100,11 +100,11 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
-        <!-- MobArena (Waiting for Maven Patch) -->
+        <!-- MobArena -->
         <dependency>
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
-            <version>0.103.2</version>
+            <version>0.104.1-SNAPSHOT</version>
         </dependency>
         <!-- Hikari -->
         <dependency>
