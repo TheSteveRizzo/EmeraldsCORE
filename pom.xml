@@ -81,6 +81,7 @@
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
             <version>c573fd60eb9b5e511d3f1994913aeaa9373aef65</version>
+            <version>0.104.1-SNAPSHOT</version>
         </dependency>
         <!-- Hikari -->
         <dependency>
