@@ -10,8 +10,8 @@
     <version>0.10</version>
 
     <properties>
-        <maven.compiler.source>1.12</maven.compiler.source>
-        <maven.compiler.target>1.12</maven.compiler.target>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
     </properties>
     <build>
         <plugins>
@@ -19,33 +19,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.12</source>
-                    <target>1.12</target>
+                    <source>12</source>
+                    <target>12</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 
@@ -95,7 +71,7 @@
         </dependency>
         <!-- Vault -->
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
@@ -104,7 +80,7 @@
         <dependency>
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
-            <version>0.104.1-SNAPSHOT</version>
+            <version>c573fd60eb9b5e511d3f1994913aeaa9373aef65</version>
         </dependency>
         <!-- Hikari -->
         <dependency>
