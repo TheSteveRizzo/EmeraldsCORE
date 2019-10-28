@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
+import com.steve_rizzo.emeraldscore.utils.glowutils.GlowUtil;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -16,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Random;
 
@@ -79,6 +79,7 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
+        GlowUtil.disableGlow(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 
@@ -182,26 +183,28 @@ public class ServerJoinPlayer implements Listener {
             Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
                 @Override
                 public void run() {
-                    GlowAPI.setGlowing(player, returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
+                    GlowUtil.activateGlow(player, returnGlowColor(playerRank));
                 }
             }, 20);
         }
     }
 
-    private GlowAPI.Color returnGlowColor(String playerRank) {
+    private String returnGlowColor(String playerRank) {
         switch (playerRank.toLowerCase()) {
             case "owner":
-                return GlowAPI.Color.RED;
+                return "red";
             case "admin":
-                return GlowAPI.Color.DARK_RED;
+                return "darkred";
             case "mod":
-                return GlowAPI.Color.AQUA;
+                return "aqua";
+            case "helper":
+                return "darkaqua";
             case "youtuber":
-                return GlowAPI.Color.GOLD;
+                return "gold";
             case "elite":
-                return GlowAPI.Color.GREEN;
+                return "green";
         }
-        return GlowAPI.Color.WHITE;
+        return "white";
     }
 
     // Check if can glow

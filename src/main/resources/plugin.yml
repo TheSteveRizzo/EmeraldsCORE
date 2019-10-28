@@ -1,10 +1,11 @@
 name: EmeraldsCore
 version: ${project.version}
+api-version: "1.14"
 description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
 depend: [Vault, MobArena]
-soft-depend: [HolographicDisplays]
+soft-depend: [HolographicDisplays, GlowAPI]
 commands:
   rank:
     description: Set a user's rank.
@@ -26,3 +27,5 @@ commands:
     description: Choose your kit for the MobArena!
   floorparty:
     description: Floor party!
+  floatitem:
+    description: Float an item from your hand!
