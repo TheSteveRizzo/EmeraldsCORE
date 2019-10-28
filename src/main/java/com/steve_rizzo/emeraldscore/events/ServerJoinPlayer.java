@@ -2,7 +2,6 @@ package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
-import com.steve_rizzo.emeraldscore.utils.glowutils.GlowUtil;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -73,13 +72,15 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
-        setUserGlowStatus(e.getPlayer());
+        // NOT YET FULLY TESTED & SUPPORTED.
+        // setUserGlowStatus(e.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
-        GlowUtil.disableGlow(e.getPlayer());
+        // NOT YET FULLY TESTED & SUPPORTED.
+        // GlowUtil.disableGlow(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 
@@ -178,15 +179,17 @@ public class ServerJoinPlayer implements Listener {
 
         String playerRank = perms.getPrimaryGroup(player);
 
-        if (isPermittedToUseGlow(playerRank)) {
-            // Delay until a user actually joins to set glow color.
-            Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
-                @Override
-                public void run() {
-                    GlowUtil.activateGlow(player, returnGlowColor(playerRank));
-                }
-            }, 20);
+        /** NOT YET FULLY TESTED & SUPPORTED.
+
+         if (isPermittedToUseGlow(playerRank)) {
+         // Delay until a user actually joins to set glow color.
+         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
+        @Override public void run() {
+        GlowUtil.activateGlow(player, returnGlowColor(playerRank));
         }
+        }, 20);
+         }
+         */
     }
 
     private String returnGlowColor(String playerRank) {
