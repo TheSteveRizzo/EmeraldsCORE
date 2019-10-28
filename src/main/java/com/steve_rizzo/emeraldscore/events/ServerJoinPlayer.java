@@ -34,6 +34,13 @@ public class ServerJoinPlayer implements Listener {
         p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', prefix) + playerName);
     }
 
+    public static String getPlayerPrefixAndName(Player player) {
+        String playerGroup = perms.getPrimaryGroup(player);
+        String playerName = player.getName();
+        String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
+        return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
@@ -58,7 +65,7 @@ public class ServerJoinPlayer implements Listener {
 
         } else {
 
-            e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has joined The Emeralds.");
+            e.setJoinMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has joined The Emeralds.");
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
@@ -79,6 +86,7 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
+        e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
         // NOT YET FULLY TESTED & SUPPORTED.
         // GlowUtil.disableGlow(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
@@ -207,7 +215,7 @@ public class ServerJoinPlayer implements Listener {
             case "elite":
                 return "green";
         }
-        return "white";
+        return "black";
     }
 
     // Check if can glow

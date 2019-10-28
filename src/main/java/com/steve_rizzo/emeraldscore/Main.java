@@ -7,11 +7,10 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
-import com.steve_rizzo.emeraldscore.events.RandomBlockReward;
-import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
-import com.steve_rizzo.emeraldscore.events.SpecialTNT;
+import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
+import com.steve_rizzo.emeraldscore.utils.glowutils.TeamUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -71,6 +70,7 @@ public class Main extends JavaPlugin {
         setupChat();
         setupEconomy();
         setupMobArena();
+        TeamUtil.onEnable();
 
         hostStaff = getConfig().getString("db_host");
         portStaff = getConfig().getString("db_port");
@@ -90,6 +90,8 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RandomBlockReward(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialTNT(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
