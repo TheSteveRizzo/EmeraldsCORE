@@ -12,7 +12,7 @@ public class ChatPing implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         if (e.getMessage().contains("@")) {
             Bukkit.getOnlinePlayers().forEach(player -> {
-                if (e.getMessage().contains("@" + player.getName())) {
+                if (e.getMessage().toLowerCase().contains("@" + player.getName().toLowerCase())) {
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2F, 1F);
                 }
             });
