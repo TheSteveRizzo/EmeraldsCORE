@@ -9,8 +9,6 @@ import org.bukkit.event.Listener;
 
 public class PlayerVanish implements Listener {
 
-    // TODO: Check when player vanishes and remove from tab.
-    // Check if this is a proper fix:
     @EventHandler
     public void onHide(PlayerHideEvent e) {
         Bukkit.getServer().broadcastMessage(ServerJoinPlayer.getPlayerPrefixAndName(e.getPlayer()) +
