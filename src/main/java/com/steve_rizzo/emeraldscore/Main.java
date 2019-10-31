@@ -8,6 +8,7 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
+import com.steve_rizzo.emeraldscore.features.SantaClaus;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
 import com.steve_rizzo.emeraldscore.utils.glowutils.TeamUtil;
@@ -93,6 +94,9 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
+
+        // TEST
+        Bukkit.getServer().getPluginManager().registerEvents(new SantaClaus(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());

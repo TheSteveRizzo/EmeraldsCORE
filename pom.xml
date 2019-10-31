@@ -93,6 +93,11 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
+        <!-- Citizens Repo -->
+        <repository>
+            <id>Citizens</id>
+            <url>https://repo.citizensnpcs.co/</url>
+        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -142,6 +147,14 @@
             <groupId>de.myzelyam</groupId>
             <artifactId>SuperVanish</artifactId>
             <version>6.0.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Citizens -->
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.25-SNAPSHOT</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>
