@@ -14,25 +14,28 @@
     </properties>
     <build>
         <plugins>
+            <!-- MAVEN COMPILE PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>12</source>
+                    <target>12</target>
+                </configuration>
+            </plugin>
+            <!-- MAVEN JAR PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.2</version>
-                <configuration>
-                    <finalName>EmeraldsCore</finalName>
-                </configuration>
             </plugin>
+            <!-- SHADE IN DEPENDENCY JARS -->
             <plugin>
-                <!-- SHADE IN HIKARICP -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>com.zaxxer:*:*:*</include>
-                        </includes>
-                    </artifactSet>
                 </configuration>
                 <executions>
                     <execution>
@@ -43,18 +46,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- JAVA COMPILE VERSION (JDK) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>12</source>
-                    <target>12</target>
-                </configuration>
-            </plugin>
         </plugins>
-        <!-- PLUGIN.YML FILTERING VERSION -->
+        <!-- RESOURCE HANDLING -->
         <resources>
+            <!-- INCLUDE ALL .YML FILES IN RESOURCES -->
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <!-- PLUGIN.YML FILTERING VERSION -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>

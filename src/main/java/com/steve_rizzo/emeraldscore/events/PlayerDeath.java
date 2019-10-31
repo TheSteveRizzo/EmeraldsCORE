@@ -15,6 +15,6 @@ public class PlayerDeath implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        e.setDeathMessage(prefix + ChatColor.DARK_AQUA + p.getName() + e.getDeathMessage());
+        e.setDeathMessage(prefix + ServerJoinPlayer.getPlayerPrefixAndName(p) + ChatColor.DARK_AQUA + e.getDeathMessage());
     }
 }
