@@ -79,6 +79,7 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
+        if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);
         // NOT YET FULLY TESTED & SUPPORTED.
         // setUserGlowStatus(e.getPlayer());
     }

@@ -8,6 +8,7 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
+import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SantaClaus;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
@@ -101,11 +102,13 @@ public class Main extends JavaPlugin {
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
-        this.getCommand("spawn").setExecutor(new SpawnCommand(this));
+        this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("bc").setExecutor(new BroadcastCommand());
+        this.getCommand("broadcast").setExecutor(new BroadcastCommand());
         this.getCommand("gm").setExecutor(new GamemodeCommand());
         this.getCommand("farmworld").setExecutor(new FarmworldCommand());
         this.getCommand("floorparty").setExecutor(new FloorParty());
+        this.getCommand("launchdonordrop").setExecutor(new LaunchDonorDrop());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

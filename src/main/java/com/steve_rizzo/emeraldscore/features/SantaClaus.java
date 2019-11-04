@@ -1,19 +1,19 @@
 package com.steve_rizzo.emeraldscore.features;
 
-import com.steve_rizzo.emeraldscore.emeraldsgames.api.GamesAPI;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
-import org.apache.commons.lang.time.DateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 // Class for "Santa" promotion, which provides users with a gift each day from 21 DEC (to 31) & (01 to) 04 JAN [w/ different gift options for each month].
 public class SantaClaus implements Listener {
@@ -44,6 +44,7 @@ public class SantaClaus implements Listener {
             "give {user} minecraft:emerald 4",
             "give {user} minecraft:diamond 8",
             "give {user} minecraft:coal 256",
+            "bc ",
             "give {user} minecraft:enchanted_golden_apple 6",
             "give {user} spawn_egg 1 102 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
                     "\"§7You may use,sell,or re-gift this item as you wish.\"]},EntityTag:{id:\"polar_bear\"}}");
@@ -83,7 +84,7 @@ public class SantaClaus implements Listener {
             }
         }
 
-        if ((year == 2019) && (month == 10)) {
+        if ((year == 2019) && (month == 11)) {
             if (day == 31) {
 
                 Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cgift " +

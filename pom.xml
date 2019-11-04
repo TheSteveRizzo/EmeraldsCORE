@@ -7,7 +7,7 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>0.20</version>
+    <version>0.50</version>
     <properties>
         <maven.compiler.source>12</maven.compiler.source>
         <maven.compiler.target>12</maven.compiler.target>
