@@ -12,21 +12,15 @@ import org.bukkit.entity.Player;
 
 public class SpawnCommand implements CommandExecutor {
 
-    private final Main serverEssentials;
     private FileConfiguration spawnyml;
-
-    public SpawnCommand(Main serverEssentials) {
-        this.serverEssentials = serverEssentials;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-
         if (sender instanceof Player) {
 
             String prefix = Main.prefix;
-            spawnyml = serverEssentials.spawnConfig;
+            spawnyml = Main.core.spawnConfig;
 
             Player p = (Player) sender;
 
