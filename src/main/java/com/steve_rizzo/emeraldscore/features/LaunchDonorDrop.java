@@ -65,6 +65,8 @@ public class LaunchDonorDrop implements CommandExecutor {
     public static int timesToRun = 30;
     public static BukkitTask task = null;
     private List<Location> listOfDropLocations = new ArrayList<>();
+    private int dropCount = 1;
+
     // Item by percent lists
     private List<ItemStack> itemsAt5Percent = new ArrayList<>();
     private List<ItemStack> itemsAt10Percent = new ArrayList<>();
@@ -98,7 +100,8 @@ public class LaunchDonorDrop implements CommandExecutor {
             String locSerialized = spawnyml.getString(Bukkit.getWorld("world").getName() + ".Location");
             String[] locString = locSerialized.split(",");
 
-            Location spawnLoc = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]) + 5, Double.parseDouble(locString[3]) - 3);
+            Location spawnLoc = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]),
+                    Double.parseDouble(locString[2]) + 5, Double.parseDouble(locString[3]) - 3);
 
             // Set regions to drop from in list.
             if (listOfDropLocations.isEmpty()) setRadiusListLocations(spawnLoc);
@@ -303,22 +306,19 @@ public class LaunchDonorDrop implements CommandExecutor {
         Bukkit.broadcastMessage(ChatColor.GREEN + "---------=[x+x]=---------");
 
 
+        // TEST THIS:
+
         // Begins after 5 seconds (200 Ticks)
         // Drops a total of 30 items. Each item has a chance of being dropped at the spawn droppers.
         // Spawn a random item at a random drop location every second (20 ticks) for 30 seconds (iterations)
         LimitedRepeatingTask countdown = new LimitedRepeatingTask(Main.core,
-                0, 20, 30) {
+                200, 20, 30) {
             @Override
             public void onRepeat() {
                 randomChooseItemAndSpawn();
+                increaseDropCount(playerName);
             }
         };
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Main.core, new Runnable() {
-            public void run() {
-                sendClosingMessage(playerName);
-            }
-        }, 650L);
     }
 
     private void sendClosingMessage(String playerName) {
@@ -337,5 +337,18 @@ public class LaunchDonorDrop implements CommandExecutor {
                     + ChatColor.YELLOW + ".\nThank you!");
         }
         Bukkit.broadcastMessage(ChatColor.GREEN + "---------=[x+x]=---------");
+    }
+
+    private void increaseDropCount(String playerName) {
+        if (dropCount < 30) {
+            dropCount++;
+        } else if (dropCount == 30) {
+            sendClosingMessage(playerName);
+            resetDropCount();
+        }
+    }
+
+    private void resetDropCount() {
+        dropCount = 1;
     }
 }
