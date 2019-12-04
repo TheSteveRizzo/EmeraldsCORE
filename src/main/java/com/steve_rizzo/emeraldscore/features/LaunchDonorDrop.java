@@ -25,7 +25,7 @@ public class LaunchDonorDrop implements CommandExecutor {
 
     // LIST OF GIFTS:
 
-    // [1% Chance to occur]
+    // [0.1% Chance to occur]
     // JACKPOT (32 Emeralds, 32 Diamonds,
     //      1 End Crystal, 1 Beacon)
 
@@ -78,10 +78,10 @@ public class LaunchDonorDrop implements CommandExecutor {
     }
 
     public static boolean percentChance(double percent) {
-        if (percent > 100 || percent < 0) {
-            throw new IllegalArgumentException("Percentage cannot be greater than 100 or less than 0!");
+        if (percent > 1000 || percent < 0) {
+            throw new IllegalArgumentException("Percentage cannot be greater than 1000 or less than 0!");
         }
-        double result = new Random().nextDouble() * 100;
+        double result = new Random().nextDouble() * 1000;
         return result <= percent;
     }
 
@@ -101,7 +101,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             String[] locString = locSerialized.split(",");
 
             Location spawnLoc = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]),
-                    Double.parseDouble(locString[2]) + 5, Double.parseDouble(locString[3]) - 3);
+                    Double.parseDouble(locString[2]) + 5, Double.parseDouble(locString[3]) - 4);
 
             // Set regions to drop from in list.
             if (listOfDropLocations.isEmpty()) setRadiusListLocations(spawnLoc);
@@ -147,7 +147,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             all.playSound(all.getLocation(), Sound.BLOCK_BUBBLE_COLUMN_BUBBLE_POP, 2F, 1F);
         }
 
-        // [1% Chance to occur]
+        // [0.1% Chance to occur]
         if (percentChance(1)) {
 
             ItemStack jackpotItem1 = new ItemStack(Material.EMERALD, 32);
@@ -178,13 +178,13 @@ public class LaunchDonorDrop implements CommandExecutor {
 
 
             // [2% Chance to be dropped]
-        } else if (percentChance(2)) {
+        } else if (percentChance(20)) {
 
             ItemStack endCrystal = new ItemStack(Material.END_CRYSTAL, 1);
             world.dropItemNaturally(locToSpawnItem(), endCrystal);
 
             // [5% Chance to be dropped (one of the following)]
-        } else if (percentChance(5)) {
+        } else if (percentChance(50)) {
 
             Random rand = new Random();
             ItemStack itemToDrop = (ItemStack)
@@ -193,7 +193,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             world.dropItemNaturally(locToSpawnItem(), itemToDrop);
 
             // [10% Chance to be dropped (one of the following)]
-        } else if (percentChance(10)) {
+        } else if (percentChance(100)) {
 
             Random rand = new Random();
             ItemStack itemToDrop = (ItemStack)
@@ -202,13 +202,13 @@ public class LaunchDonorDrop implements CommandExecutor {
             world.dropItemNaturally(locToSpawnItem(), itemToDrop);
 
             // [15% Chance to be dropped]
-        } else if (percentChance(15)) {
+        } else if (percentChance(150)) {
 
             ItemStack gold = new ItemStack(Material.GOLD_INGOT, 32);
             world.dropItemNaturally(locToSpawnItem(), gold);
 
             // [20% Chance to be dropped (one of the following)]
-        } else if (percentChance(20)) {
+        } else if (percentChance(200)) {
 
             Random rand = new Random();
             ItemStack itemToDrop = (ItemStack)
@@ -217,7 +217,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             world.dropItemNaturally(locToSpawnItem(), itemToDrop);
 
             // [25% Chance to be dropped]
-        } else if (percentChance(25)) {
+        } else if (percentChance(250)) {
 
             ItemStack iron = new ItemStack(Material.IRON_INGOT, 64);
             world.dropItemNaturally(locToSpawnItem(), iron);

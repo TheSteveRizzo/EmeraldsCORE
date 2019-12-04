@@ -32,6 +32,6 @@ commands:
   floatitem:
     description: Float an item from your hand!
   store:
-    description: Open a menu to view and get a link to the server store!
+    description: Displays a link to the server store!
   launchdonordrop:
     description: JACKPOT Drop Party!

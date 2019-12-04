@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Random;
 
@@ -79,9 +80,23 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
+        // Glitch fix
         if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);
-        // NOT YET FULLY TESTED & SUPPORTED.
-        // setUserGlowStatus(e.getPlayer());
+
+        String playerRank = perms.getPrimaryGroup(e.getPlayer());
+
+        /** NOT FUNCTIONING FOR 1.14
+         if (isPermittedToUseGlow(playerRank)) {
+
+         // NOT YET FULLY TESTED & SUPPORTED.
+         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
+        @Override public void run() {
+        //Set the event's player glowing in DARK_AQUA for all online players
+        GlowAPI.setGlowing(e.getPlayer(), returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
+        }
+        }, 10);
+         }
+         */
     }
 
     @EventHandler
@@ -183,40 +198,22 @@ public class ServerJoinPlayer implements Listener {
         return fwm;
     }
 
-    // Sets a user's glow.
-    private void setUserGlowStatus(Player player) {
-
-        String playerRank = perms.getPrimaryGroup(player);
-
-        /** NOT YET FULLY TESTED & SUPPORTED.
-
-         if (isPermittedToUseGlow(playerRank)) {
-         // Delay until a user actually joins to set glow color.
-         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
-        @Override public void run() {
-        GlowUtil.activateGlow(player, returnGlowColor(playerRank));
-        }
-        }, 20);
-         }
-         */
-    }
-
-    private String returnGlowColor(String playerRank) {
+    private GlowAPI.Color returnGlowColor(String playerRank) {
         switch (playerRank.toLowerCase()) {
             case "owner":
-                return "red";
+                return GlowAPI.Color.RED;
             case "admin":
-                return "darkred";
+                return GlowAPI.Color.DARK_RED;
             case "mod":
-                return "aqua";
+                return GlowAPI.Color.AQUA;
             case "helper":
-                return "darkaqua";
+                return GlowAPI.Color.DARK_AQUA;
             case "youtuber":
-                return "gold";
+                return GlowAPI.Color.GOLD;
             case "elite":
-                return "green";
+                return GlowAPI.Color.GREEN;
         }
-        return "black";
+        return GlowAPI.Color.WHITE;
     }
 
     // Check if can glow

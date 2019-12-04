@@ -1,5 +1,6 @@
 package com.steve_rizzo.emeraldscore.features;
 
+import com.steve_rizzo.emeraldscore.emeraldsgames.api.GamesAPI;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static org.bukkit.Bukkit.getServer;
+
 // Class for "Santa" promotion, which provides users with a gift each day from 21 DEC (to 31) & (01 to) 04 JAN [w/ different gift options for each month].
 public class SantaClaus implements Listener {
 
@@ -23,9 +26,8 @@ public class SantaClaus implements Listener {
             "give {user} minecraft:emerald 4",
             "give {user} minecraft:diamond 8",
             "give {user} minecraft:coal 256",
-            "bc ",
             "give {user} minecraft:enchanted_golden_apple 6",
-            "give {user} spawn_egg 1 102 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
+            "give {user} polar_bear_spawn_egg 1 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
                     "\"§7You may use,sell,or re-gift this item as you wish.\"]},EntityTag:{id:\"polar_bear\"}}");
 
     // GIFT LIST FOR (NON-DONOR USERS), FROM DEC 24 TO DEC 31
@@ -34,7 +36,7 @@ public class SantaClaus implements Listener {
             "give {user} minecraft:diamond 16",
             "give {user} minecraft:redstone 256",
             "give {user} minecraft:enchanted_golden_apple 12",
-            "give {user} spawn_egg 1 102 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
+            "give {user} polar_bear_spawn_egg 1 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
                     "\"§7You may use,sell,or re-gift this item as you wish.\"]},EntityTag:{id:\"polar_bear\"}}");
 
 
@@ -44,9 +46,8 @@ public class SantaClaus implements Listener {
             "give {user} minecraft:emerald 4",
             "give {user} minecraft:diamond 8",
             "give {user} minecraft:coal 256",
-            "bc ",
             "give {user} minecraft:enchanted_golden_apple 6",
-            "give {user} spawn_egg 1 102 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
+            "give {user} polar_bear_spawn_egg 1 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
                     "\"§7You may use,sell,or re-gift this item as you wish.\"]},EntityTag:{id:\"polar_bear\"}}");
 
     // GIFT LIST FOR (DONOR USERS), FROM DEC 24 TO DEC 31
@@ -57,7 +58,7 @@ public class SantaClaus implements Listener {
             "give {user} minecraft:gold 128",
             "give {user} minecraft:enchanted_golden_apple 12",
             "give {user} minecraft:coal 256",
-            "give {user} spawn_egg 2 102 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
+            "give {user} polar_bear_spawn_egg 2 {display:{Name:\"§aChristmas Event Gift §7(from Santa!)\",Lore:[\"§aThis item was gifted as a part of a §bChristmas Special§a!\"," +
                     "\"§7You may use,sell,or re-gift this item as you wish.\"]},EntityTag:{id:\"polar_bear\"}}");
 
     // TODO
@@ -79,30 +80,87 @@ public class SantaClaus implements Listener {
         if ((year == 2019) && (month == 12)) {
             if (day <= 24) {
 
+                // Run the 21-24 command
+
+
+                if (isDonor(p)) {
+
+                    if (!isInCooldown(p)) giveDonorGift21(p, 21);
+
+                } else {
+
+                    if (!isInCooldown(p)) giveRegularGift21(p, 21);
+                }
+
+
             } else {
 
+                // Run the 25-31 command
+
+                if (isDonor(p)) {
+
+                    if (!isInCooldown(p)) giveDonorGift21(p, 24);
+
+                } else {
+                    if (!isInCooldown(p)) giveRegularGift21(p, 24);
+
+
+                }
             }
         }
-
-        if ((year == 2019) && (month == 11)) {
-            if (day == 31) {
-
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cgift " +
-                        "&efrom &bSanta&e! Go claim your daily prize at /spawn!").replace("{user}", p.getName()));
-
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&cA random command would have been" + commandToRun(december21to24GiftList)));
-
-            } else {
-
-                p.sendMessage("ERROR SANTA CLAUS!");
-
-            }
-        }
-
     }
 
     private String commandToRun(List givenList) {
         Random rand = new Random();
         return (String) givenList.get(rand.nextInt(givenList.size()));
+    }
+
+    private boolean isDonor(Player player) {
+        return GamesAPI.isDonorOrHigher(player);
+    }
+
+    // TODO
+    private boolean isInCooldown(Player player) {
+        return false;
+    }
+
+    private void giveDonorGift21(Player player, int timeTo) {
+
+        if (timeTo == 21) {
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cdonor gift " +
+                    "&efrom &bSanta&e! Go claim your daily prize at /spawn!").replace("{user}", player.getName()));
+
+            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
+                    commandToRun(december21to24DonorGiftList).replace("{user}", player.getName()));
+
+        } else if (timeTo == 24) {
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cdonor gift " +
+                    "&efrom &bSanta&e! Go claim your daily prize at /spawn!").replace("{user}", player.getName()));
+
+            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
+                    commandToRun(december24to31DonorGiftList).replace("{user}", player.getName()));
+        }
+
+    }
+
+    private void giveRegularGift21(Player player, int timeTo) {
+
+        if (timeTo == 21) {
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cregular gift " +
+                    "&efrom &bSanta&e! Go claim your daily prize at /spawn!").replace("{user}", player.getName()));
+
+            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
+                    commandToRun(december21to24GiftList).replace("{user}", player.getName()));
+
+        } else if (timeTo == 24) {
+
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aEmeraldsMC&7]: {user} &ejust claimed a &cregular gift " +
+                    "&efrom &bSanta&e! Go claim your daily prize at /spawn!").replace("{user}", player.getName()));
+
+            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
+                    commandToRun(december24to31GiftList).replace("{user}", player.getName()));
+
+        }
+
     }
 }

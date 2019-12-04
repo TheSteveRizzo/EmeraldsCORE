@@ -12,7 +12,6 @@ import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SantaClaus;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
-import com.steve_rizzo.emeraldscore.utils.glowutils.TeamUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -72,7 +71,6 @@ public class Main extends JavaPlugin {
         setupChat();
         setupEconomy();
         setupMobArena();
-        TeamUtil.onEnable();
 
         hostStaff = getConfig().getString("db_host");
         portStaff = getConfig().getString("db_port");
@@ -109,6 +107,7 @@ public class Main extends JavaPlugin {
         this.getCommand("farmworld").setExecutor(new FarmworldCommand());
         this.getCommand("floorparty").setExecutor(new FloorParty());
         this.getCommand("launchdonordrop").setExecutor(new LaunchDonorDrop());
+        this.getCommand("store").setExecutor(new StoreCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -134,6 +133,7 @@ public class Main extends JavaPlugin {
         hikari.addDataSourceProperty("password", passwordEmeralds);
 
         createTable();
+        setPVPRegions();
 
         // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");

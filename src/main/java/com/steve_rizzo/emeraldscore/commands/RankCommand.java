@@ -29,13 +29,13 @@ public class RankCommand implements CommandExecutor {
                 String target = args[0];
                 String rankName = args[1];
 
-                if (p.hasPermission("se.rank")) {
+                if (p.hasPermission("emeraldsmc.rank")) {
 
                     switch (rankName.toLowerCase()) {
 
                         case "owner":
 
-                            if (p.hasPermission("se.rank.owner")) {
+                            if (p.hasPermission("emeraldsmc.rank.owner")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -49,7 +49,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "admin":
 
-                            if (p.hasPermission("se.rank.admin")) {
+                            if (p.hasPermission("emeraldsmc.rank.admin")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -63,7 +63,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "mod":
 
-                            if (p.hasPermission("se.rank.mod")) {
+                            if (p.hasPermission("emeraldsmc.rank.mod")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -76,7 +76,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "helper":
 
-                            if (p.hasPermission("se.rank.helper")) {
+                            if (p.hasPermission("emeraldsmc.rank.helper")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -89,7 +89,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "youtuber":
 
-                            if (p.hasPermission("se.rank.youtuber")) {
+                            if (p.hasPermission("emeraldsmc.rank.youtuber")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -102,7 +102,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "elite":
 
-                            if (p.hasPermission("se.rank.elite")) {
+                            if (p.hasPermission("emeraldsmc.rank.elite")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -113,22 +113,10 @@ public class RankCommand implements CommandExecutor {
                                 return true;
                             }
 
-                        case "donor5":
-
-                            if (p.hasPermission("se.rank.donor5")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
 
                         case "donor4":
 
-                            if (p.hasPermission("se.rank.donor4")) {
+                            if (p.hasPermission("emeraldsmc.rank.donor4")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -141,7 +129,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "donor3":
 
-                            if (p.hasPermission("se.rank.donor3")) {
+                            if (p.hasPermission("emeraldsmc.rank.donor3")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -154,7 +142,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "donor2":
 
-                            if (p.hasPermission("se.rank.donor2")) {
+                            if (p.hasPermission("emeraldsmc.rank.donor2")) {
                                 setRankPlayer(p, target, rankName);
                                 return true;
 
@@ -166,7 +154,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "donor1":
 
-                            if (p.hasPermission("se.rank.donor1")) {
+                            if (p.hasPermission("emeraldsmc.rank.donor1")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -179,7 +167,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "member":
 
-                            if (p.hasPermission("se.rank.member")) {
+                            if (p.hasPermission("emeraldsmc.rank.member")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -192,7 +180,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "guest":
 
-                            if (p.hasPermission("se.rank.guest")) {
+                            if (p.hasPermission("emeraldsmc.rank.guest")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
