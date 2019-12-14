@@ -48,8 +48,10 @@ public class Main extends JavaPlugin {
 
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
+    File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
     public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
+    public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
 
     private HikariDataSource hikari;
     private FloatItem floatItem;
@@ -66,6 +68,7 @@ public class Main extends JavaPlugin {
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
+        saveYML(cooldownConfig, cooldownNPCYML);
 
         setupPermissions();
         setupChat();
@@ -196,6 +199,7 @@ public class Main extends JavaPlugin {
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
+        saveYML(cooldownConfig, cooldownNPCYML);
 
         try {
             if (StaffHandler.connection != null && StaffHandler.connection.isClosed()) {
