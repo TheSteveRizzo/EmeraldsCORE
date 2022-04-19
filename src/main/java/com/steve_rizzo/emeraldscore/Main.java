@@ -64,6 +64,8 @@ public class Main extends JavaPlugin {
     public void onEnable() {
 
         core = this;
+
+        
         instance = this;
 
         saveYML(spawnConfig, spawnYML);
