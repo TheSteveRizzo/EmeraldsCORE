@@ -31,6 +31,7 @@ public class RulesCommand implements CommandExecutor {
                             "\n" +
                             ChatColor.AQUA + "" + ChatColor.BOLD + "=====-x+x-[/RULES]-x+x-=====";
 
+            p.sendMessage(rules);
 
             return true;
         }
