@@ -17,6 +17,8 @@ commands:
     description: Go to the world's spawn-point.
   bc:
     description: Broadcast a message to the server.
+  broadcast:
+    description: Broadcast a message to the server.
   gm:
     description: Sets the gamemode of a player.
   eg:
@@ -29,3 +31,9 @@ commands:
     description: Floor party!
   floatitem:
     description: Float an item from your hand!
+  store:
+    description: Displays a link to the server store!
+  launchdonordrop:
+    description: JACKPOT Drop Party!
+  rules:
+    description: Displays the server rules.

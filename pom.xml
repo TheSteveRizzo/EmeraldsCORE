@@ -7,32 +7,35 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>0.20</version>
+    <version>1.0b</version>
     <properties>
-        <maven.compiler.source>12</maven.compiler.source>
-        <maven.compiler.target>12</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <build>
         <plugins>
+            <!-- MAVEN COMPILE PLUGIN -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!-- MAVEN JAR PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.2</version>
-                <configuration>
-                    <finalName>EmeraldsCore</finalName>
-                </configuration>
             </plugin>
+            <!-- SHADE IN DEPENDENCY JARS -->
             <plugin>
-                <!-- SHADE IN HIKARICP -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>com.zaxxer:*:*:*</include>
-                        </includes>
-                    </artifactSet>
                 </configuration>
                 <executions>
                     <execution>
@@ -43,18 +46,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- JAVA COMPILE VERSION (JDK) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>12</source>
-                    <target>12</target>
-                </configuration>
-            </plugin>
         </plugins>
-        <!-- PLUGIN.YML FILTERING VERSION -->
+        <!-- RESOURCE HANDLING -->
         <resources>
+            <!-- INCLUDE ALL .YML FILES IN RESOURCES -->
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <!-- PLUGIN.YML FILTERING VERSION -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
@@ -83,6 +87,21 @@
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+        <!-- SuperVanish Repo -->
+        <repository>
+            <id>cubekrowd-repo</id>
+            <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
+        </repository>
+        <!-- Citizens Repo -->
+        <repository>
+            <id>Citizens</id>
+            <url>https://repo.citizensnpcs.co/</url>
+        </repository>
+        <!-- GlowAPI Repo -->
+        <repository>
+            <id>inventive-repo</id>
+            <url>https://repo.inventivetalent.org/content/groups/public/</url>
         </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
@@ -127,6 +146,27 @@
             <artifactId>holographicdisplays-api</artifactId>
             <version>2.4.0</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- SuperVanish -->
+        <dependency>
+            <groupId>de.myzelyam</groupId>
+            <artifactId>SuperVanish</artifactId>
+            <version>6.0.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Citizens -->
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.25-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <!-- GlowAPI -->
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>glowapi</artifactId>
+            <version>1.4.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

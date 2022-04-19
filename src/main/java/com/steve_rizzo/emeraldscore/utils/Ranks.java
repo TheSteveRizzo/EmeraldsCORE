@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class Ranks {
 
-    //Ranks(UUID varchar(36), name VARCHAR(16), rank varchar(16), date DATE)
+    // Ranks(UUID varchar(36), name VARCHAR(16), rank varchar(16), date DATE)
 
     private static final String FIRST_INSERT = "INSERT INTO Ranks VALUES(?,?,?,?)";
     private static final String SELECT_DATA = "SELECT rank FROM Ranks WHERE uuid=?";

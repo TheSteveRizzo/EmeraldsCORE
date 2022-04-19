@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Random;
 
@@ -32,6 +33,13 @@ public class ServerJoinPlayer implements Listener {
         String playerName = p.getName();
         String prefix = chat.getGroupPrefix(p.getWorld(), playerGroup);
         p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', prefix) + playerName);
+    }
+
+    public static String getPlayerPrefixAndName(Player player) {
+        String playerGroup = perms.getPrimaryGroup(player);
+        String playerName = player.getName();
+        String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
+        return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
     }
 
     @EventHandler
@@ -58,7 +66,7 @@ public class ServerJoinPlayer implements Listener {
 
         } else {
 
-            e.setJoinMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has joined The Emeralds.");
+            e.setJoinMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has joined The Emeralds.");
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
@@ -72,13 +80,29 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
-        // NOT YET FULLY TESTED & SUPPORTED.
-        // setUserGlowStatus(e.getPlayer());
+        // Glitch fix
+        if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);
+
+        String playerRank = perms.getPrimaryGroup(e.getPlayer());
+
+        /** NOT FUNCTIONING FOR 1.14
+         if (isPermittedToUseGlow(playerRank)) {
+
+         // NOT YET FULLY TESTED & SUPPORTED.
+         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
+        @Override public void run() {
+        //Set the event's player glowing in DARK_AQUA for all online players
+        GlowAPI.setGlowing(e.getPlayer(), returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
+        }
+        }, 10);
+         }
+         */
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
+        e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
         // NOT YET FULLY TESTED & SUPPORTED.
         // GlowUtil.disableGlow(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
@@ -174,40 +198,22 @@ public class ServerJoinPlayer implements Listener {
         return fwm;
     }
 
-    // Sets a user's glow.
-    private void setUserGlowStatus(Player player) {
-
-        String playerRank = perms.getPrimaryGroup(player);
-
-        /** NOT YET FULLY TESTED & SUPPORTED.
-
-         if (isPermittedToUseGlow(playerRank)) {
-         // Delay until a user actually joins to set glow color.
-         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
-        @Override public void run() {
-        GlowUtil.activateGlow(player, returnGlowColor(playerRank));
-        }
-        }, 20);
-         }
-         */
-    }
-
-    private String returnGlowColor(String playerRank) {
+    private GlowAPI.Color returnGlowColor(String playerRank) {
         switch (playerRank.toLowerCase()) {
             case "owner":
-                return "red";
+                return GlowAPI.Color.RED;
             case "admin":
-                return "darkred";
+                return GlowAPI.Color.DARK_RED;
             case "mod":
-                return "aqua";
+                return GlowAPI.Color.AQUA;
             case "helper":
-                return "darkaqua";
+                return GlowAPI.Color.DARK_AQUA;
             case "youtuber":
-                return "gold";
+                return GlowAPI.Color.GOLD;
             case "elite":
-                return "green";
+                return GlowAPI.Color.GREEN;
         }
-        return "white";
+        return GlowAPI.Color.WHITE;
     }
 
     // Check if can glow

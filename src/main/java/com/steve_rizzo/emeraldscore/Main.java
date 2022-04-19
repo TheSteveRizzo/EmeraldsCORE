@@ -7,9 +7,9 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
-import com.steve_rizzo.emeraldscore.events.RandomBlockReward;
-import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
-import com.steve_rizzo.emeraldscore.events.SpecialTNT;
+import com.steve_rizzo.emeraldscore.events.*;
+import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
+import com.steve_rizzo.emeraldscore.features.SantaClaus;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
 import com.zaxxer.hikari.HikariDataSource;
@@ -48,8 +48,10 @@ public class Main extends JavaPlugin {
 
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
+    File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
     public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
+    public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
 
     private HikariDataSource hikari;
     private FloatItem floatItem;
@@ -66,6 +68,7 @@ public class Main extends JavaPlugin {
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
+        saveYML(cooldownConfig, cooldownNPCYML);
 
         setupPermissions();
         setupChat();
@@ -90,15 +93,25 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RandomBlockReward(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialTNT(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
+
+        // TEST
+        Bukkit.getServer().getPluginManager().registerEvents(new SantaClaus(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
-        this.getCommand("spawn").setExecutor(new SpawnCommand(this));
+        this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("bc").setExecutor(new BroadcastCommand());
+        this.getCommand("broadcast").setExecutor(new BroadcastCommand());
         this.getCommand("gm").setExecutor(new GamemodeCommand());
         this.getCommand("farmworld").setExecutor(new FarmworldCommand());
         this.getCommand("floorparty").setExecutor(new FloorParty());
+        this.getCommand("launchdonordrop").setExecutor(new LaunchDonorDrop());
+        this.getCommand("store").setExecutor(new StoreCommand());
+        this.getCommand("rules").setExecutor(new RulesCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -124,6 +137,7 @@ public class Main extends JavaPlugin {
         hikari.addDataSourceProperty("password", passwordEmeralds);
 
         createTable();
+        setPVPRegions();
 
         // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
@@ -186,6 +200,7 @@ public class Main extends JavaPlugin {
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
+        saveYML(cooldownConfig, cooldownNPCYML);
 
         try {
             if (StaffHandler.connection != null && StaffHandler.connection.isClosed()) {
