@@ -111,6 +111,7 @@ public class Main extends JavaPlugin {
         this.getCommand("floorparty").setExecutor(new FloorParty());
         this.getCommand("launchdonordrop").setExecutor(new LaunchDonorDrop());
         this.getCommand("store").setExecutor(new StoreCommand());
+        this.getCommand("rules").setExecutor(new RulesCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

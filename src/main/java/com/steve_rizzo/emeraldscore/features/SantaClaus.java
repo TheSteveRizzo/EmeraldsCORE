@@ -22,7 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.bukkit.Bukkit.getServer;
 
-// Class for "Santa" promotion, which provides users with a gift each day from 21 DEC (to 31) & (01 to) 04 JAN [w/ different gift options for each month].
+// Class for "Santa" promotion, which provides users with a gift each day from 21 DEC (to 31)
+// & (01 to) 04 JAN [w/ different gift options for each month].
 public class SantaClaus implements Listener {
 
     FileConfiguration config = Main.core.cooldownConfig;

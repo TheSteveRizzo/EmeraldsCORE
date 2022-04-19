@@ -35,3 +35,5 @@ commands:
     description: Displays a link to the server store!
   launchdonordrop:
     description: JACKPOT Drop Party!
+  rules:
+    description: Displays the server rules.
