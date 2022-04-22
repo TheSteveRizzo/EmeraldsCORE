@@ -37,3 +37,6 @@ commands:
     description: JACKPOT Drop Party!
   rules:
     description: Displays the server rules.
+  balance:
+    description: Displays your balance.
+    aliases: [bal]
