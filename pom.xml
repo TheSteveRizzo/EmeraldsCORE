@@ -19,22 +19,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
+                <version>3.10.1</version>
             </plugin>
             <!-- MAVEN JAR PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.2</version>
             </plugin>
             <!-- SHADE IN DEPENDENCY JARS -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <configuration>
                 </configuration>
                 <executions>
@@ -95,8 +92,8 @@
         </repository>
         <!-- Citizens Repo -->
         <repository>
-            <id>Citizens</id>
-            <url>https://repo.citizensnpcs.co/</url>
+            <id>everything</id>
+            <url>http://repo.citizensnpcs.co/</url>
         </repository>
         <!-- GlowAPI Repo -->
         <repository>
@@ -106,11 +103,17 @@
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
+        <!-- MAVEN COMPILER -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version>
+        </dependency>
         <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- Vault -->
@@ -124,27 +127,27 @@
         <dependency>
             <groupId>com.github.garbagemule</groupId>
             <artifactId>MobArena</artifactId>
-            <version>c573fd60eb9b5e511d3f1994913aeaa9373aef65</version>
+            <version>0.106</version>
             <scope>provided</scope>
         </dependency>
         <!-- Hikari -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.4.1</version>
+            <version>5.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.0-alpha0</version>
+            <version>2.0.0-alpha7</version>
             <scope>compile</scope>
         </dependency>
         <!-- HologramAPI -->
         <dependency>
             <groupId>com.gmail.filoghost.holographicdisplays</groupId>
             <artifactId>holographicdisplays-api</artifactId>
-            <version>2.4.0</version>
+            <version>2.4.9</version>
             <scope>provided</scope>
         </dependency>
         <!-- SuperVanish -->
@@ -158,15 +161,15 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.25-SNAPSHOT</version>
+            <version>2.0.18-SNAPSHOT</version>
             <type>jar</type>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <!-- GlowAPI -->
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>glowapi</artifactId>
-            <version>1.4.10-SNAPSHOT</version>
+            <version>1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
