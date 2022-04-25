@@ -129,7 +129,7 @@ public class SpecialGift implements Listener {
 
         if ((year == 2022) && (month == 4)) {
 
-            if (day < 14) {
+            if (day > 1 && day < 14) {
 
                 // Run the WEEK 1 commands (DONOR)
                 if (isDonor(p)) {
@@ -154,7 +154,7 @@ public class SpecialGift implements Listener {
                     }
                 }
 
-            } else if (day < 21) {
+            } else if (day >= 14 && day < 21) {
                 // Run the WEEK 2 commands (DONOR)
                 if (isDonor(p)) {
 
@@ -177,8 +177,8 @@ public class SpecialGift implements Listener {
                                 ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
                     }
                 }
-
-            } else {
+                
+            } else if (day >= 21) {
 
                 // Run the WEEK 1 commands (DONOR)
                 if (isDonor(p)) {
