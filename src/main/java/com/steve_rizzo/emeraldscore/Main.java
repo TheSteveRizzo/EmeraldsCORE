@@ -9,7 +9,7 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
-import com.steve_rizzo.emeraldscore.features.SantaClaus;
+import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
 import com.zaxxer.hikari.HikariDataSource;
@@ -99,8 +99,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
 
-        // TEST
-        Bukkit.getServer().getPluginManager().registerEvents(new SantaClaus(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());

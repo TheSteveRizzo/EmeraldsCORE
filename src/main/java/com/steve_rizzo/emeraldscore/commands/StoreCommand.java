@@ -18,7 +18,7 @@ public class StoreCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            p.sendMessage(prefix + ChatColor.YELLOW + "Visit our store! " + ChatColor.AQUA + "store.emeraldsmc.com");
+            p.sendMessage(prefix + ChatColor.YELLOW + "Visit our store! " + ChatColor.AQUA + "emeraldsmc.buycraft.net");
 
             return true;
 
