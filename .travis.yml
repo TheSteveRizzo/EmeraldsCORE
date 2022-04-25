@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - oraclejdk11
+  - openjdk16
 sudo: false
 script: mvn clean verify
 dist: trusty
