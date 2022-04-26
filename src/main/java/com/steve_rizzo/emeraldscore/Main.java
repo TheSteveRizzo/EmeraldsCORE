@@ -98,8 +98,9 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
-
+        Bukkit.getServer().getPluginManager().registerEvents(new PingServer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
+
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());

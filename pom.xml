@@ -89,11 +89,6 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
-        <!-- Citizens Repo -->
-        <repository>
-            <id>everything</id>
-            <url>http://repo.citizensnpcs.co/</url>
-        </repository>
         <!-- GlowAPI Repo -->
         <repository>
             <id>inventive-repo</id>
@@ -155,14 +150,6 @@
             <artifactId>SuperVanish</artifactId>
             <version>6.0.4</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- Citizens -->
-        <dependency>
-            <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizensapi</artifactId>
-            <version>2.0.18-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <!-- GlowAPI -->
         <dependency>

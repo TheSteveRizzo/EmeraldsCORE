@@ -4,8 +4,8 @@ api-version: "1.14"
 description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
-depend: [Vault, MobArena]
-soft-depend: [HolographicDisplays, GlowAPI]
+depend: [Vault]
+soft-depend: [Mob Arena, HolographicDisplays, GlowAPI, SuperVanish]
 commands:
   rank:
     description: Set a user's rank.
