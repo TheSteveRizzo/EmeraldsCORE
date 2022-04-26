@@ -118,12 +118,7 @@ public class SpecialGift implements Listener {
         Entity magicLord;
         Player p;
 
-        System.out.println("Reached!!");
-        System.out.println("Execute name : " + e.getRightClicked().getName());
-
         if (e.getRightClicked().getName().equalsIgnoreCase("Magic Lord")) {
-
-            System.out.println("Reached 2!!");
 
             magicLord = e.getRightClicked();
             p = e.getPlayer();
@@ -131,9 +126,7 @@ public class SpecialGift implements Listener {
             Date curDate = new Date();
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
-
-            System.out.println("Reached. Year: " + year + " Month : " + month + " Day : " + day);
-
+            
             if ((year == 2022) && (month == 4)) {
 
                 if (day > 1 && day < 14) {
