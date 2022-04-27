@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
         StaffHandler.createTables();
 
         hikari = new HikariDataSource();
-        hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        hikari.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", hostEmeralds);
         hikari.addDataSourceProperty("port", portEmeralds);
         hikari.addDataSourceProperty("databaseName", nameEmeralds);
