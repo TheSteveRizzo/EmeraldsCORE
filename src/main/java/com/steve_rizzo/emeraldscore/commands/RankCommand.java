@@ -225,56 +225,53 @@ public class RankCommand implements CommandExecutor {
         return true;
 
     }
-
+    //Update rank
     private void setRankPlayer(Player p, String target, String rank) {
 
-        //Update rank
-        if (serverEssentials.getServer().getPlayer(target) != null) {
+        // Grab user UUID in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user " + target);
+        // Set user group in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user setgroup " + rank);
+        // Set rank of player in tab
+        Player tp = serverEssentials.getServer().getPlayer(target);
+        ServerJoinPlayer.setPlayerTabName(tp);
 
-            Player tp = serverEssentials.getServer().getPlayer(target);
-
-            String command = "setgroup" + " " + target + " " + rank;
-            serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), command);
-
-            ServerJoinPlayer.setPlayerTabName(tp);
-
-        } else {
-            p.sendMessage(prefix + ChatColor.RED + "Could not find player " + ChatColor.AQUA + target + ChatColor.RED + "!");
-            return;
-        }
-
+        // Send message to command issuer and print to Console
         p.sendMessage(prefix + "user " + ChatColor.RED + target
                 + ChatColor.GRAY + " has been updated to group "
                 + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
+        System.out.println(prefix + "user " + target + " has been updated to group "
+                + rank.toUpperCase() + "!");
 
-        if (serverEssentials.getServer().getPlayer(target).isOnline()) {
-            serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
-                    + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
-        }
-    }
-
-    //SWITCH TO VAULT
-    private void setRankConsole(String target, String rank) {
-
-        //Update rank
-        if (serverEssentials.getServer().getPlayer(target) != null) {
-            Player tp = serverEssentials.getServer().getPlayer(target);
-
-            String command = "setgroup" + " " + target + " " + rank;
-            serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), command);
-            ServerJoinPlayer.setPlayerTabName(tp);
-
-            System.out.println(prefix + "user " + target + " has been updated to group " + rank.toUpperCase() + "!");
-
+        // If target player is online, tell them that their rank has been updated
+        if ((serverEssentials.getServer().getPlayer(target) != null)) {
             if (serverEssentials.getServer().getPlayer(target).isOnline()) {
                 serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
             }
+        }
+    }
 
-        } else {
+    // Command is issued via console
+    private void setRankConsole(String target, String rank) {
+        // Grab user UUID in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user " + target);
+        // Set user group in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user setgroup " + rank);
+        // Set rank of player in tab
+        Player tp = serverEssentials.getServer().getPlayer(target);
+        ServerJoinPlayer.setPlayerTabName(tp);
 
-            System.out.println(prefix + "Could not find player " + target + "!");
+        // Send message to Console
+        System.out.println(prefix + "user " + target + " has been updated to group "
+                + rank.toUpperCase() + "!");
 
+        // If target player is online, tell them that their rank has been updated
+        if ((serverEssentials.getServer().getPlayer(target) != null)) {
+            if (serverEssentials.getServer().getPlayer(target).isOnline()) {
+                serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
+                        + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
+            }
         }
     }
 }
