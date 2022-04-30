@@ -2,7 +2,7 @@ package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
-import com.steve_rizzo.emeraldscore.utils.Ranks;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,14 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class RankCommand implements CommandExecutor {
-
+    public static Permission perms = null;
     private final Main serverEssentials;
     String prefix = Main.prefix;
 
-    Ranks ranks = Main.ranks;
-
     public RankCommand(Main serverEssentials) {
         this.serverEssentials = serverEssentials;
+        perms = Main.perms;
     }
 
     @Override
@@ -32,13 +31,15 @@ public class RankCommand implements CommandExecutor {
                 String target = args[0];
                 String rankName = args[1];
 
+                String rankOfIssuer = perms.getPrimaryGroup(p);
+
                 if (p.hasPermission("emeraldsmc.rank")) {
 
                     switch (rankName.toLowerCase()) {
 
                         case "owner":
 
-                            if (ranks.getRank(p).equalsIgnoreCase("owner")) {
+                            if (rankOfIssuer.equalsIgnoreCase("owner")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -52,8 +53,8 @@ public class RankCommand implements CommandExecutor {
 
                         case "admin":
 
-                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
-                                    (ranks.getRank(p).equalsIgnoreCase("admin"))) {
+                            if (rankOfIssuer.equalsIgnoreCase("owner") ||
+                                    (rankOfIssuer.equalsIgnoreCase("admin"))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -67,9 +68,9 @@ public class RankCommand implements CommandExecutor {
 
                         case "mod":
 
-                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
-                                    (ranks.getRank(p).equalsIgnoreCase("admin") ||
-                                            (ranks.getRank(p).equalsIgnoreCase("mod")))) {
+                            if (rankOfIssuer.equalsIgnoreCase("owner") ||
+                                    (rankOfIssuer.equalsIgnoreCase("admin") ||
+                                            (rankOfIssuer.equalsIgnoreCase("mod")))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -94,9 +95,9 @@ public class RankCommand implements CommandExecutor {
 
                         case "donor1":
 
-                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
-                                    (ranks.getRank(p).equalsIgnoreCase("admin")) ||
-                                    (ranks.getRank(p).equalsIgnoreCase("mod"))) {
+                            if (rankOfIssuer.equalsIgnoreCase("owner") ||
+                                    (rankOfIssuer.equalsIgnoreCase("admin")) ||
+                                    (rankOfIssuer.equalsIgnoreCase("mod"))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -111,10 +112,10 @@ public class RankCommand implements CommandExecutor {
 
                         case "guest":
 
-                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
-                                    (ranks.getRank(p).equalsIgnoreCase("admin")) ||
-                                    (ranks.getRank(p).equalsIgnoreCase("mod") ||
-                                            (ranks.getRank(p).equalsIgnoreCase("helper")))) {
+                            if (rankOfIssuer.equalsIgnoreCase("owner") ||
+                                    (rankOfIssuer.equalsIgnoreCase("admin")) ||
+                                    (rankOfIssuer.equalsIgnoreCase("mod") ||
+                                            (rankOfIssuer.equalsIgnoreCase("helper")))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;

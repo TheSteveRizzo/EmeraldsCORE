@@ -12,7 +12,6 @@ import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
 import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
-import com.steve_rizzo.emeraldscore.utils.Ranks;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -47,8 +46,6 @@ public class Main extends JavaPlugin {
     public static MobArena mobarena;
     private static Main instance;
 
-    public static Ranks ranks;
-
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
     File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
@@ -68,8 +65,6 @@ public class Main extends JavaPlugin {
 
         core = this;
 
-        ranks = new Ranks();
-        
         instance = this;
 
         saveYML(spawnConfig, spawnYML);
