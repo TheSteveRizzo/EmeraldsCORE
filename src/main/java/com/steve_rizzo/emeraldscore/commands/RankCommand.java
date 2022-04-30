@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import com.steve_rizzo.emeraldscore.utils.Ranks;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,6 +13,8 @@ public class RankCommand implements CommandExecutor {
 
     private final Main serverEssentials;
     String prefix = Main.prefix;
+
+    Ranks ranks = Main.ranks;
 
     public RankCommand(Main serverEssentials) {
         this.serverEssentials = serverEssentials;
@@ -35,7 +38,7 @@ public class RankCommand implements CommandExecutor {
 
                         case "owner":
 
-                            if (p.hasPermission("emeraldsmc.rank.owner")) {
+                            if (ranks.getRank(p).equalsIgnoreCase("owner")) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -49,7 +52,8 @@ public class RankCommand implements CommandExecutor {
 
                         case "admin":
 
-                            if (p.hasPermission("emeraldsmc.rank.admin")) {
+                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
+                                    (ranks.getRank(p).equalsIgnoreCase("admin"))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -63,7 +67,9 @@ public class RankCommand implements CommandExecutor {
 
                         case "mod":
 
-                            if (p.hasPermission("emeraldsmc.rank.mod")) {
+                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
+                                    (ranks.getRank(p).equalsIgnoreCase("admin") ||
+                                            (ranks.getRank(p).equalsIgnoreCase("mod")))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -76,85 +82,21 @@ public class RankCommand implements CommandExecutor {
 
                         case "helper":
 
-                            if (p.hasPermission("emeraldsmc.rank.helper")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
-
                         case "youtuber":
-
-                            if (p.hasPermission("emeraldsmc.rank.youtuber")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
 
                         case "elite":
 
-                            if (p.hasPermission("emeraldsmc.rank.elite")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
-
-
                         case "donor4":
-
-                            if (p.hasPermission("emeraldsmc.rank.donor4")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
 
                         case "donor3":
 
-                            if (p.hasPermission("emeraldsmc.rank.donor3")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
-
                         case "donor2":
-
-                            if (p.hasPermission("emeraldsmc.rank.donor2")) {
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
 
                         case "donor1":
 
-                            if (p.hasPermission("emeraldsmc.rank.donor1")) {
+                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
+                                    (ranks.getRank(p).equalsIgnoreCase("admin")) ||
+                                    (ranks.getRank(p).equalsIgnoreCase("mod"))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
@@ -167,20 +109,12 @@ public class RankCommand implements CommandExecutor {
 
                         case "member":
 
-                            if (p.hasPermission("emeraldsmc.rank.member")) {
-
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
-
                         case "guest":
 
-                            if (p.hasPermission("emeraldsmc.rank.guest")) {
+                            if (ranks.getRank(p).equalsIgnoreCase("owner") ||
+                                    (ranks.getRank(p).equalsIgnoreCase("admin")) ||
+                                    (ranks.getRank(p).equalsIgnoreCase("mod") ||
+                                            (ranks.getRank(p).equalsIgnoreCase("helper")))) {
 
                                 setRankPlayer(p, target, rankName);
                                 return true;
