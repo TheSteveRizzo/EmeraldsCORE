@@ -116,7 +116,7 @@ public class StaffHandler extends JavaPlugin {
 
     public static void openConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name, username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + name, username, password + "?autoReconnect=true");
             System.out.println("[EmeraldApps] Connection to database established.");
         } catch (Exception e) {
             System.out.println("[EmeraldApps] Error connecting to database! Please check your config details.");

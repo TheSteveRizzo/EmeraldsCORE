@@ -114,6 +114,8 @@ public class Main extends JavaPlugin {
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("balance").setExecutor(new BalanceCommand());
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("afk").setExecutor(new AFKCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

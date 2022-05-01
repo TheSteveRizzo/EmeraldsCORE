@@ -39,4 +39,9 @@ commands:
     description: Displays the server rules.
   balance:
     description: Displays your balance.
-    aliases: [bal]
+    aliases: [ bal ]
+  afk:
+    description: Toggle AFK status.
+  staffchat:
+    aliases: [ sc ]
+    description: Sends a message thru staffs chat.

@@ -167,9 +167,6 @@ public class RankCommand implements CommandExecutor {
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user " + target);
         // Set user group in console
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user setgroup " + rank);
-        // Set rank of player in tab
-        Player tp = serverEssentials.getServer().getPlayer(target);
-        ServerJoinPlayer.setPlayerTabName(tp);
 
         // Send message to command issuer and print to Console
         p.sendMessage(prefix + "user " + ChatColor.RED + target
@@ -179,11 +176,20 @@ public class RankCommand implements CommandExecutor {
                 + rank.toUpperCase() + "!");
 
         // If target player is online, tell them that their rank has been updated
-        if ((serverEssentials.getServer().getPlayer(target) != null)) {
-            if (serverEssentials.getServer().getPlayer(target).isOnline()) {
-                serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
+        Player targetPlayer = null;
+        try {
+            targetPlayer = serverEssentials.getServer().getPlayer(target);
+            assert targetPlayer != null;
+            if (targetPlayer.isOnline()) {
+                // Notify player that their rank has been updated
+                targetPlayer.sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
+                // Set rank of player in tab
+                Player tp = serverEssentials.getServer().getPlayer(target);
+                ServerJoinPlayer.setPlayerTabName(tp);
             }
+        } catch (NullPointerException ex) {
+            System.out.println("[EmeraldsCore] Player doesn't exist for ranking.");
         }
     }
 
