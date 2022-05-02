@@ -10,8 +10,6 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
-import com.steve_rizzo.emeraldscore.staffapps.StaffHandler;
-import com.steve_rizzo.emeraldscore.staffapps.events.PlayerJoin;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -93,7 +91,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new ServerJoinPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RandomBlockReward(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialTNT(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
@@ -127,10 +124,6 @@ public class Main extends JavaPlugin {
 
         floatItem = new FloatItem();
         this.getCommand("floatitem").setExecutor(floatItem);
-
-        saveDefaultConfig();
-        StaffHandler.openConnection();
-        StaffHandler.createTables();
 
         hikari = new HikariDataSource();
         hikari.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
@@ -205,14 +198,6 @@ public class Main extends JavaPlugin {
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
-
-        try {
-            if (StaffHandler.connection != null && StaffHandler.connection.isClosed()) {
-                StaffHandler.connection.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         if (hikari != null) hikari.close();
 

@@ -43,5 +43,5 @@ commands:
   afk:
     description: Toggle AFK status.
   staffchat:
-    aliases: [ sc ]
+    aliases: [ staff, ssc ]
     description: Sends a message thru staffs chat.

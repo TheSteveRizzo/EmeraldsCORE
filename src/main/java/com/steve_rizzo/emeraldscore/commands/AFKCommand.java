@@ -8,12 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AFKCommand implements CommandExecutor {
-
-    List<String> listOfAFKPlayers;
-
+    List<String> listOfAFKPlayers = new ArrayList<>();
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
