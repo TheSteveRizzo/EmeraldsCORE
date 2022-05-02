@@ -26,7 +26,6 @@ public class StaffChatCommand implements CommandExecutor {
                 for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
                     if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
                         allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
-                        return true;
                     }
                     return true;
                 }
@@ -41,9 +40,10 @@ public class StaffChatCommand implements CommandExecutor {
             for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
                 if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
                     allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
-                    return true;
                 }
             }
+
+            return true;
         }
         return true;
     }
