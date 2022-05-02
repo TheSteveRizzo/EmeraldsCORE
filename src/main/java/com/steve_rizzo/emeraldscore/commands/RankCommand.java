@@ -157,10 +157,9 @@ public class RankCommand implements CommandExecutor {
     //Update rank
     private void setRankPlayer(Player p, String target, String rank) {
 
-        // Grab user UUID in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user " + target);
-        // Set user group in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user setgroup " + rank);
+        // Update player rank in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+                "lp user " + target + " parent set " + rank);
 
         // Send message to command issuer and print to Console
         p.sendMessage(prefix + "user " + ChatColor.RED + target
@@ -189,10 +188,11 @@ public class RankCommand implements CommandExecutor {
 
     // Command is issued via console
     private void setRankConsole(String target, String rank) {
-        // Grab user UUID in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user " + target);
-        // Set user group in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(), "user setgroup " + rank);
+
+        // Update player rank in console
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+                "lp user " + target + " parent set " + rank);
+
         // Set rank of player in tab
         Player tp = serverEssentials.getServer().getPlayer(target);
         ServerJoinPlayer.setPlayerTabName(tp);
