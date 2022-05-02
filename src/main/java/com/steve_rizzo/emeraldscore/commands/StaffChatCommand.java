@@ -22,14 +22,9 @@ public class StaffChatCommand implements CommandExecutor {
             Player p = (Player) sender;
             String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ChatColor.GOLD + p.getName() + ChatColor.GRAY + " >> ";
 
-            String playerRank = Main.perms.getPrimaryGroup(p);
-            if (playerRank.equalsIgnoreCase("helper") || playerRank.equalsIgnoreCase("mod") ||
-                    (playerRank.equalsIgnoreCase("admin") || (playerRank.equalsIgnoreCase("owner")))) {
-
+            if (p.hasPermission("emeraldsmc.staffchat")) {
                 for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
-                    String rankOfONLINE = Main.perms.getPrimaryGroup(allstaffplayer);
-                    if (rankOfONLINE.equalsIgnoreCase("helper") || rankOfONLINE.equalsIgnoreCase("mod") ||
-                            (rankOfONLINE.equalsIgnoreCase("admin") || (rankOfONLINE.equalsIgnoreCase("owner")))) {
+                    if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
                         allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
                         return true;
                     }
@@ -44,14 +39,10 @@ public class StaffChatCommand implements CommandExecutor {
             String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ChatColor.GOLD + "CONSOLE" + ChatColor.GRAY + " >> ";
 
             for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
-                String rank = Main.perms.getPrimaryGroup(allstaffplayer);
-                if (rank.equalsIgnoreCase("helper") || rank.equalsIgnoreCase("mod") ||
-                        (rank.equalsIgnoreCase("admin") || (rank.equalsIgnoreCase("owner")))) {
+                if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
                     allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
                     return true;
-
                 }
-                return true;
             }
         }
         return true;

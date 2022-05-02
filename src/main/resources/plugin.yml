@@ -45,3 +45,6 @@ commands:
   staffchat:
     aliases: [ staff, ssc ]
     description: Sends a message thru staffs chat.
+  maintenance:
+    aliases: [ maintenancemode, mm, maint ]
+    description: Puts the server into maintenance mode.

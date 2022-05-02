@@ -112,6 +112,7 @@ public class Main extends JavaPlugin {
         this.getCommand("balance").setExecutor(new BalanceCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("afk").setExecutor(new AFKCommand());
+        this.getCommand("maintenance").setExecutor(new MaintenanceMode());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
