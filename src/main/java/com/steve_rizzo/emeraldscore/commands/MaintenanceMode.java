@@ -69,9 +69,13 @@ public class MaintenanceMode implements CommandExecutor {
 
         } else {
 
-            setMaintenanceMode();
-            return true;
-
+            if (!isInMaintMode) {
+                setMaintenanceMode();
+                return true;
+            } else {
+                endMaintenanceMode();
+                return true;
+            }
         }
     }
 }
