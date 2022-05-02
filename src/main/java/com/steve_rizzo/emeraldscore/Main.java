@@ -43,7 +43,6 @@ public class Main extends JavaPlugin {
     public static Main core;
     public static MobArena mobarena;
     private static Main instance;
-
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
     File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");

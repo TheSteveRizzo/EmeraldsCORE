@@ -69,12 +69,7 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <!-- Vault Repo -->
-        <repository>
-            <id>vault-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/net/milkbowl/vault/</url>
-        </repository>
-        <!-- JitPack (for MobArena) Repo -->
+        <!-- JitPack (for Vault) Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>

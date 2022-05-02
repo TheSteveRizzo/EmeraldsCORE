@@ -31,9 +31,13 @@ public class RankCommand implements CommandExecutor {
                 String target = args[0];
                 String rankName = args[1];
 
-                String rankOfIssuer = perms.getPrimaryGroup(p);
+                String rankOfIssuer = Main.perms.getPrimaryGroup(p);
 
-                if (p.hasPermission("emeraldsmc.rank")) {
+                boolean isStaff = rankOfIssuer.equalsIgnoreCase("owner") ||
+                        (rankOfIssuer.equalsIgnoreCase("admin")) ||
+                        (rankOfIssuer.equalsIgnoreCase("mod") ||
+                                (rankOfIssuer.equalsIgnoreCase("helper")));
+                if (isStaff) {
 
                     switch (rankName.toLowerCase()) {
 
@@ -112,19 +116,9 @@ public class RankCommand implements CommandExecutor {
 
                         case "guest":
 
-                            if (rankOfIssuer.equalsIgnoreCase("owner") ||
-                                    (rankOfIssuer.equalsIgnoreCase("admin")) ||
-                                    (rankOfIssuer.equalsIgnoreCase("mod") ||
-                                            (rankOfIssuer.equalsIgnoreCase("helper")))) {
+                            setRankPlayer(p, target, rankName);
+                            return true;
 
-                                setRankPlayer(p, target, rankName);
-                                return true;
-
-                            } else {
-
-                                p.sendMessage(prefix + ChatColor.RED + "No permission.");
-                                return true;
-                            }
                     }
 
                 } else {
