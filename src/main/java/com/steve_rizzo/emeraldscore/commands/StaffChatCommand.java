@@ -27,8 +27,10 @@ public class StaffChatCommand implements CommandExecutor {
                     if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
                         allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
                     }
-                    return true;
                 }
+
+                return true;
+
             } else {
                 p.sendMessage(Main.prefix + ChatColor.RED + "No permission!");
                 return true;
@@ -45,7 +47,6 @@ public class StaffChatCommand implements CommandExecutor {
 
             return true;
         }
-        return true;
     }
 }
 
