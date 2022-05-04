@@ -1,13 +1,11 @@
 package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -24,7 +22,6 @@ public class ServerJoinPlayer implements Listener {
 
     public static Permission perms = Main.perms;
     public static Chat chat = Main.chat;
-    Main serverEssentials;
 
     private Ranks ranks = new Ranks();
 
@@ -61,7 +58,7 @@ public class ServerJoinPlayer implements Listener {
 
             // Play a sound to inform the users about a new user joining!
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), "welcome.mp3", 10F, 1F);
+                e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
             }
 
         } else {
@@ -80,31 +77,30 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
+        if (!EmeraldsCashAPI.doesPlayerAccountExist(e.getPlayer())) {
+            EmeraldsCashAPI.createAccount(e.getPlayer());
+        }
+
         // Glitch fix
         if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);
 
         String playerRank = perms.getPrimaryGroup(e.getPlayer());
 
-        /** NOT FUNCTIONING FOR 1.14
-         if (isPermittedToUseGlow(playerRank)) {
 
-         // NOT YET FULLY TESTED & SUPPORTED.
-         Bukkit.getScheduler().runTaskLater(Main.core, new Runnable() {
-        @Override public void run() {
-        //Set the event's player glowing in DARK_AQUA for all online players
-        GlowAPI.setGlowing(e.getPlayer(), returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
+        if (isPermittedToUseGlow(playerRank)) {
+
+            // NOT YET FULLY TESTED & SUPPORTED.
+            Bukkit.getScheduler().runTaskLater(Main.core, () -> {
+                //Set the event's player glowing in DARK_AQUA for all online players
+                GlowAPI.setGlowing(e.getPlayer(), returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
+            }, 10);
         }
-        }, 10);
-         }
-         */
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ranks.updateAndSaveData(e.getPlayer());
         e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
-        // NOT YET FULLY TESTED & SUPPORTED.
-        // GlowUtil.disableGlow(e.getPlayer());
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 

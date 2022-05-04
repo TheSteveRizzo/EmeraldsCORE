@@ -37,9 +37,6 @@ commands:
     description: JACKPOT Drop Party!
   rules:
     description: Displays the server rules.
-  balance:
-    description: Displays your balance.
-    aliases: [ bal ]
   afk:
     description: Toggle AFK status.
   staffchat:
@@ -48,3 +45,18 @@ commands:
   maintenance:
     aliases: [ maintenancemode, mm, maint ]
     description: Puts the server into maintenance mode.
+  balance:
+    description: Displays your balance.
+    aliases: [ bal ]
+  pay:
+    aliases: [sendmoney]
+    description: Send a player an amount of Emeralds Cash.
+  setbalance:
+    aliases: [setbal]
+    description: Sets the balance of a player.
+  takebalance:
+    aliases: [takebal]
+    description: Takes from the balance of a player.
+  givebalance:
+    aliases: [givebal]
+    description: Gives to a balance of a player.

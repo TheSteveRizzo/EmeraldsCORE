@@ -3,6 +3,8 @@ package com.steve_rizzo.emeraldscore;
 import com.garbagemule.MobArena.MobArena;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.steve_rizzo.emeraldscore.commands.*;
+import com.steve_rizzo.emeraldscore.commands.economy.*;
+import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
@@ -20,6 +22,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.awt.*;
@@ -28,15 +31,34 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Main extends JavaPlugin {
 
     public static String prefix;
     public static Permission perms = null;
     public static Economy economy = null;
+    public EconomyImplement economyImplementer;
+
+    private void instanceClasses() {
+        economyImplementer = new EconomyImplement();
+    }
+
+    private Economy provider;
+
+    public void hook() {
+        provider = economyImplementer;
+        Bukkit.getServicesManager().register(Economy.class, this.provider, this, ServicePriority.Normal);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VaultAPI hooked into " + ChatColor.AQUA + this.getName());
+    }
+
+    public void unhook() {
+        Bukkit.getServicesManager().unregister(Economy.class, this.provider);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + this.getName());
+
+    }
+
+
     public static Chat chat = null;
     public static String hostStaff, portStaff, passwordStaff, usernameStaff, nameStaff,
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
@@ -63,6 +85,9 @@ public class Main extends JavaPlugin {
         core = this;
 
         instance = this;
+
+        instanceClasses();
+        hook();
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
@@ -109,10 +134,15 @@ public class Main extends JavaPlugin {
         this.getCommand("launchdonordrop").setExecutor(new LaunchDonorDrop());
         this.getCommand("store").setExecutor(new StoreCommand());
         this.getCommand("rules").setExecutor(new RulesCommand());
-        this.getCommand("balance").setExecutor(new BalanceCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("afk").setExecutor(new AFKCommand());
         this.getCommand("maintenance").setExecutor(new MaintenanceMode());
+
+        this.getCommand("balance").setExecutor(new BalanceCommand());
+        this.getCommand("pay").setExecutor(new PayCommand());
+        this.getCommand("setbalance").setExecutor(new SetCommand());
+        this.getCommand("takebalance").setExecutor(new TakeCommand());
+        this.getCommand("givebalance").setExecutor(new GiveCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -134,6 +164,7 @@ public class Main extends JavaPlugin {
         hikari.addDataSourceProperty("password", passwordEmeralds);
 
         createTable();
+        createEconomyTable();
         setPVPRegions();
 
         // Plugin startup success
@@ -195,6 +226,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        unhook();
+
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
@@ -231,6 +264,17 @@ public class Main extends JavaPlugin {
             System.out.println("[EmeraldsMC - Rank Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Rank Handler]: Error. See below.");
+            e.printStackTrace();
+        }
+    }
+
+    public void createEconomyTable() {
+        try (Connection connection = hikari.getConnection();
+             Statement statement = connection.createStatement();) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36), name VARCHAR(16), balance INT, date DATE)");
+            System.out.println("[EmeraldsMC - Currency Handler]: Table created and/or connected successfully.");
+        } catch (SQLException e) {
+            System.out.println("[EmeraldsMC - Currency Handler]: Error. See below.");
             e.printStackTrace();
         }
     }
