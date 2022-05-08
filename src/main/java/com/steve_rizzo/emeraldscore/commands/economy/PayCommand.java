@@ -49,7 +49,7 @@ public class PayCommand implements CommandExecutor {
 
                                 EmeraldsCashAPI.deductFunds(p, amount);
                                 EmeraldsCashAPI.addFunds(target, amount);
-                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just sent " + ChatColor.AQUA + tarPlayerName + ChatColor.GRAY + "$" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash.");
+                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just sent " + ChatColor.AQUA + tarPlayerName + ChatColor.GRAY + " $" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash.");
                                 target.sendMessage(Main.prefix + ChatColor.GRAY + "You just received " + ChatColor.GRAY + "$" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash from " + ChatColor.AQUA + p.getName() + ChatColor.GRAY + ".");
 
                                 return true;

@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 public class Main extends JavaPlugin {
 
@@ -271,7 +273,7 @@ public class Main extends JavaPlugin {
     public void createEconomyTable() {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36), name VARCHAR(16), balance INT, date DATE)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE)");
             System.out.println("[EmeraldsMC - Currency Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Currency Handler]: Error. See below.");

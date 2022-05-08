@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -95,7 +96,6 @@ public class GiveCommand implements CommandExecutor {
 
                         if (Bukkit.getServer().getPlayer(tarPlayerName).isOnline()) {
 
-
                             EmeraldsCashAPI.addFunds(target, amount);
                             System.out.println(Main.prefix + ChatColor.GRAY + "You just gave $" + ChatColor.GREEN + amount + ChatColor.GRAY + " to " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + "'s balance.");
                             target.sendMessage(Main.prefix + ChatColor.GRAY + "The amount of $" + ChatColor.GREEN + amount + ChatColor.GRAY + " was given to your balance.");
@@ -108,8 +108,15 @@ public class GiveCommand implements CommandExecutor {
                         }
 
                     } else {
-                        System.out.println(Main.prefix + ChatColor.RED + "Error: player must exist.");
-                        return true;
+
+                        OfflinePlayer offline = Bukkit.getOfflinePlayer(tarPlayerName);
+                        if (offline.hasPlayedBefore()) {
+                            String uuid = offline.getUniqueId().toString();
+                            EmeraldsCashAPI.addFundsToUUID(uuid, amount);
+                            return true;
+                        } else {
+                            System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
+                        }
                     }
                 }
 

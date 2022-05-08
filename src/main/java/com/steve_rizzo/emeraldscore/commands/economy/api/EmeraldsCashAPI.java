@@ -45,6 +45,12 @@ public class EmeraldsCashAPI {
         updatePlayerCurrencyAmount(player, newBal);
     }
 
+    public static void deductFundsUUID(String uuid, int amount) {
+        int existingBal = returnPlayerUUIDCurrencyAmount(uuid);
+        int newBal = (existingBal - amount);
+        updatePlayerUUIDCurrencyAmount(uuid, newBal);
+    }
+
     public static void addFunds(Player player, int amount) {
         int existingBal = returnPlayerCurrencyAmount(player);
         int newBal = (existingBal + amount);
@@ -84,6 +90,33 @@ public class EmeraldsCashAPI {
 
     }
 
+    public static void createAccountUUID(String uuid) {
+
+        int amountOnFirstJoin = 500;
+
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateTime = format.format(date);
+
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement insert = connection.prepareStatement(INSERT_CURRENCY_DATA)) {
+                insert.setString(1, uuid);
+                insert.setString(2, null);
+                insert.setInt(3, amountOnFirstJoin);
+                insert.setString(4, currentDateTime);
+                insert.execute();
+
+                System.out.println("[EmeraldsMC - Currency Handler]: Data CREATED for " + uuid + ".");
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+    }
+
     public static boolean doesPlayerAccountExist(Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
             try (Connection connection = Main.getInstance().getHikari();
@@ -91,10 +124,33 @@ public class EmeraldsCashAPI {
                 selectionStatement.setString(1, player.getUniqueId().toString());
                 selectionStatement.execute();
                 ResultSet resultBalance = selectionStatement.executeQuery();
-                System.out.println("[EmeraldsMC - Currency Handler]: Data QUERIED for " + player.getName() + ".");
                 if (!resultBalance.isBeforeFirst()) {
                     accountExists = false;
+                    System.out.println("[EmeraldsMC - Currency Handler]: Data QUERIED, account does NOT exist for " + player.getName() + ".");
                 } else {
+                    System.out.println("[EmeraldsMC - Currency Handler]: Data QUERIED, account DOES exist for " + player.getName() + ".");
+                    accountExists = true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return accountExists;
+    }
+
+    public static boolean doesPlayerUUIDAccountExist(String uuid) {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement selectionStatement = connection.prepareStatement(QUERY_CURRENCY_DATA)) {
+                selectionStatement.setString(1, uuid);
+                selectionStatement.execute();
+                ResultSet resultBalance = selectionStatement.executeQuery();
+                if (!resultBalance.isBeforeFirst()) {
+                    accountExists = false;
+                    System.out.println("[EmeraldsMC - Currency Handler]: Data QUERIED, account does NOT exist for " + uuid + ".");
+                } else {
+                    System.out.println("[EmeraldsMC - Currency Handler]: Data QUERIED, account DOES exist for " + uuid + ".");
                     accountExists = true;
                 }
             } catch (SQLException e) {
