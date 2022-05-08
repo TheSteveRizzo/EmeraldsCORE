@@ -52,11 +52,14 @@ commands:
     aliases: [sendmoney]
     description: Send a player an amount of Emeralds Cash.
   setbalance:
-    aliases: [setbal]
+    aliases: [ setbal ]
     description: Sets the balance of a player.
   takebalance:
-    aliases: [takebal]
+    aliases: [ takebal ]
     description: Takes from the balance of a player.
   givebalance:
-    aliases: [givebal]
+    aliases: [ givebal ]
     description: Gives to a balance of a player.
+  baltop:
+    aliases: [ balancetop, topbal, moneytop ]
+    description: Lists the top balances of players on the server.

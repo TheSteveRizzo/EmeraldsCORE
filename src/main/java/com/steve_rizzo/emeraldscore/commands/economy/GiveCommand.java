@@ -45,7 +45,7 @@ public class GiveCommand implements CommandExecutor {
 
 
                                 EmeraldsCashAPI.addFunds(target, amount);
-                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just took $" + ChatColor.GREEN + amount + ChatColor.GRAY + " from " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + "'s balance.");
+                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just added $" + ChatColor.GREEN + amount + ChatColor.GRAY + " from " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + "'s balance.");
                                 target.sendMessage(Main.prefix + ChatColor.GRAY + "The amount of $" + ChatColor.GREEN + amount + ChatColor.GRAY + " was given to your balance.");
 
                                 return true;
@@ -56,7 +56,18 @@ public class GiveCommand implements CommandExecutor {
                             }
 
                         } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "Error: player must exist.");
+                            for (OfflinePlayer offlinePlayers : Bukkit.getServer().getOfflinePlayers()) {
+
+                                if (tarPlayerName.equalsIgnoreCase(offlinePlayers.getName())) {
+
+                                    EmeraldsCashAPI.addFundsToUUID(offlinePlayers.getUniqueId().toString(), amount);
+
+                                    return true;
+
+                                }
+                            }
+
+                            p.sendMessage(Main.prefix + ChatColor.RED + "Error: player has not played before.");
                             return true;
                         }
                     }
@@ -109,14 +120,19 @@ public class GiveCommand implements CommandExecutor {
 
                     } else {
 
-                        OfflinePlayer offline = Bukkit.getOfflinePlayer(tarPlayerName);
-                        if (offline.hasPlayedBefore()) {
-                            String uuid = offline.getUniqueId().toString();
-                            EmeraldsCashAPI.addFundsToUUID(uuid, amount);
-                            return true;
-                        } else {
-                            System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
+                        for (OfflinePlayer offlinePlayers : Bukkit.getServer().getOfflinePlayers()) {
+
+                            if (tarPlayerName.equalsIgnoreCase(offlinePlayers.getName())) {
+
+                                EmeraldsCashAPI.addFundsToUUID(offlinePlayers.getUniqueId().toString(), amount);
+
+                                return true;
+
+                            }
                         }
+
+                        System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
+                        return true;
                     }
                 }
 

@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,7 +57,18 @@ public class SetCommand implements CommandExecutor {
                             }
 
                         } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "Error: player must exist.");
+                            for (OfflinePlayer offlinePlayers : Bukkit.getServer().getOfflinePlayers()) {
+
+                                if (tarPlayerName.equalsIgnoreCase(offlinePlayers.getName())) {
+
+                                    EmeraldsCashAPI.setBalanceUUID(offlinePlayers.getUniqueId().toString(), amount);
+
+                                    return true;
+
+                                }
+                            }
+
+                            System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
                             return true;
                         }
                     }
@@ -110,7 +122,18 @@ public class SetCommand implements CommandExecutor {
                         }
 
                     } else {
-                        System.out.println(Main.prefix + ChatColor.RED + "Error: player must exist.");
+                        for (OfflinePlayer offlinePlayers : Bukkit.getServer().getOfflinePlayers()) {
+
+                            if (tarPlayerName.equalsIgnoreCase(offlinePlayers.getName())) {
+
+                                EmeraldsCashAPI.setBalanceUUID(offlinePlayers.getUniqueId().toString(), amount);
+
+                                return true;
+
+                            }
+                        }
+
+                        System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
                         return true;
                     }
                 }

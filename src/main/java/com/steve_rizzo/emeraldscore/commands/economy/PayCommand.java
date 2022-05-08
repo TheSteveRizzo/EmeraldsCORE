@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,29 +44,34 @@ public class PayCommand implements CommandExecutor {
 
                     if (target != null) {
 
-                        if (Bukkit.getServer().getPlayer(tarPlayerName).isOnline()) {
 
-                            if ((EmeraldsCashAPI.getBalance(p)) > amount) {
+                        if ((EmeraldsCashAPI.getBalance(p)) > amount) {
 
-                                EmeraldsCashAPI.deductFunds(p, amount);
-                                EmeraldsCashAPI.addFunds(target, amount);
-                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just sent " + ChatColor.AQUA + tarPlayerName + ChatColor.GRAY + " $" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash.");
-                                target.sendMessage(Main.prefix + ChatColor.GRAY + "You just received " + ChatColor.GRAY + "$" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash from " + ChatColor.AQUA + p.getName() + ChatColor.GRAY + ".");
+                            EmeraldsCashAPI.deductFunds(p, amount);
+                            EmeraldsCashAPI.addFunds(target, amount);
+                            p.sendMessage(Main.prefix + ChatColor.GRAY + "You just sent " + ChatColor.AQUA + tarPlayerName + ChatColor.GRAY + " $" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash.");
+                            target.sendMessage(Main.prefix + ChatColor.GRAY + "You just received " + ChatColor.GRAY + "$" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash from " + ChatColor.AQUA + p.getName() + ChatColor.GRAY + ".");
 
-                                return true;
-
-                            } else {
-                                p.sendMessage(Main.prefix + ChatColor.RED + "Error: insufficient funds.");
-                                return true;
-                            }
+                            return true;
 
                         } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "Error: player must be online.");
+                            p.sendMessage(Main.prefix + ChatColor.RED + "Error: insufficient funds.");
                             return true;
                         }
 
                     } else {
-                        p.sendMessage(Main.prefix + ChatColor.RED + "Error: player must exist.");
+                        for (OfflinePlayer offlinePlayers : Bukkit.getServer().getOfflinePlayers()) {
+
+                            if (tarPlayerName.equalsIgnoreCase(offlinePlayers.getName())) {
+
+                                EmeraldsCashAPI.deductFunds(p, amount);
+                                EmeraldsCashAPI.addFundsToUUID(offlinePlayers.getUniqueId().toString(), amount);
+                                return true;
+
+                            }
+                        }
+
+                        System.out.println(Main.prefix + ChatColor.RED + "Error: player has not played before.");
                         return true;
                     }
 

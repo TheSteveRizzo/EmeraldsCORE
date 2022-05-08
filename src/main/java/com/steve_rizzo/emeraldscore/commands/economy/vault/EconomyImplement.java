@@ -251,29 +251,21 @@ public class EconomyImplement implements Economy {
 
     @Override
     public boolean createPlayerAccount(String s) {
-        if (!EmeraldsCashAPI.doesPlayerAccountExist(Bukkit.getPlayer(s)))
-            EmeraldsCashAPI.createAccountUUID(s);
         return true;
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        if (!EmeraldsCashAPI.doesPlayerUUIDAccountExist(offlinePlayer.getUniqueId().toString()))
-            EmeraldsCashAPI.createAccountUUID(offlinePlayer.getUniqueId().toString());
         return true;
     }
 
     @Override
     public boolean createPlayerAccount(String s, String s1) {
-        if (!EmeraldsCashAPI.doesPlayerAccountExist(Bukkit.getPlayer(s)))
-            EmeraldsCashAPI.createAccount(Bukkit.getPlayer(s));
         return true;
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s) {
-        if (!EmeraldsCashAPI.doesPlayerUUIDAccountExist(offlinePlayer.getUniqueId().toString()))
-            EmeraldsCashAPI.createAccountUUID(offlinePlayer.getUniqueId().toString());
         return true;
     }
 }
