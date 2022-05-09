@@ -30,17 +30,11 @@ public class BalanceCommand implements CommandExecutor {
 
                     Player target = Bukkit.getServer().getPlayer(args[0]);
 
-                    if (EmeraldsCashAPI.doesPlayerAccountExist(target)) {
+                    int tarBal = EmeraldsCashAPI.getBalance(target);
+                    assert target != null;
+                    p.sendMessage(Main.prefix + ChatColor.GRAY + "The balance of " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " is: $" + ChatColor.GREEN + tarBal + ChatColor.GRAY + ".");
+                    return true;
 
-                        int tarBal = EmeraldsCashAPI.getBalance(target);
-                        assert target != null;
-                        p.sendMessage(Main.prefix + ChatColor.GRAY + "The balance of " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " is: $" + ChatColor.GREEN + tarBal + ChatColor.GRAY + ".");
-                        return true;
-
-                    } else {
-                        p.sendMessage(Main.prefix + ChatColor.RED + "Error: " + ChatColor.GRAY + "account does not exist.");
-                        return true;
-                    }
                 } else {
                     p.sendMessage(Main.prefix + ChatColor.RED + "Error: " + ChatColor.GRAY + "player does not exist.");
                     return true;

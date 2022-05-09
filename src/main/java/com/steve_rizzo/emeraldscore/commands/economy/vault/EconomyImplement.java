@@ -53,27 +53,22 @@ public class EconomyImplement implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return EmeraldsCashAPI.doesPlayerAccountExist(Bukkit.getPlayer(s));
+        return true;
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        if (offlinePlayer.hasPlayedBefore()) {
-            String uuid = offlinePlayer.getUniqueId().toString();
-            return EmeraldsCashAPI.doesPlayerUUIDAccountExist(uuid);
-        } else {
-            return false;
-        }
+        return true;
     }
 
     @Override
     public boolean hasAccount(String s, String s1) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return false;
+        return true;
     }
 
     @Override
@@ -128,33 +123,53 @@ public class EconomyImplement implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
         Player player = Bukkit.getPlayer(s);
-        EmeraldsCashAPI.deductFunds(player, (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
-                EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        if (has(s, v)) {
+            EmeraldsCashAPI.deductFunds(player, (int) v);
+            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+                    EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        } else {
+            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+                    EconomyResponse.ResponseType.FAILURE, "Failed");
+        }
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
-                EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        if (has(offlinePlayer, v)) {
+            EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
+            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+                    EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        } else {
+            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+                    EconomyResponse.ResponseType.FAILURE, "Failed");
+        }
     }
 
     @Override
     public EconomyResponse withdrawPlayer(String s, String s1, double v) {
         Player player = Bukkit.getPlayer(s);
-        EmeraldsCashAPI.deductFunds(player, (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
-                EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        if (has(s, v)) {
+            EmeraldsCashAPI.deductFunds(player, (int) v);
+            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+                    EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        } else {
+            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+                    EconomyResponse.ResponseType.FAILURE, "Failed");
+        }
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
-                EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        if (has(offlinePlayer, v)) {
+            EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
+            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+                    EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
+        } else {
+            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+                    EconomyResponse.ResponseType.FAILURE, "Failed");
+        }
     }
 
     @Override

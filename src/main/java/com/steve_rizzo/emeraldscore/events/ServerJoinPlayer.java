@@ -1,7 +1,6 @@
 package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
-import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -76,10 +75,6 @@ public class ServerJoinPlayer implements Listener {
 
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
-
-        if (!EmeraldsCashAPI.doesPlayerAccountExist(e.getPlayer())) {
-            EmeraldsCashAPI.createAccount(e.getPlayer());
-        }
 
         // Glitch fix
         if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);

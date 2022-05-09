@@ -274,7 +274,7 @@ public class Main extends JavaPlugin {
     public void createEconomyTable() {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE, PRIMARY KEY (UUID))");
             System.out.println("[EmeraldsMC - Currency Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Currency Handler]: Error. See below.");
