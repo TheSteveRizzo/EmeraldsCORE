@@ -34,6 +34,48 @@ public class EmeraldsCashAPI {
 
     private static int returnedBal = 0;
 
+    public static void displayBalance(Player player) {
+
+        Player p = player;
+
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA)) {
+                selectionStatement.setString(1, p.getUniqueId().toString());
+                ResultSet resultBalance = selectionStatement.executeQuery();
+                if (resultBalance.next()) {
+                    returnedBal = resultBalance.getInt(1);
+                    p.sendMessage(Main.prefix + ChatColor.GRAY + "Your " + ChatColor.GREEN + "EmeraldsCash" + ChatColor.GRAY + " balance is: "
+                            + ChatColor.GREEN + "$" + returnedBal + ChatColor.GRAY + ".");
+                }
+                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + p.getName() + ".");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void displayBalanceUUID(String balanceUserName, String balanceUsersUUID, Player playerRequestingBalance) {
+
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA)) {
+                selectionStatement.setString(1, balanceUsersUUID);
+                ResultSet resultBalance = selectionStatement.executeQuery();
+                if (resultBalance.next()) {
+                    returnedBal = resultBalance.getInt(1);
+                    playerRequestingBalance.sendMessage(Main.prefix + ChatColor.GRAY + "The " + ChatColor.GREEN + "EmeraldsCash" + ChatColor.GRAY + " balance of " +
+                            ChatColor.AQUA + balanceUserName + ChatColor.GRAY + " is: "
+                            + ChatColor.GREEN + "$" + returnedBal + ChatColor.GRAY + ".");
+                }
+                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + balanceUserName + " REQUESTED BY " + playerRequestingBalance.getName() + ".");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
     public static int getBalance(Player player) {
         return returnPlayerCurrencyAmount(player);
     }

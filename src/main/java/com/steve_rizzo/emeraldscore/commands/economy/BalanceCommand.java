@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,23 +21,22 @@ public class BalanceCommand implements CommandExecutor {
 
             if (args.length == 0) {
 
-                int balance = EmeraldsCashAPI.getBalance(p);
-                p.sendMessage(Main.prefix + ChatColor.GRAY + "Your Emeralds Cash balance is: $" + ChatColor.GREEN + balance + ChatColor.GRAY + ".");
+                EmeraldsCashAPI.displayBalance(p);
+
                 return true;
 
             } else if (args.length == 1) {
 
-                if (Bukkit.getServer().getPlayer(args[0]) != null) {
+                try {
 
-                    Player target = Bukkit.getServer().getPlayer(args[0]);
+                    EmeraldsCashAPI.displayBalanceUUID(args[0], getPlayerUUID(args[0]), p);
 
-                    int tarBal = EmeraldsCashAPI.getBalance(target);
-                    assert target != null;
-                    p.sendMessage(Main.prefix + ChatColor.GRAY + "The balance of " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " is: $" + ChatColor.GREEN + tarBal + ChatColor.GRAY + ".");
                     return true;
 
-                } else {
+                } catch (Exception ex) {
+
                     p.sendMessage(Main.prefix + ChatColor.RED + "Error: " + ChatColor.GRAY + "player does not exist.");
+
                     return true;
                 }
 
@@ -48,5 +48,13 @@ public class BalanceCommand implements CommandExecutor {
 
         return true;
 
+    }
+
+    private String getPlayerUUID(String playerName) {
+        for (OfflinePlayer offlinePlayer : Bukkit.getServer().getOfflinePlayers()) {
+            if (offlinePlayer.getName().equalsIgnoreCase(playerName))
+                return offlinePlayer.getUniqueId().toString();
+        }
+        return null;
     }
 }
