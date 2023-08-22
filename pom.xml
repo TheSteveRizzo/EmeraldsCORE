@@ -7,7 +7,7 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>1.0b</version>
+    <version>1.1b</version>
     <properties>
         <maven.compiler.target>16</maven.compiler.target>
         <maven.compiler.source>16</maven.compiler.source>
@@ -84,11 +84,6 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
-        <!-- GlowAPI Repo -->
-        <repository>
-            <id>inventive-repo</id>
-            <url>https://repo.inventivetalent.org/content/groups/public/</url>
-        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -145,12 +140,6 @@
             <artifactId>SuperVanish</artifactId>
             <version>6.0.4</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- GlowAPI -->
-        <dependency>
-            <groupId>org.inventivetalent</groupId>
-            <artifactId>glowapi</artifactId>
-            <version>1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

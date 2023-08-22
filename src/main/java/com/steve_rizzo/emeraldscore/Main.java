@@ -62,7 +62,7 @@ public class Main extends JavaPlugin {
 
 
     public static Chat chat = null;
-    public static String hostStaff, portStaff, passwordStaff, usernameStaff, nameStaff,
+    public static String
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
     public static Main core;
     public static MobArena mobarena;
@@ -99,12 +99,6 @@ public class Main extends JavaPlugin {
         setupChat();
         setupEconomy();
         setupMobArena();
-
-        hostStaff = getConfig().getString("db_host");
-        portStaff = getConfig().getString("db_port");
-        passwordStaff = getConfig().getString("db_pass");
-        usernameStaff = getConfig().getString("db_user");
-        nameStaff = getConfig().getString("db_name");
 
         hostEmeralds = emeraldsConfig.getString("db_host");
         portEmeralds = emeraldsConfig.getString("db_port");

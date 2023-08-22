@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -13,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Random;
 
@@ -42,6 +42,9 @@ public class ServerJoinPlayer implements Listener {
     public void onJoin(PlayerJoinEvent e) {
 
         if (!e.getPlayer().hasPlayedBefore()) {
+
+            // Set money first time user
+            EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
 
 
             e.setJoinMessage(ChatColor.LIGHT_PURPLE + e.getPlayer().getName() + " has joined The Emeralds for the first time!");
@@ -76,20 +79,9 @@ public class ServerJoinPlayer implements Listener {
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         setPlayerTabName(e.getPlayer());
 
-        // Glitch fix
-        if (e.getPlayer().isGlowing()) e.getPlayer().setGlowing(false);
-
         String playerRank = perms.getPrimaryGroup(e.getPlayer());
 
 
-        if (isPermittedToUseGlow(playerRank)) {
-
-            // NOT YET FULLY TESTED & SUPPORTED.
-            Bukkit.getScheduler().runTaskLater(Main.core, () -> {
-                //Set the event's player glowing in DARK_AQUA for all online players
-                GlowAPI.setGlowing(e.getPlayer(), returnGlowColor(playerRank), Bukkit.getOnlinePlayers());
-            }, 10);
-        }
     }
 
     @EventHandler
@@ -187,24 +179,6 @@ public class ServerJoinPlayer implements Listener {
         fwm.setPower(rp);
 
         return fwm;
-    }
-
-    private GlowAPI.Color returnGlowColor(String playerRank) {
-        switch (playerRank.toLowerCase()) {
-            case "owner":
-                return GlowAPI.Color.RED;
-            case "admin":
-                return GlowAPI.Color.DARK_RED;
-            case "mod":
-                return GlowAPI.Color.AQUA;
-            case "helper":
-                return GlowAPI.Color.DARK_AQUA;
-            case "youtuber":
-                return GlowAPI.Color.GOLD;
-            case "elite":
-                return GlowAPI.Color.GREEN;
-        }
-        return GlowAPI.Color.WHITE;
     }
 
     // Check if can glow
