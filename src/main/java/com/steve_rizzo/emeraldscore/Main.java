@@ -117,9 +117,9 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PingServer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
 
-
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
+        this.getCommand("flyspeed").setExecutor(new FlyspeedCommand());
         this.getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("bc").setExecutor(new BroadcastCommand());
@@ -257,7 +257,7 @@ public class Main extends JavaPlugin {
     public void createTable() {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS Ranks(UUID varchar(36), name VARCHAR(16), rank varchar(16), date DATE)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS Ranks(UUID varchar(36) UNIQUE, name VARCHAR(16), rank varchar(16), date DATE)");
             System.out.println("[EmeraldsMC - Rank Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Rank Handler]: Error. See below.");

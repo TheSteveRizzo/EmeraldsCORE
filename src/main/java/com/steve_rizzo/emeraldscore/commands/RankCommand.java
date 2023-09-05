@@ -156,10 +156,13 @@ public class RankCommand implements CommandExecutor {
     }
     //Update rank
     private void setRankPlayer(Player p, String target, String rank) {
+        System.out.println("DETAILS PL TARGET: " + target + " RANK: " + rank);
 
         // Update player rank in console
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
-                "lp user " + target + " parent set " + rank);
+                "user " + target);
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+                "user setgroup " + rank);
 
         // Send message to command issuer and print to Console
         p.sendMessage(prefix + "user " + ChatColor.RED + target
@@ -180,6 +183,7 @@ public class RankCommand implements CommandExecutor {
                 // Set rank of player in tab
                 Player tp = serverEssentials.getServer().getPlayer(target);
                 ServerJoinPlayer.setPlayerTabName(tp);
+                ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
             }
         } catch (NullPointerException ex) {
             System.out.println("[EmeraldsCore] Player doesn't exist for ranking.");
@@ -189,13 +193,15 @@ public class RankCommand implements CommandExecutor {
     // Command is issued via console
     private void setRankConsole(String target, String rank) {
 
+        System.out.println("DETAILS CN TARGET: " + target + " RANK: " + rank);
         // Update player rank in console
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
-                "lp user " + target + " parent set " + rank);
+                "user " + target);
+        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+                "user setgroup " + rank);
 
         // Set rank of player in tab
         Player tp = serverEssentials.getServer().getPlayer(target);
-        ServerJoinPlayer.setPlayerTabName(tp);
 
         // Send message to Console
         System.out.println(prefix + "user " + target + " has been updated to group "
@@ -206,6 +212,8 @@ public class RankCommand implements CommandExecutor {
             if (serverEssentials.getServer().getPlayer(target).isOnline()) {
                 serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
+                ServerJoinPlayer.setPlayerTabName(tp);
+                ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
             }
         }
     }

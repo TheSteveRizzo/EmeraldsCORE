@@ -11,6 +11,8 @@ commands:
     description: Set a user's rank.
   fly:
     description: Set a user's ability to fly.
+  flyspeed:
+    description: Set user flight speed.
   setspawn:
     description: Set the spawn of the world.
   spawn:

@@ -76,19 +76,16 @@ public class Ranks {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = format.format(date);
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                try (Connection connection = Main.getInstance().getHikari();
-                     PreparedStatement statement = connection.prepareStatement(UPDATE_DATA)) {
-                    statement.setString(1, Main.perms.getPrimaryGroup(p));
-                    statement.setString(2, currentDateTime);
-                    statement.setString(3, p.getUniqueId().toString());
-                    statement.execute();
-                    System.out.println("[EmeraldsMC - Rank Handler]: Data SAVED/UPDATED for " + p.getName() + ".");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement statement = connection.prepareStatement(UPDATE_DATA)) {
+                statement.setString(1, Main.perms.getPrimaryGroup(p));
+                statement.setString(2, currentDateTime);
+                statement.setString(3, p.getUniqueId().toString());
+                statement.execute();
+                System.out.println("[EmeraldsMC - Rank Handler]: Data SAVED/UPDATED for " + p.getName() + ".");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }

@@ -21,8 +21,7 @@ public class ServerJoinPlayer implements Listener {
 
     public static Permission perms = Main.perms;
     public static Chat chat = Main.chat;
-
-    private Ranks ranks = new Ranks();
+    public static Ranks ranks = new Ranks();
 
     public static void setPlayerTabName(Player p) {
         String playerGroup = perms.getPrimaryGroup(p);
