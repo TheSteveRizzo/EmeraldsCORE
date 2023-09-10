@@ -40,7 +40,11 @@ public class FlyspeedCommand implements CommandExecutor {
                         float flySpeed = 0.1f;
 
                         if (x >= 1 && x <=10)  {
-                            flySpeed = Float.parseFloat("0."+speedGiven+"f");
+                            if (x == 10) {
+                                flySpeed = Float.parseFloat("0.98f");
+                            } else {
+                                flySpeed = Float.parseFloat("0." + speedGiven + "f");
+                            }
                         }
 
                         p.setFlySpeed(flySpeed);
