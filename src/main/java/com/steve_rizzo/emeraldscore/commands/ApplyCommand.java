@@ -16,7 +16,7 @@ public class ApplyCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            p.sendMessage(Main.prefix + ChatColor.GRAY + "Apply to become a Member: " + ChatColor.GREEN + "emeraldsmc.com/apply");
+            p.sendMessage(Main.prefix + ChatColor.YELLOW + "Apply to become a Member: " + ChatColor.GREEN + "EmeraldsMC.com/apply");
 
             return true;
 
