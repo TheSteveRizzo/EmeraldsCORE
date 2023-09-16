@@ -1,7 +1,6 @@
 package com.steve_rizzo.emeraldscore;
 
 import com.garbagemule.MobArena.MobArena;
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
 import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
