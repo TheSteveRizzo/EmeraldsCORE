@@ -75,7 +75,6 @@ public class Main extends JavaPlugin {
     public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
 
     private HikariDataSource hikari;
-    private FloatItem floatItem;
 
     public static Main getInstance() {
         return instance;
@@ -140,6 +139,7 @@ public class Main extends JavaPlugin {
         this.getCommand("takebalance").setExecutor(new TakeCommand());
         this.getCommand("givebalance").setExecutor(new GiveCommand());
         this.getCommand("baltop").setExecutor(new BaltopCommand());
+        this.getCommand("apply").setExecutor(new ApplyCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -148,9 +148,6 @@ public class Main extends JavaPlugin {
         KitGUI kitGUI = new KitGUI();
         this.getCommand("kit").setExecutor(new KitCommand());
         Bukkit.getServer().getPluginManager().registerEvents(kitGUI, this);
-
-        floatItem = new FloatItem();
-        this.getCommand("floatitem").setExecutor(floatItem);
 
         hikari = new HikariDataSource();
         hikari.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
@@ -231,15 +228,6 @@ public class Main extends JavaPlugin {
 
         if (hikari != null) hikari.close();
 
-        Iterator it = floatItem.activeUserHolograms.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            Hologram holoToDelete = (Hologram) pair.getValue();
-            it.remove();
-        }
-
-        floatItem.activeUserHolograms.clear();
-
         Bukkit.getServer().getPluginManager().disablePlugin(this);
         System.out.println(Color.RED + ChatColor.stripColor(prefix) + " has SUCCESSFULLY UNLOADED!");
 
@@ -257,7 +245,7 @@ public class Main extends JavaPlugin {
     public void createTable() {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS Ranks(UUID varchar(36) UNIQUE, name VARCHAR(16), rank varchar(16), date DATE)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS Ranks(UUID varchar(36) UNIQUE, name VARCHAR(16), rank varchar(16), date DATE);");
             System.out.println("[EmeraldsMC - Rank Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Rank Handler]: Error. See below.");
@@ -268,7 +256,7 @@ public class Main extends JavaPlugin {
     public void createEconomyTable() {
         try (Connection connection = hikari.getConnection();
              Statement statement = connection.createStatement();) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE, PRIMARY KEY (UUID))");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsCash(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE, PRIMARY KEY (UUID));");
             System.out.println("[EmeraldsMC - Currency Handler]: Table created and/or connected successfully.");
         } catch (SQLException e) {
             System.out.println("[EmeraldsMC - Currency Handler]: Error. See below.");

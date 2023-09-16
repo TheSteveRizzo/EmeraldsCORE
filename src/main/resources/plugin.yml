@@ -22,7 +22,7 @@ commands:
   broadcast:
     description: Broadcast a message to the server.
   gm:
-    description: Sets the gamemode of a player.
+    description: Sets the Game Mode of a player.
   eg:
     description: Receive a EmeraldsGames Navigator.
   farmworld:
@@ -51,7 +51,7 @@ commands:
     description: Displays your balance.
     aliases: [ bal ]
   pay:
-    aliases: [sendmoney]
+    aliases: [ sendmoney ]
     description: Send a player an amount of Emeralds Cash.
   setbalance:
     aliases: [ setbal ]
@@ -65,3 +65,6 @@ commands:
   baltop:
     aliases: [ balancetop, topbal, moneytop ]
     description: Lists the top balances of players on the server.
+  apply:
+    aliases: [ member ]
+    description: Apply to become a member!

@@ -7,7 +7,7 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>1.2b</version>
+    <version>1.3b</version>
     <properties>
         <maven.compiler.target>16</maven.compiler.target>
         <maven.compiler.source>16</maven.compiler.source>
@@ -74,16 +74,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- HologramAPI Repo -->
-        <repository>
-            <id>codemc-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
-        </repository>
-        <!-- SuperVanish Repo -->
-        <repository>
-            <id>cubekrowd-repo</id>
-            <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
-        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -126,13 +116,6 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.0-alpha7</version>
             <scope>compile</scope>
-        </dependency>
-        <!-- HologramAPI -->
-        <dependency>
-            <groupId>com.gmail.filoghost.holographicdisplays</groupId>
-            <artifactId>holographicdisplays-api</artifactId>
-            <version>2.4.9</version>
-            <scope>provided</scope>
         </dependency>
         <!-- SuperVanish -->
         <dependency>
