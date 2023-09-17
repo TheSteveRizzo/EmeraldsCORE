@@ -118,7 +118,7 @@ public class SpecialGift implements Listener {
         Entity magicLord;
         Player p;
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("Magic Lord")) {
+        if (e.getRightClicked().getName().equalsIgnoreCase("Gift Zombie")) {
 
             magicLord = e.getRightClicked();
             p = e.getPlayer();
@@ -127,7 +127,7 @@ public class SpecialGift implements Listener {
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
             
-            if ((year == 2022) && (month == 5)) {
+            if ((year == 2023) && (month == 9)) {
 
                 if (day > 1 && day < 14) {
 
@@ -216,7 +216,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1GiftList).replace("{user}", player.getName()));
@@ -224,14 +224,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2GiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3GiftList).replace("{user}", player.getName()));
@@ -242,7 +242,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1DonorGiftList).replace("{user}", player.getName()));
@@ -250,14 +250,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2DonorGiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &b&lMagic Lord&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom the &6&lGift Zombie&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3DonorGiftList).replace("{user}", player.getName()));
