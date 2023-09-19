@@ -76,8 +76,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:coal 128",
             "give {user} minecraft:enchanted_golden_apple 8",
             // SHARP 1 DIA SWORD
-            "give {user} diamond_sword {display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Holiday Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A special Christmas gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} polar_bear_spawn_egg 2");
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
+            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
 
     // GIFT LIST FOR (DONOR USERS), FROM APRIL 07 TO APR 14
     private List<String> week2DonorGiftList = Arrays.asList("fe grant {user} 2000",
@@ -86,8 +86,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:coal 128",
             "give {user} minecraft:enchanted_golden_apple 8",
             // SHARP 1 DIA SWORD
-            "give {user} diamond_sword {display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Holiday Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A special Christmas gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} polar_bear_spawn_egg 2");
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
+            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
 
     // GIFT LIST FOR (DONOR USERS), FROM APRIL 14 TO APR 21
     private List<String> week3DonorGiftList = Arrays.asList("fe grant {user} 2000",
@@ -96,8 +96,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:coal 128",
             "give {user} minecraft:enchanted_golden_apple 8",
             // SHARP 1 DIA SWORD
-            "give {user} diamond_sword {display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Holiday Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A special Christmas gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} polar_bear_spawn_egg 2");
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
+            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
 
 
     // GIFT LIST FOR (DONOR USERS), FROM APRIL 21 +
@@ -107,8 +107,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:coal 256",
             "give {user} minecraft:enchanted_golden_apple 16",
             // SHARP 2 DIA SWORD
-            "give {user} diamond_sword {display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Holiday Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A special Christmas gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1",
-            "give {user} polar_bear_spawn_egg 1");
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1",
+            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
 
     ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 

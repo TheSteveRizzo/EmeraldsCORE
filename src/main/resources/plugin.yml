@@ -1,11 +1,11 @@
 name: EmeraldsCore
 version: ${project.version}
-api-version: "1.14"
+api-version: "1.15"
 description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
 depend: [Vault]
-soft-depend: [Mob Arena, HolographicDisplays, GlowAPI, SuperVanish]
+soft-depend: [MobArena, GlowAPI, SuperVanish]
 commands:
   rank:
     description: Set a user's rank.
@@ -68,3 +68,6 @@ commands:
   apply:
     aliases: [ member ]
     description: Apply to become a member!
+  casino:
+    aliases: [ roulette ]
+    description: Go to the Emeralds Casino!
