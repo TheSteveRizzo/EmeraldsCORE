@@ -130,7 +130,7 @@ public class Main extends JavaPlugin {
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("afk").setExecutor(new AFKCommand());
-        this.getCommand("casino").setExecutor(new AFKCommand());
+        this.getCommand("casino").setExecutor(new CasinoCommand());
         this.getCommand("maintenance").setExecutor(new MaintenanceMode());
 
         this.getCommand("balance").setExecutor(new BalanceCommand());
