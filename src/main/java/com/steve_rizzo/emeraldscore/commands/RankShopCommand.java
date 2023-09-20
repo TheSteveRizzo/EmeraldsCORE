@@ -6,6 +6,9 @@ import com.steve_rizzo.emeraldscore.utils.Ranks;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +20,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import static org.bukkit.Bukkit.getServer;
 import static org.bukkit.Material.*;
 
-public class RankShopCommand implements Listener {
+public class RankShopCommand implements Listener, CommandExecutor {
 
     Ranks ranks;
     String title = ChatColor.AQUA + "EmeraldsMC" + ChatColor.GRAY + " - " + ChatColor.GREEN + "Rank Shop";
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (sender instanceof Player) {
+            Player p = (Player) sender;
+            openRankShop(p);
+        }
+        return true;
+    }
 
     private void openRankShop(Player player) {
 
