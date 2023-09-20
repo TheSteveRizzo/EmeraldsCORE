@@ -71,3 +71,5 @@ commands:
   casino:
     aliases: [ roulette ]
     description: Go to the Emeralds Casino!
+  rankshop:
+    description: Opens the Emeralds Rank Shop.
