@@ -3,6 +3,7 @@ package com.steve_rizzo.emeraldscore.commands;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,7 +23,7 @@ import static org.bukkit.Material.*;
 
 public class RankShopCommand implements Listener, CommandExecutor {
 
-    Ranks ranks;
+    public static Permission perms = Main.perms;
     String title = ChatColor.AQUA + "EmeraldsMC" + ChatColor.GRAY + " - " + ChatColor.GREEN + "Rank Shop";
 
     @Override
@@ -83,27 +84,29 @@ public class RankShopCommand implements Listener, CommandExecutor {
             ItemStack clickedItem = event.getCurrentItem();
 
             if (clickedItem != null && clickedItem.getType() != Material.AIR) {
+
                 int price = getPrice(clickedItem);
+
                 if (price > 0) {
+
                     if (canPurchaseRank(player, price)) {
 
                         if (hasPreviousRank(player, clickedItem)) {
 
                             // Perform rank purchase
                             // Implement rank upgrade logic here
-                            purchaseRank(player, clickedItem);
+                            purchaseRank(player, clickedItem, price);
                             player.sendMessage(Main.prefix + ChatColor.GREEN + "Congratulations on your new rank!");
                             player.closeInventory();
 
                         } else {
 
-                            player.sendMessage(Main.prefix + ChatColor.RED + "Sorry. You can only purchase the next available rank, in order.");
+                            player.sendMessage(Main.prefix + ChatColor.RED + "Sorry, you can only purchase the next sequential rank (in order).");
 
                         }
-
                     } else {
 
-                        player.sendMessage(Main.prefix + "You have insufficient funds to purchase this rank.");
+                        player.sendMessage(Main.prefix + ChatColor.RED + "Sorry, you have insufficient funds.");
 
                     }
                 }
@@ -130,13 +133,13 @@ public class RankShopCommand implements Listener, CommandExecutor {
     }
 
     private boolean canPurchaseRank(Player player, int price) {
-        if (EmeraldsCashAPI.getBalance(player) >= price) return true;
+        if ((EmeraldsCashAPI.getBalance(player)) >= price) return true;
         return false;
     }
 
     private boolean hasPreviousRank(Player player, ItemStack rankItem) {
 
-        String playerRank = ranks.getRank(player);
+        String playerRank = perms.getPrimaryGroup(player);
 
         switch (rankItem.getType()) {
             case COAL_BLOCK:
@@ -165,32 +168,40 @@ public class RankShopCommand implements Listener, CommandExecutor {
         }
     }
 
-    private void purchaseRank(Player player, ItemStack rankItem) {
+    private void purchaseRank(Player player, ItemStack rankItem, int price) {
 
         getServer().dispatchCommand(getServer().getConsoleSender(),
                 "user " + player.getName());
+
+        getServer().dispatchCommand(getServer().getConsoleSender(),
+                "takebal " + player.getName() + " " + price);
 
         switch (rankItem.getType()) {
             case COAL_BLOCK:
                 // Purchasing $ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
                         "user setgroup donor1");
+                return;
             case IRON_BLOCK:
                 // Purchasing $$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
                         "user setgroup donor2");
+                return;
             case GOLD_BLOCK:
                 // Attempting $$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
                         "user setgroup donor3");
+                return;
             case DIAMOND_BLOCK:
                 // Attempting <3$$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
                         "user setgroup donor4");
+                return;
             case EMERALD_BLOCK:
                 // Attempting ELITE rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
                         "user setgroup elite");
+                return;
         }
     }
 }
