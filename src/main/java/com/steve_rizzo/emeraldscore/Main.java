@@ -141,7 +141,7 @@ public class Main extends JavaPlugin {
         this.getCommand("givebalance").setExecutor(new GiveCommand());
         this.getCommand("baltop").setExecutor(new BaltopCommand());
         this.getCommand("apply").setExecutor(new ApplyCommand());
-        this.getCommand("rankshop").setExecutor(new ApplyCommand());
+        this.getCommand("rankshop").setExecutor(new RankShopCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
