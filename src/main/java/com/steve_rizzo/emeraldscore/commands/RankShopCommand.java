@@ -50,9 +50,9 @@ public class RankShopCommand implements Listener, CommandExecutor {
                 donorRankThreeName = donorRankFormat.replace("%ENTER%", "$$$")
                         .replace("%COST%", "$750,000"),
                 donorRankFourName = donorRankFormat.replace("%ENTER%", ChatColor.LIGHT_PURPLE + "<3" + ChatColor.GREEN + "$$$")
-                        .replace("%COST", "$1,000,000"),
+                        .replace("%COST%", "$1,000,000"),
                 donorRankEliteName = donorRankFormat.replace("%ENTER%", "ELITE")
-                        .replace("%COST", "$1,500,000");
+                        .replace("%COST%", "$1,500,000");
 
 
         addRankItem(rankShop, COAL_BLOCK, donorRankOneName, 250000);
