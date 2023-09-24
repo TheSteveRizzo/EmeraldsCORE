@@ -263,8 +263,7 @@ public class EmeraldsCashAPI {
         });
     }
 
-    public static void returnAllBalances(Player p) {
-
+    public static void returnTopBalances(Player p, int topCount) {
         final HashMap<String, Integer> balTopList = new HashMap<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
@@ -272,43 +271,39 @@ public class EmeraldsCashAPI {
                  PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BALANCES)) {
                 ResultSet resultBalance = statement.executeQuery();
                 while (resultBalance.next()) {
-                    // has another value to add to the baltop list
-                    // NAME, BAL
-
-                    System.out.println("DEBUG [BALTOPLIST RES BAL 1]: " + resultBalance);
-
-
                     String name = resultBalance.getString(1);
-                    System.out.println("DEBUG [BALTOPLIST RES NAME 1]: " + name);
-
                     int userBal = resultBalance.getInt(2);
-                    System.out.println("DEBUG [BALTOPLIST RES BAL 2]: " + userBal);
-
 
                     balTopList.put(name, userBal);
-
                 }
-                // no more values to add to the list
 
-                System.out.println("DEBUG [BALTOP FINAL DATA]: " + balTopList);
+                // Sort the balances in descending order
+                LinkedHashMap<String, Integer> sortedBalances = getTopBalances(balTopList, false, topCount);
 
-                HashMap<String, Integer> sortedBalances = sortBalances(balTopList, false);
-                sortedBalances.forEach((key, value) -> p.sendMessage(ChatColor.AQUA + key + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + value));
+                // Iterate over the top balances and send them to the player
+                int rank = 1;
+                for (Map.Entry<String, Integer> entry : sortedBalances.entrySet()) {
+                    if (rank > topCount) {
+                        break; // Only send the top 10 balances
+                    }
 
-                System.out.println("DEBUG [FINAL SORTEDBALANACES DATA]: " + sortedBalances);
+                    String name = entry.getKey();
+                    int balance = entry.getValue();
+
+                    p.sendMessage(ChatColor.AQUA + "#" + rank + " " + name + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + balance);
+                    rank++;
+                }
 
                 p.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
                         + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
-
-                System.out.println("[EmeraldsMC - Currency Handler]: BalTOP Query executed.");
-
+                System.out.println("[EmeraldsMC - Currency Handler]: Top " + topCount + " balances queried.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private static HashMap<String, Integer> sortBalances(HashMap<String, Integer> unsortedMap, final boolean order) {
+    private static LinkedHashMap<String, Integer> getTopBalances(HashMap<String, Integer> unsortedMap, final boolean order, int topCount) {
         List<HashMap.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
 
         // Sorting the list based on values
@@ -317,9 +312,19 @@ public class EmeraldsCashAPI {
                 : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
                 ? o2.getKey().compareTo(o1.getKey())
                 : o2.getValue().compareTo(o1.getValue()));
-        return list.stream().collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
 
+        // Limit the result to the top 'topCount' entries
+        List<HashMap.Entry<String, Integer>> topEntries = list.stream().limit(topCount).collect(Collectors.toList());
+
+        // Collect the top entries into a LinkedHashMap
+        LinkedHashMap<String, Integer> topBalances = new LinkedHashMap<>();
+        for (HashMap.Entry<String, Integer> entry : topEntries) {
+            topBalances.put(entry.getKey(), entry.getValue());
+        }
+
+        return topBalances;
     }
+
 
     private static void printMap(HashMap<String, Integer> map) {
         map.forEach((key, value) -> System.out.println("Key : " + key + " Value : " + value));

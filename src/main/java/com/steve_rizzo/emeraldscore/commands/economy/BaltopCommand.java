@@ -20,7 +20,7 @@ public class BaltopCommand implements CommandExecutor {
                     + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
             p.sendMessage(ChatColor.GRAY + "TOP BALANCES: ");
 
-            EmeraldsCashAPI.returnAllBalances(p);
+            EmeraldsCashAPI.returnTopBalances(p, 10);
             return true;
 
         }
