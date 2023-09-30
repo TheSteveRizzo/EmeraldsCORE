@@ -27,90 +27,87 @@ public class SpecialGift implements Listener {
 
     FileConfiguration config = Main.core.cooldownConfig;
 
-
     ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM APRIL 01 TO APR 07
-    private List<String> week1GiftList = Arrays.asList("fe grant {user} 2000",
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 01 TO APR 07
+    private List<String> week1GiftList = Arrays.asList(
+            "fe grant {user} 500",                  // ND Cash amount
+            "give {user} minecraft:emerald 1",       // ND Emerald Amount
+            "give {user} minecraft:glowstone 4",     // Replaced with glowstone for Halloween
+            "give {user} minecraft:spider_eye 64",   // Replaced with spider eye for Halloween
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:1}]} 1", // Enchanted book with fire aspect
+            "give {user} minecraft:iron_sword 1");   // Replaced with iron sword for Halloween
+
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 07 TO APR 14
+    private List<String> week2GiftList = Arrays.asList(
+            "fe grant {user} 750",                  // ND Cash amount
+            "give {user} minecraft:emerald 1",       // ND Emerald Amount
+            "give {user} minecraft:glowstone 8",
+            "give {user} minecraft:spider_eye 64",
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1",
+            "give {user} minecraft:iron_sword 1");
+
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 14 TO APR 21
+    private List<String> week3GiftList = Arrays.asList(
+            "fe grant {user} 1000",                   // ND Cash amount
+            "give {user} minecraft:emerald 2",       // ND Emerald Amount
+            "give {user} minecraft:glowstone 16",     // Replaced with glowstone for Halloween
+            "give {user} minecraft:spider_eye 32",   // Replaced with spider eye for Halloween
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1", // Enchanted book with fire aspect
+            "give {user} minecraft:iron_sword 1");   // Replaced with iron sword for Halloween
+
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 21 +
+    private List<String> week4GiftList = Arrays.asList(
+            "fe grant {user} 1250",                  // ND Cash amount
+            "give {user} minecraft:emerald 3",       // ND Emerald Amount
+            "give {user} minecraft:glowstone 16",     // Replaced with glowstone for Halloween
+            "give {user} minecraft:spider_eye 64",   // Replaced with spider eye for Halloween
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 2", // Enchanted book with fire aspect
+            "give {user} minecraft:iron_sword 1");   // Replaced with iron sword for Halloween
+
+
+////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
+
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 01 TO APR 07 (Same as before)
+    private List<String> week1DonorGiftList = Arrays.asList(
+            "fe grant {user} 1500",                 // Donor Cash Amount
+            "give {user} minecraft:emerald 4",          // Donor Emerald Amount
+            "give {user} minecraft:glowstone 8",
+            "give {user} minecraft:spider_eye 128",
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:1}]} 1",
+            // SHARP 1 IRON SWORD
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1");
+
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 07 TO APR 14 (Same as before)
+    private List<String> week2DonorGiftList = Arrays.asList(
+            "fe grant {user} 2000",
+            "give {user} minecraft:emerald 6",
+            "give {user} minecraft:glowstone 16",
+            "give {user} minecraft:spider_eye 128",
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1",
+            // SHARP 1 IRON SWORD
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1");
+
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 14 TO APR 21 (Same as before)
+    private List<String> week3DonorGiftList = Arrays.asList(
+            "fe grant {user} 2500",
             "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:redstone 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            "give {user} minecraft:diamond_sword 1",
-            "give {user} polar_bear_spawn_egg 1");
+            "give {user} minecraft:glowstone 32",
+            "give {user} minecraft:spider_eye 128",
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1",
+            // SHARP 1 IRON SWORD
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1");
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM APRIL 07 TO APR 14
-    private List<String> week2GiftList = Arrays.asList("fe grant {user} 2000",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:redstone 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            "give {user} minecraft:diamond_sword 1",
-            "give {user} polar_bear_spawn_egg 1");
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 21 + (Same as before)
+    private List<String> week4DonorGiftList = Arrays.asList(
+            "fe grant {user} 5000",
+            "give {user} minecraft:emerald 10",
+            "give {user} minecraft:glowstone 32",
+            "give {user} minecraft:spider_eye 128",
+            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 2", // Enchanted book with fire aspect II
+            // SHARP 2 IRON SWORD
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1");
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM APRIL 14 TO APR 21
-    private List<String> week3GiftList = Arrays.asList("fe grant {user} 1000",
-            "give {user} minecraft:emerald 4",
-            "give {user} minecraft:diamond 8",
-            "give {user} minecraft:coal 64",
-            "give {user} minecraft:enchanted_golden_apple 4",
-            "give {user} polar_bear_spawn_egg 1");
-
-    // GIFT LIST FOR (NON-DONOR USERS), FROM APRIL 21 +
-    private List<String> week4GiftList = Arrays.asList("fe grant {user} 2000",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:redstone 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            "give {user} minecraft:diamond_sword 1",
-            "give {user} polar_bear_spawn_egg 1");
-
-
-    ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
-
-
-    // GIFT LIST FOR (DONOR USERS), FROM APRIL 01 TO APR 07
-    private List<String> week1DonorGiftList = Arrays.asList("fe grant {user} 2000",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:coal 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            // SHARP 1 DIA SWORD
-            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
-
-    // GIFT LIST FOR (DONOR USERS), FROM APRIL 07 TO APR 14
-    private List<String> week2DonorGiftList = Arrays.asList("fe grant {user} 2000",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:coal 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            // SHARP 1 DIA SWORD
-            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
-
-    // GIFT LIST FOR (DONOR USERS), FROM APRIL 14 TO APR 21
-    private List<String> week3DonorGiftList = Arrays.asList("fe grant {user} 2000",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:coal 128",
-            "give {user} minecraft:enchanted_golden_apple 8",
-            // SHARP 1 DIA SWORD
-            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1",
-            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
-
-
-    // GIFT LIST FOR (DONOR USERS), FROM APRIL 21 +
-    private List<String> week4DonorGiftList = Arrays.asList("fe grant {user} 5000",
-            "give {user} minecraft:emerald 16",
-            "give {user} minecraft:diamond 32",
-            "give {user} minecraft:coal 256",
-            "give {user} minecraft:enchanted_golden_apple 16",
-            // SHARP 2 DIA SWORD
-            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"aqua\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1",
-            "give {user} zombie_spawn_egg{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Halloween Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Halloween gift\\\",\\\"color\\\":\\\"orange\\\"}\"]}} 1");
-
-    ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 
     @EventHandler
     public void onMagicLordClick(PlayerInteractEntityEvent e) {
@@ -127,7 +124,7 @@ public class SpecialGift implements Listener {
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
             
-            if ((year == 2023) && (month == 9)) {
+            if ((year == 2023) && (month == 10)) {
 
                 if (day > 1 && day < 14) {
 
