@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -142,6 +143,9 @@ public class Main extends JavaPlugin {
         this.getCommand("baltop").setExecutor(new BaltopCommand());
         this.getCommand("apply").setExecutor(new ApplyCommand());
         this.getCommand("rankshop").setExecutor(new RankShopCommand());
+        this.getCommand("message").setExecutor(new MessageCommand());
+        this.getCommand("reply").setExecutor(new MessageCommand());
+        this.getCommand("payheal").setExecutor(new PayHeal());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

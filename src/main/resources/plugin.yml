@@ -73,3 +73,12 @@ commands:
     description: Go to the Emeralds Casino!
   rankshop:
     description: Opens the Emeralds Rank Shop.
+  message:
+    description: Message another player.
+    aliases: [ msg, whisper, pm ]
+  reply:
+    description: Reply to a message.
+    aliases: [ r ]
+  payheal:
+    description: Pay for a heal!
+    aliases: [ pheal ]
