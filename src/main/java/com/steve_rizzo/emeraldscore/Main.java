@@ -146,6 +146,8 @@ public class Main extends JavaPlugin {
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new MessageCommand());
         this.getCommand("payheal").setExecutor(new PayHeal());
+        this.getCommand("pvp").setExecutor(new PVPCommand());
+        this.getCommand("survival").setExecutor(new SurvivalCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
