@@ -42,14 +42,14 @@ commands:
   afk:
     description: Toggle AFK status.
   staffchat:
-    aliases: [ staff, ssc ]
+    aliases: [ staff, sc ]
     description: Sends a message thru staffs chat.
   maintenance:
     aliases: [ maintenancemode, mm, maint ]
     description: Puts the server into maintenance mode.
   balance:
     description: Displays your balance.
-    aliases: [ bal ]
+    aliases: [ bal , eco ]
   pay:
     aliases: [ sendmoney ]
     description: Send a player an amount of Emeralds Cash.
