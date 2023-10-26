@@ -17,26 +17,23 @@ public class PVPCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            if (p.isOp()) {
+            p.sendMessage(Main.prefix + ChatColor.GRAY + "Sending you to the... " +
+                    ChatColor.AQUA + "PVP World" + ChatColor.GRAY + "!");
 
-                p.sendMessage(Main.prefix + ChatColor.GRAY + "Sending you to the... " +
-                        ChatColor.AQUA + "PVP World" + ChatColor.GRAY + "!");
+            if (Bukkit.getWorld("pvpworld") != null) {
 
-                if (Bukkit.getWorld("pvpworld") != null) {
+                p.teleport(Bukkit.getWorld("pvpworld").getSpawnLocation());
 
-                    p.teleport(Bukkit.getWorld("pvpworld").getSpawnLocation());
+                p.sendMessage(Main.prefix + ChatColor.AQUA + "Success!");
 
-                    p.sendMessage(Main.prefix + ChatColor.AQUA + "Success!");
+                return true;
 
-                    return true;
+            } else {
 
-                } else {
+                p.sendMessage(Main.prefix + ChatColor.RED + "This request could not be completed. Please tell an administrator.");
 
-                    p.sendMessage(Main.prefix + ChatColor.RED + "This request could not be completed. Please tell an administrator.");
+                return true;
 
-                    return true;
-
-                }
             }
         }
 

@@ -42,6 +42,12 @@ public class ServerJoinPlayer implements Listener {
 
         if (!e.getPlayer().hasPlayedBefore()) {
 
+            try {
+                e.getPlayer().teleport(Bukkit.getServer().getWorld("pvpworld").getSpawnLocation());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
             // Set money first time user
             EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
 
