@@ -32,7 +32,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 01 TO OCT 07
     private List<String> week1GiftList = Arrays.asList(
-            "fe grant {user} 500",                  // ND Cash amount
+            "givebal {user} 500",                  // ND Cash amount
             "give {user} minecraft:emerald 1",       // ND Emerald Amount
             "give {user} minecraft:glowstone 4",     // Replaced with glowstone for Halloween
             "give {user} minecraft:spider_eye 64",   // Replaced with spider eye for Halloween
@@ -41,7 +41,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 07 TO OCT 14
     private List<String> week2GiftList = Arrays.asList(
-            "fe grant {user} 750",                  // ND Cash amount
+            "givebal {user} 750",                  // ND Cash amount
             "give {user} minecraft:emerald 1",       // ND Emerald Amount
             "give {user} minecraft:glowstone 8",
             "give {user} minecraft:spider_eye 64",
@@ -50,7 +50,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (NON-DONOR USERS), FROM OCT OCT 21+
     private List<String> week3GiftList = Arrays.asList(
-            "fe grant {user} 1000",                   // ND Cash amount
+            "givebal {user} 1000",                   // ND Cash amount
             "give {user} minecraft:emerald 2",       // ND Emerald Amount
             "give {user} minecraft:glowstone 16",     // Replaced with glowstone for Halloween
             "give {user} minecraft:spider_eye 32",   // Replaced with spider eye for Halloween
@@ -62,7 +62,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (DONOR USERS), FROM OCT 01 TO OCT 07 (Same as before)
     private List<String> week1DonorGiftList = Arrays.asList(
-            "fe grant {user} 1500",                 // Donor Cash Amount
+            "givebal {user} 1500",                 // Donor Cash Amount
             "give {user} minecraft:emerald 4",          // Donor Emerald Amount
             "give {user} minecraft:glowstone 8",
             "give {user} minecraft:spider_eye 128",
@@ -72,7 +72,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (DONOR USERS), FROM OCT 07 TO OCT 14 (Same as before)
     private List<String> week2DonorGiftList = Arrays.asList(
-            "fe grant {user} 2000",
+            "givebal {user} 2000",
             "give {user} minecraft:emerald 6",
             "give {user} minecraft:glowstone 16",
             "give {user} minecraft:spider_eye 128",
@@ -82,7 +82,7 @@ public class SpecialGift implements Listener {
 
     // GIFT LIST FOR (DONOR USERS), FROM OCT 21+ (Same as before)
     private List<String> week3DonorGiftList = Arrays.asList(
-            "fe grant {user} 2500",
+            "givebal {user} 2500",
             "give {user} minecraft:emerald 8",
             "give {user} minecraft:glowstone 32",
             "give {user} minecraft:spider_eye 128",

@@ -44,22 +44,22 @@ public class RankShopCommand implements Listener, CommandExecutor {
 
 
         String donorRankOneName = donorRankFormat.replace("%ENTER%", "$")
-                .replace("%COST%", "$250,000"),
+                .replace("%COST%", "$500,000"),
                 donorRankTwoName = donorRankFormat.replace("%ENTER%", "$$")
-                        .replace("%COST%", "$500,000"),
-                donorRankThreeName = donorRankFormat.replace("%ENTER%", "$$$")
                         .replace("%COST%", "$750,000"),
-                donorRankFourName = donorRankFormat.replace("%ENTER%", ChatColor.LIGHT_PURPLE + "<3" + ChatColor.GREEN + "$$$")
+                donorRankThreeName = donorRankFormat.replace("%ENTER%", "$$$")
                         .replace("%COST%", "$1,000,000"),
+                donorRankFourName = donorRankFormat.replace("%ENTER%", ChatColor.LIGHT_PURPLE + "<3" + ChatColor.GREEN + "$$$")
+                        .replace("%COST%", "$1,500,000"),
                 donorRankEliteName = donorRankFormat.replace("%ENTER%", "ELITE")
-                        .replace("%COST%", "$1,500,000");
+                        .replace("%COST%", "$2,000,000");
 
 
-        addRankItem(rankShop, COAL_BLOCK, donorRankOneName, 250000);
-        addRankItem(rankShop, IRON_BLOCK, donorRankTwoName, 500000);
-        addRankItem(rankShop, GOLD_BLOCK, donorRankThreeName, 750000);
-        addRankItem(rankShop, Material.DIAMOND_BLOCK, donorRankFourName, 1000000);
-        addRankItem(rankShop, Material.EMERALD_BLOCK, donorRankEliteName, 1500000);
+        addRankItem(rankShop, COAL_BLOCK, donorRankOneName, 500000);
+        addRankItem(rankShop, IRON_BLOCK, donorRankTwoName, 750000);
+        addRankItem(rankShop, GOLD_BLOCK, donorRankThreeName, 1000000);
+        addRankItem(rankShop, Material.DIAMOND_BLOCK, donorRankFourName, 1500000);
+        addRankItem(rankShop, Material.EMERALD_BLOCK, donorRankEliteName, 2000000);
 
         player.openInventory(rankShop);
 
@@ -118,15 +118,15 @@ public class RankShopCommand implements Listener, CommandExecutor {
     private int getPrice(ItemStack item) {
         switch (item.getType()) {
             case COAL_BLOCK:
-                return 250000;
-            case IRON_BLOCK:
                 return 500000;
-            case GOLD_BLOCK:
+            case IRON_BLOCK:
                 return 750000;
-            case DIAMOND_BLOCK:
+            case GOLD_BLOCK:
                 return 1000000;
-            case EMERALD_BLOCK:
+            case DIAMOND_BLOCK:
                 return 1500000;
+            case EMERALD_BLOCK:
+                return 2000000;
             default:
                 return 0;
         }

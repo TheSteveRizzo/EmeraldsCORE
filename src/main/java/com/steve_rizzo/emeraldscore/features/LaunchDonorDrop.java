@@ -2,7 +2,6 @@ package com.steve_rizzo.emeraldscore.features;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
-import com.steve_rizzo.emeraldscore.utils.LimitedRepeatingTask;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -14,6 +13,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -65,6 +65,9 @@ public class LaunchDonorDrop implements CommandExecutor {
     public static BukkitTask task = null;
     private List<Location> listOfDropLocations = new ArrayList<>();
     private int dropCount = 1;
+
+    // Store Task here
+    BukkitTask dropTask;
 
     // Item by percent lists
     private List<ItemStack> itemsAt5Percent = new ArrayList<>();
@@ -303,20 +306,13 @@ public class LaunchDonorDrop implements CommandExecutor {
         }
         Bukkit.broadcastMessage(ChatColor.GREEN + "---------=[x+x]=---------");
 
-
-        // TEST THIS:
-
-        // Begins after 5 seconds (200 Ticks)
-        // Drops a total of 30 items. Each item has a chance of being dropped at the spawn droppers.
-        // Spawn a random item at a random drop location every second (20 ticks) for 30 seconds (iterations)
-        LimitedRepeatingTask countdown = new LimitedRepeatingTask(Main.core,
-                200, 20, 30) {
+        dropTask = new BukkitRunnable() {
             @Override
-            public void onRepeat() {
+            public void run() {
                 randomChooseItemAndSpawn();
                 increaseDropCount(playerName);
             }
-        };
+        }.runTaskTimer(Main.core, 200, 20);
     }
 
     private void sendClosingMessage(String playerName) {
@@ -342,6 +338,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             dropCount++;
         } else if (dropCount == 30) {
             sendClosingMessage(playerName);
+            dropTask.cancel();
             resetDropCount();
         }
     }
