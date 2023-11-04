@@ -88,3 +88,6 @@ commands:
   survival:
     description: Travel to the Survival world!
     aliases: [ mainworld ]
+  list:
+    description: List online players.
+    aliases: [ online ]

@@ -117,6 +117,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -149,6 +150,7 @@ public class Main extends JavaPlugin {
         this.getCommand("payheal").setExecutor(new PayHeal());
         this.getCommand("pvp").setExecutor(new PVPCommand());
         this.getCommand("survival").setExecutor(new SurvivalCommand());
+        this.getCommand("list").setExecutor(new ListCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

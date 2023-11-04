@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AFKCommand implements CommandExecutor {
-    List<String> listOfAFKPlayers = new ArrayList<>();
+    public static List<String> listOfAFKPlayers = new ArrayList<>();
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
@@ -24,11 +25,13 @@ public class AFKCommand implements CommandExecutor {
                 Bukkit.broadcastMessage(Main.prefix + ChatColor.GOLD + p.getName() + ChatColor.GRAY
                         + " is " + ChatColor.GREEN + "no longer AFK" + ChatColor.GRAY + ".");
                 listOfAFKPlayers.remove(p.getName());
+                ServerJoinPlayer.setPlayerTabName(p);
                 return true;
             } else {
                 Bukkit.broadcastMessage(Main.prefix + ChatColor.GOLD + p.getName() + ChatColor.GRAY
                         + " is now " + ChatColor.RED + "AFK" + ChatColor.GRAY + ".");
                 listOfAFKPlayers.add(p.getName());
+                ServerJoinPlayer.setAFKPlayerTabName(p);
                 return true;
             }
         }

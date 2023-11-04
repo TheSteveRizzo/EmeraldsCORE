@@ -30,6 +30,11 @@ public class ServerJoinPlayer implements Listener {
         p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', prefix) + playerName);
     }
 
+    public static void setAFKPlayerTabName(Player p) {
+        String playerName = p.getName();
+        p.setPlayerListName(ChatColor.GRAY + playerName);
+    }
+
     public static String getPlayerPrefixAndName(Player player) {
         String playerGroup = perms.getPrimaryGroup(player);
         String playerName = player.getName();
@@ -41,12 +46,6 @@ public class ServerJoinPlayer implements Listener {
     public void onJoin(PlayerJoinEvent e) {
 
         if (!e.getPlayer().hasPlayedBefore()) {
-
-            try {
-                e.getPlayer().teleport(Bukkit.getServer().getWorld("pvpworld").getSpawnLocation());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
 
             // Set money first time user
             EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
@@ -67,6 +66,16 @@ public class ServerJoinPlayer implements Listener {
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                 e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
             }
+
+            e.getPlayer().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.AQUA + "" + ChatColor.BOLD +  "=====\n" +
+                    ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "! Make sure to:\n" +
+                    ChatColor.AQUA + "> Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
+                    ChatColor.AQUA + "> Apply for Member using " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
+                    ChatColor.AQUA + "> Join our Discord using " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
+                    ChatColor.AQUA + "> Visit our PVP World using " + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
+                    ChatColor.AQUA + "> Go back to Survival using " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                    ChatColor.AQUA + ChatColor.BOLD + "===== ===== ====="
+            );
 
         } else {
 
