@@ -50,7 +50,7 @@ public class Main extends JavaPlugin {
 
     public void hook() {
         provider = economyImplementer;
-        Bukkit.getServicesManager().register(Economy.class, this.provider, this, ServicePriority.Normal);
+        Bukkit.getServicesManager().register(Economy.class, this.provider, this, ServicePriority.Highest);
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "VaultAPI hooked into " + ChatColor.AQUA + this.getName());
     }
 
@@ -151,6 +151,8 @@ public class Main extends JavaPlugin {
         this.getCommand("pvp").setExecutor(new PVPCommand());
         this.getCommand("survival").setExecutor(new SurvivalCommand());
         this.getCommand("list").setExecutor(new ListCommand());
+        this.getCommand("help").setExecutor(new HelpCommand());
+        this.getCommand("test").setExecutor(new TestCommand());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());

@@ -16,7 +16,6 @@ public class EconomyImplement implements Economy {
     public boolean isEnabled() {
         return true;
     }
-
     @Override
     public String getName() {
         return "EmeraldsCash";
@@ -53,22 +52,22 @@ public class EconomyImplement implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return true;
+        return EmeraldsCashAPI.doesAccountExist(s);
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return true;
+        return EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
     }
 
     @Override
     public boolean hasAccount(String s, String s1) {
-        return true;
+        return EmeraldsCashAPI.doesAccountExist(s);
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return true;
+        return EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
     }
 
     @Override

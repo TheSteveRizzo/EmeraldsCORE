@@ -16,7 +16,7 @@ public class CasinoCommand implements CommandExecutor {
         if (sender instanceof Player) {
 
             Player p = (Player) sender;
-            Location casinoLoc = new Location(Bukkit.getWorld("world"), -197, 66, 406);
+            Location casinoLoc = new Location(Bukkit.getWorld("pvpworld"), 2044, 245, -1289);
             p.sendMessage(Main.prefix + ChatColor.GRAY + "Sending you to the " + ChatColor.LIGHT_PURPLE + "CASINO" + ChatColor.GRAY + "...");
             p.teleport(casinoLoc);
 

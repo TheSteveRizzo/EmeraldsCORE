@@ -91,3 +91,7 @@ commands:
   list:
     description: List online players.
     aliases: [ online ]
+  help:
+    description: Review helpful tools on EmeraldsMC.
+  test:
+    description: Launch a test

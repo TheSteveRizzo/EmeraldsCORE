@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.commands.economy.api;
 
 import com.steve_rizzo.emeraldscore.Main;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -323,6 +324,22 @@ public class EmeraldsCashAPI {
         }
 
         return topBalances;
+    }
+
+    public static boolean doesAccountExist(String uuid) {
+        boolean accountExists = false;
+        String SELECT_ACCOUNT = "SELECT uuid FROM EmeraldsCash WHERE uuid=?";
+
+        try (Connection connection = Main.getInstance().getHikari();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT)) {
+            statement.setString(1, uuid);
+            ResultSet resultSet = statement.executeQuery();
+            accountExists = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return accountExists;
     }
 
 
