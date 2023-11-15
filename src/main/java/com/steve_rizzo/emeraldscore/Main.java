@@ -30,9 +30,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 
 public class Main extends JavaPlugin {
@@ -234,6 +231,9 @@ public class Main extends JavaPlugin {
     public void onDisable() {
 
         unhook();
+
+        System.out.println(Color.RED + ChatColor.stripColor(prefix) + " stopped all TimedXP tasks!");
+        TimedXP.stopAllTasks();
 
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);

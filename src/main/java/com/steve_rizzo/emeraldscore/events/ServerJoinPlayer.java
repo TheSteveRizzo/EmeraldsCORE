@@ -17,6 +17,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
 
+import static com.steve_rizzo.emeraldscore.Main.prefix;
+
 public class ServerJoinPlayer implements Listener {
 
     public static Permission perms = Main.perms;
@@ -79,7 +81,9 @@ public class ServerJoinPlayer implements Listener {
 
         } else {
 
+            // Display player join message
             e.setJoinMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has joined The Emeralds.");
+            // Update and save player rank data
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
@@ -90,17 +94,27 @@ public class ServerJoinPlayer implements Listener {
 
         }
 
+        // Set flight to disabled
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
+        // Set player tab name
         setPlayerTabName(e.getPlayer());
 
-        String playerRank = perms.getPrimaryGroup(e.getPlayer());
+        // Start timed XP & cash event
+        System.out.println(java.awt.Color.RED + ChatColor.stripColor(prefix) + " started a TimedXP task for " + e.getPlayer().getName());
+        TimedXP.startTaskForPlayer(e.getPlayer());
 
+        String playerRank = perms.getPrimaryGroup(e.getPlayer());
 
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        // Stop timed XP & cash event
+        System.out.println(java.awt.Color.RED + ChatColor.stripColor(prefix) + " stopped all TimedXP tasks for " + e.getPlayer().getName());
+        TimedXP.stopTaskForPlayer(e.getPlayer());
+        // Save rank data
         ranks.updateAndSaveData(e.getPlayer());
+        // Display quit message
         e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
         e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
