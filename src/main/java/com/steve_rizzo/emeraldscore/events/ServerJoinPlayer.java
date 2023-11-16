@@ -99,19 +99,10 @@ public class ServerJoinPlayer implements Listener {
         // Set player tab name
         setPlayerTabName(e.getPlayer());
 
-        // Start timed XP & cash event
-        System.out.println(java.awt.Color.RED + ChatColor.stripColor(prefix) + " started a TimedXP task for " + e.getPlayer().getName());
-        TimedXP.startTaskForPlayer(e.getPlayer());
-
-        String playerRank = perms.getPrimaryGroup(e.getPlayer());
-
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        // Stop timed XP & cash event
-        System.out.println(java.awt.Color.RED + ChatColor.stripColor(prefix) + " stopped all TimedXP tasks for " + e.getPlayer().getName());
-        TimedXP.stopTaskForPlayer(e.getPlayer());
         // Save rank data
         ranks.updateAndSaveData(e.getPlayer());
         // Display quit message

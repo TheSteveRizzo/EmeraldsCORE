@@ -171,6 +171,10 @@ public class Main extends JavaPlugin {
         createEconomyTable();
         setPVPRegions();
 
+        // Start TimedXP Timer Function
+        System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
+        TimedXP.startTask();
+
         // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
     }
@@ -232,14 +236,15 @@ public class Main extends JavaPlugin {
 
         unhook();
 
-        System.out.println(Color.RED + ChatColor.stripColor(prefix) + " stopped all TimedXP tasks!");
-        TimedXP.stopAllTasks();
-
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
 
         if (hikari != null) hikari.close();
+
+        // Stop TimedXP Timer Function
+        System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " stopped TimedXP Timer function!");
+        TimedXP.endTask();
 
         Bukkit.getServer().getPluginManager().disablePlugin(this);
         System.out.println(Color.RED + ChatColor.stripColor(prefix) + " has SUCCESSFULLY UNLOADED!");
