@@ -20,7 +20,7 @@ public class TimedXP extends BukkitRunnable {
     }
 
     public static void endTask() {
-        TimedXP.endTask();
+        lastRewardTime.clear();
     }
     @Override
     public void run() {

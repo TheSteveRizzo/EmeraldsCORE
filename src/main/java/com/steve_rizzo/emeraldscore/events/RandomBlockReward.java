@@ -23,17 +23,6 @@ public class RandomBlockReward implements Listener {
         this.serverEssentials = serverEssentials;
     }
 
-    /*
-
-    EMERALD EQUIVALENCY TO USD: 1:$0.0100
-    DIAMOND EQUIVALENCY TO USD: 1:$0.0010
-    EMERALDSCASH EQUIVALENCY (1 is worth ~$0.0001, or roughly 1/100 emerald)
-
-        server icon and desc,
-        apply process, votifier, achievements,
-        store packages, litebans web interface
-     */
-
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
         if (e.getBlock().getType().equals(Material.STONE)) {
@@ -85,9 +74,6 @@ public class RandomBlockReward implements Listener {
                             + ChatColor.GRAY + "CONGRATS: " + ChatColor.GRAY + p.getName() + ChatColor.GRAY
                             + " has just found a random lucky " + ChatColor.GREEN + "EMERALD BLOCK" + ChatColor.GRAY + "!");
 
-
-                    return;
-
                 }
             }
         }
@@ -98,17 +84,17 @@ public class RandomBlockReward implements Listener {
         /*
         Ranks chances:
         OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
-            EMERALD: 1/1250
+            EMERALD: 1/500
         DONOR4:
-            EMERALD: 1/1750
+            EMERALD: 1/750
         DONOR3:
-            EMERALD: 1/2000
+            EMERALD: 1/1000
         DONOR2:
-            EMERALD: 1/2500
+            EMERALD: 1/1250
         DONOR1:
-            EMERALD: 1/3000
+            EMERALD: 1/1500
         MEMBER:
-            EMERALD: 1/5000
+            EMERALD: 1/2000
         GUEST:
             EMERALD: N/A
         */
@@ -117,27 +103,27 @@ public class RandomBlockReward implements Listener {
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
                 (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
 
-            return (double) (1 / 1250);
+            return (double) (1 / 500);
 
         } else if (groupName.equalsIgnoreCase("donor4")) {
 
-            return (double) (1 / 1750);
+            return (double) (1 / 750);
 
         } else if (groupName.equalsIgnoreCase("donor3")) {
 
-            return (double) (1 / 2000);
+            return (double) (1 / 1000);
 
         } else if (groupName.equalsIgnoreCase("donor2")) {
 
-            return (double) (1 / 2500);
+            return (double) (1 / 1250);
 
         } else if (groupName.equalsIgnoreCase("donor1")) {
 
-            return (double) (1 / 3000);
+            return (double) (1 / 1500);
 
         } else if (groupName.equalsIgnoreCase("member")) {
 
-            return (double) (1 / 5000);
+            return (double) (1 / 2000);
 
         }
 
@@ -150,46 +136,47 @@ public class RandomBlockReward implements Listener {
         /*
         Ranks chances:
         OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
-            DIAMOND: 1/750
+            DIAMOND: 1/300
         DONOR4:
-            DIAMOND: 1/1000
+            DIAMOND: 1/400
         DONOR3:
-            DIAMOND: 1/1250
+            DIAMOND: 1/500
         DONOR2:
-            DIAMOND: 1/1500
+            DIAMOND: 1/750
         DONOR1:
-            DIAMOND: 1/2000
+            DIAMOND: 1/1000
         MEMBER:
-            DIAMOND: 1/4000
+            DIAMOND: 1/1250
         GUEST:
             DIAMOND: N/A
         */
+
 
         if (groupName.equalsIgnoreCase("owner") || (groupName.equalsIgnoreCase("admin")) ||
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
                 (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
 
-            return (double) (1 / 750);
+            return (double) (1 / 300);
 
         } else if (groupName.equalsIgnoreCase("donor4")) {
 
-            return (double) (1 / 1000);
+            return (double) (1 / 400);
 
         } else if (groupName.equalsIgnoreCase("donor3")) {
 
-            return (double) (1 / 1250);
+            return (double) (1 / 500);
 
         } else if (groupName.equalsIgnoreCase("donor2")) {
 
-            return (double) (1 / 1500);
+            return (double) (1 / 750);
 
         } else if (groupName.equalsIgnoreCase("donor1")) {
 
-            return (double) (1 / 2000);
+            return (double) (1 / 1000);
 
         } else if (groupName.equalsIgnoreCase("member")) {
 
-            return (double) (1 / 4000);
+            return (double) (1 / 1250);
 
         }
 
