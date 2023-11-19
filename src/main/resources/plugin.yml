@@ -95,3 +95,5 @@ commands:
     description: Review helpful tools on EmeraldsMC.
   test:
     description: Launch a test
+  secretsanta:
+    description: Gift players using Secret Santa!

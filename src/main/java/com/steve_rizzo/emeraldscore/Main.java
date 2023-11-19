@@ -10,6 +10,7 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
+import com.steve_rizzo.emeraldscore.features.SecretSanta;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
@@ -37,6 +38,7 @@ public class Main extends JavaPlugin {
     public static String prefix;
     public static Permission perms = null;
     public static Economy economy = null;
+    public static SecretSanta secretSanta = null;
     public EconomyImplement economyImplementer;
 
     private void instanceClasses() {
@@ -115,6 +117,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new SecretSanta(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -150,6 +153,7 @@ public class Main extends JavaPlugin {
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("test").setExecutor(new TestCommand());
+        this.getCommand("secretsanta").setExecutor(new SecretSanta());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -174,6 +178,20 @@ public class Main extends JavaPlugin {
         // Start TimedXP Timer Function
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
+
+        // Load Secret Santa Inventories
+        secretSanta = new SecretSanta();
+        getServer().getPluginManager().registerEvents(secretSanta, this);
+        SecretSanta.santaFile = new File(getDataFolder(), "secretsanta.yml");
+        if (!SecretSanta.santaFile.exists()) {
+            try {
+                SecretSanta.santaFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            SecretSanta.loadSantaInventories();
+        }
 
         // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
