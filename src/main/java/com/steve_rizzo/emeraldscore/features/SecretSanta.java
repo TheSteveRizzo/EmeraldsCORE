@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SecretSanta extends JavaPlugin implements Listener {
+public class SecretSanta implements CommandExecutor, Listener {
 
     private static Map<String, Inventory> secretSantaInventories = new HashMap<>();
     public static File santaFile;
@@ -125,7 +126,7 @@ public class SecretSanta extends JavaPlugin implements Listener {
 
     private void openSecretSantaInventory(Player player, OfflinePlayer targetPlayer) {
         if (targetPlayer != null) {
-            player.setMetadata("SecretSantaTarget", new FixedMetadataValue(this, targetPlayer));
+            player.setMetadata("SecretSantaTarget", new FixedMetadataValue(Main.core, targetPlayer));
             Inventory inventory = secretSantaInventories.getOrDefault(targetPlayer.getName(), Bukkit.createInventory(null, 27, "Secret Santa for " + targetPlayer.getName()));
             secretSantaInventories.put(targetPlayer.getName(), inventory);
             player.openInventory(inventory);

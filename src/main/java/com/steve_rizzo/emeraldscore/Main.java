@@ -38,7 +38,6 @@ public class Main extends JavaPlugin {
     public static String prefix;
     public static Permission perms = null;
     public static Economy economy = null;
-    public static SecretSanta secretSanta;
     public EconomyImplement economyImplementer;
 
     private void instanceClasses() {
@@ -117,6 +116,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new SecretSanta(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -179,8 +179,6 @@ public class Main extends JavaPlugin {
         TimedXP.startTask();
 
         // Load Secret Santa Inventories
-        secretSanta = new SecretSanta();
-        getServer().getPluginManager().registerEvents(secretSanta, this);
         SecretSanta.santaFile = new File(getDataFolder(), "secretsanta.yml");
         if (!SecretSanta.santaFile.exists()) {
             try {
