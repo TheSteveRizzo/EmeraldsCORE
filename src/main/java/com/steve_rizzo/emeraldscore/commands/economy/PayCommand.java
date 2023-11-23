@@ -45,7 +45,7 @@ public class PayCommand implements CommandExecutor {
                     if (target != null) {
 
 
-                        if ((EmeraldsCashAPI.getBalance(p)) > amount) {
+                        if ((EmeraldsCashAPI.returnBalance(p)) > amount) {
 
                             EmeraldsCashAPI.deductFunds(p, amount);
                             EmeraldsCashAPI.addFunds(target, amount);

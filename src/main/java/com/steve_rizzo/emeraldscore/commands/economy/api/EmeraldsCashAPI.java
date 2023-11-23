@@ -1,7 +1,6 @@
 package com.steve_rizzo.emeraldscore.commands.economy.api;
 
 import com.steve_rizzo.emeraldscore.Main;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -13,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class EmeraldsCashAPI {
@@ -33,13 +33,10 @@ public class EmeraldsCashAPI {
 
     private static final String SELECT_ALL_BALANCES = "SELECT name, balance FROM EmeraldsCash";
 
-    private static int returnedBal = 0;
-
-    public static void displayBalance(Player player) {
-
-        Player p = player;
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Integer> displayBalance(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+            int returnedBal = 0;
+            Player p = player;
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, p.getUniqueId().toString());
@@ -53,12 +50,13 @@ public class EmeraldsCashAPI {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return returnedBal;
         });
     }
 
-    public static void displayBalanceUUID(String balanceUserName, String balanceUsersUUID, Player playerRequestingBalance) {
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Integer> displayBalanceUUID(String balanceUserName, String balanceUsersUUID, Player playerRequestingBalance) {
+        return CompletableFuture.supplyAsync(() -> {
+            int returnedBal = 0;
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, balanceUsersUUID);
@@ -73,33 +71,41 @@ public class EmeraldsCashAPI {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return returnedBal;
         });
     }
 
-
-    public static int getBalance(Player player) {
+    public static CompletableFuture<Integer> getBalance(Player player) {
         return returnPlayerCurrencyAmount(player);
     }
 
-    public static int getUUIDBalance(String uuid) {
+    public static CompletableFuture<Integer> getUUIDBalance(String uuid) {
         return returnPlayerUUIDCurrencyAmount(uuid);
     }
 
-    public static void setBalance(Player player, int amount) {
-        updatePlayerCurrencyAmount(player, amount);
+    public static int returnBalance(Player player) {
+        CompletableFuture<Integer> balanceFuture = returnPlayerCurrencyAmount(player);
+        return balanceFuture.join();
     }
 
-    public static void setBalanceUUID(String uuid, int amount) {
-        updatePlayerUUIDCurrencyAmount(uuid, amount);
+    public static int returnUUIDBalance(String uuid) {
+        CompletableFuture<Integer> balanceFuture = returnPlayerUUIDCurrencyAmount(uuid);
+        return balanceFuture.join();
     }
 
-    public static void deductFunds(Player player, int amount) {
+    public static CompletableFuture<Void> setBalance(Player player, int amount) {
+        return updatePlayerCurrencyAmount(player, amount);
+    }
 
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = format.format(date);
+    public static CompletableFuture<Void> setBalanceUUID(String uuid, int amount) {
+        return updatePlayerUUIDCurrencyAmount(uuid, amount);
+    }
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Void> deductFunds(Player player, int amount) {
+        return CompletableFuture.runAsync(() -> {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = format.format(date);
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(DEDUCT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, player.getUniqueId().toString());
@@ -116,13 +122,11 @@ public class EmeraldsCashAPI {
         });
     }
 
-    public static void deductFundsUUID(String uuid, int amount) {
-
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = format.format(date);
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Void> deductFundsUUID(String uuid, int amount) {
+        return CompletableFuture.runAsync(() -> {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = format.format(date);
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(DEDUCT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, uuid);
@@ -139,13 +143,11 @@ public class EmeraldsCashAPI {
         });
     }
 
-    public static void addFunds(Player player, int amount) {
-
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = format.format(date);
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Void> addFunds(Player player, int amount) {
+        return CompletableFuture.runAsync(() -> {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = format.format(date);
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(ADD_CURRENCY_DATA)) {
                 selectionStatement.setString(1, player.getUniqueId().toString());
@@ -160,16 +162,14 @@ public class EmeraldsCashAPI {
                 e.printStackTrace();
             }
         });
-
     }
 
-    public static void addFundsToUUID(String uuid, int amount) {
+    public static CompletableFuture<Void> addFundsToUUID(String uuid, int amount) {
+        return CompletableFuture.runAsync(() -> {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = format.format(date);
 
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = format.format(date);
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(ADD_CURRENCY_DATA)) {
                 selectionStatement.setString(1, uuid);
@@ -186,47 +186,47 @@ public class EmeraldsCashAPI {
         });
     }
 
-    private static int returnPlayerCurrencyAmount(Player p) {
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Integer> returnPlayerCurrencyAmount(Player p) {
+        return CompletableFuture.supplyAsync(() -> {
+            int returnedBal = 0;
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, p.getUniqueId().toString());
                 ResultSet resultBalance = selectionStatement.executeQuery();
-                if (resultBalance.next()) returnedBal = resultBalance.getInt(1);
+                if (resultBalance.next()) {
+                    returnedBal = resultBalance.getInt(1);
+                }
                 System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + p.getName() + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return returnedBal;
         });
-        return returnedBal;
     }
 
-    private static int returnPlayerUUIDCurrencyAmount(String uuid) {
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+    public static CompletableFuture<Integer> returnPlayerUUIDCurrencyAmount(String uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            int returnedBal = 0;
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(SELECT_CURRENCY_DATA_UUID)) {
                 selectionStatement.setString(1, uuid);
                 ResultSet resultBalance = selectionStatement.executeQuery();
-                if (resultBalance.next()) returnedBal = resultBalance.getInt(1);
+                if (resultBalance.next()) {
+                    returnedBal = resultBalance.getInt(1);
+                }
                 System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + uuid + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return returnedBal;
         });
-        return returnedBal;
-
     }
+    public static CompletableFuture<Void> updatePlayerCurrencyAmount(Player p, int amount) {
+        return CompletableFuture.runAsync(() -> {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDateTime = format.format(date);
 
-    private static void updatePlayerCurrencyAmount(Player p, int amount) {
-
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateTime = format.format(date);
-
-        //             "INSERT INTO EmeraldsCash(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance=?";
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
                 statement.setString(1, p.getUniqueId().toString());
@@ -242,13 +242,12 @@ public class EmeraldsCashAPI {
         });
     }
 
-    private static void updatePlayerUUIDCurrencyAmount(String uuid, int amount) {
-
+    private static CompletableFuture<Void> updatePlayerUUIDCurrencyAmount(String uuid, int amount) {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = format.format(date);
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        return CompletableFuture.runAsync(() -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
                 statement.setString(1, uuid);
@@ -263,11 +262,10 @@ public class EmeraldsCashAPI {
             }
         });
     }
+    public static CompletableFuture<Void> returnTopBalances(Player p, int topCount) {
+        return CompletableFuture.runAsync(() -> {
+            final HashMap<String, Integer> balTopList = new HashMap<>();
 
-    public static void returnTopBalances(Player p, int topCount) {
-        final HashMap<String, Integer> balTopList = new HashMap<>();
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BALANCES)) {
                 ResultSet resultBalance = statement.executeQuery();
@@ -278,70 +276,74 @@ public class EmeraldsCashAPI {
                     balTopList.put(name, userBal);
                 }
 
-                // Sort the balances in descending order
-                LinkedHashMap<String, Integer> sortedBalances = getTopBalances(balTopList, false, topCount);
+                // Sort the balances in descending order asynchronously
+                getTopBalances(balTopList, false, topCount)
+                        .thenAcceptAsync(sortedBalances -> {
+                            // Iterate over the top balances and send them to the player
+                            int rank = 1;
+                            for (Map.Entry<String, Integer> entry : sortedBalances.entrySet()) {
+                                if (rank > topCount) {
+                                    break; // Only send the top 10 balances
+                                }
 
-                // Iterate over the top balances and send them to the player
-                int rank = 1;
-                for (Map.Entry<String, Integer> entry : sortedBalances.entrySet()) {
-                    if (rank > topCount) {
-                        break; // Only send the top 10 balances
-                    }
+                                String name = entry.getKey();
+                                int balance = entry.getValue();
 
-                    String name = entry.getKey();
-                    int balance = entry.getValue();
+                                p.sendMessage(ChatColor.AQUA + "#" + rank + " " + name + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + balance);
+                                rank++;
+                            }
 
-                    p.sendMessage(ChatColor.AQUA + "#" + rank + " " + name + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + balance);
-                    rank++;
-                }
+                            p.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
+                                    + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
+                            System.out.println("[EmeraldsMC - Currency Handler]: Top " + topCount + " balances queried.");
+                        });
 
-                p.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
-                        + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
-                System.out.println("[EmeraldsMC - Currency Handler]: Top " + topCount + " balances queried.");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private static LinkedHashMap<String, Integer> getTopBalances(HashMap<String, Integer> unsortedMap, final boolean order, int topCount) {
-        List<HashMap.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+    private static CompletableFuture<LinkedHashMap<String, Integer>> getTopBalances(HashMap<String, Integer> unsortedMap, final boolean order, int topCount) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<HashMap.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
 
-        // Sorting the list based on values
-        list.sort((o1, o2) -> order ? o1.getValue().compareTo(o2.getValue()) == 0
-                ? o1.getKey().compareTo(o2.getKey())
-                : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
-                ? o2.getKey().compareTo(o1.getKey())
-                : o2.getValue().compareTo(o1.getValue()));
+            // Sorting the list based on values
+            list.sort((o1, o2) -> order ? o1.getValue().compareTo(o2.getValue()) == 0
+                    ? o1.getKey().compareTo(o2.getKey())
+                    : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
+                    ? o2.getKey().compareTo(o1.getKey())
+                    : o2.getValue().compareTo(o1.getValue()));
 
-        // Limit the result to the top 'topCount' entries
-        List<HashMap.Entry<String, Integer>> topEntries = list.stream().limit(topCount).collect(Collectors.toList());
+            // Limit the result to the top 'topCount' entries
+            List<HashMap.Entry<String, Integer>> topEntries = list.stream().limit(topCount).collect(Collectors.toList());
 
-        // Collect the top entries into a LinkedHashMap
-        LinkedHashMap<String, Integer> topBalances = new LinkedHashMap<>();
-        for (HashMap.Entry<String, Integer> entry : topEntries) {
-            topBalances.put(entry.getKey(), entry.getValue());
-        }
+            // Collect the top entries into a LinkedHashMap
+            LinkedHashMap<String, Integer> topBalances = new LinkedHashMap<>();
+            for (HashMap.Entry<String, Integer> entry : topEntries) {
+                topBalances.put(entry.getKey(), entry.getValue());
+            }
 
-        return topBalances;
+            return topBalances;
+        });
     }
+    public static CompletableFuture<Boolean> doesAccountExist(String uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            boolean accountExists = false;
+            String SELECT_ACCOUNT = "SELECT uuid FROM EmeraldsCash WHERE uuid=?";
 
-    public static boolean doesAccountExist(String uuid) {
-        boolean accountExists = false;
-        String SELECT_ACCOUNT = "SELECT uuid FROM EmeraldsCash WHERE uuid=?";
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT)) {
+                statement.setString(1, uuid);
+                ResultSet resultSet = statement.executeQuery();
+                accountExists = resultSet.next();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-        try (Connection connection = Main.getInstance().getHikari();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT)) {
-            statement.setString(1, uuid);
-            ResultSet resultSet = statement.executeQuery();
-            accountExists = resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return accountExists;
+            return accountExists;
+        });
     }
-
 
     private static void printMap(HashMap<String, Integer> map) {
         map.forEach((key, value) -> System.out.println("Key : " + key + " Value : " + value));

@@ -178,18 +178,6 @@ public class Main extends JavaPlugin {
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
 
-        // Load Secret Santa Inventories
-        SecretSanta.santaFile = new File(getDataFolder(), "secretsanta.yml");
-        if (!SecretSanta.santaFile.exists()) {
-            try {
-                SecretSanta.santaFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            SecretSanta.loadSantaInventories();
-        }
-
         // Plugin startup success
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
     }

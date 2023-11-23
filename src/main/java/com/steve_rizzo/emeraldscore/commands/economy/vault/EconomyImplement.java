@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class EconomyImplement implements Economy {
 
@@ -52,82 +53,93 @@ public class EconomyImplement implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return EmeraldsCashAPI.doesAccountExist(s);
+        CompletableFuture<Boolean> accountExistFuture = EmeraldsCashAPI.doesAccountExist(s);
+        return accountExistFuture.join();
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
+        CompletableFuture<Boolean> accountExistFuture = EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
+        return accountExistFuture.join();
     }
 
     @Override
     public boolean hasAccount(String s, String s1) {
-        return EmeraldsCashAPI.doesAccountExist(s);
+        CompletableFuture<Boolean> accountExistFuture = EmeraldsCashAPI.doesAccountExist(s);
+        return accountExistFuture.join();
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
+        CompletableFuture<Boolean> accountExistFuture = EmeraldsCashAPI.doesAccountExist(offlinePlayer.getUniqueId().toString());
+        return accountExistFuture.join();
     }
 
     @Override
     public double getBalance(String s) {
-        Player player = Bukkit.getPlayer(s);
-        return EmeraldsCashAPI.getBalance(player);
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s));
+        return balanceFuture.join();
     }
-
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        UUID uuid = offlinePlayer.getUniqueId();
-        return EmeraldsCashAPI.getUUIDBalance(uuid.toString());
-
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString());
+        return balanceFuture.join();
     }
 
     @Override
     public double getBalance(String s, String s1) {
-        Player player = Bukkit.getPlayer(s);
-        return EmeraldsCashAPI.getBalance(player);
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s));
+        return balanceFuture.join();
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        UUID uuid = offlinePlayer.getUniqueId();
-        return EmeraldsCashAPI.getUUIDBalance(uuid.toString());
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString());
+        return balanceFuture.join();
     }
 
     @Override
     public boolean has(String s, double v) {
-        if (EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s)) >= v) return true;
-        return false;
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s));
+        int balance = balanceFuture.join();
+        return balance >= v;
     }
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
-        if (EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString()) >= v) return true;
-        return false;
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString());
+        int balance = balanceFuture.join();
+        return balance >= v;
     }
 
     @Override
     public boolean has(String s, String s1, double v) {
-        if (EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s)) >= v) return true;
-        return false;
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(Bukkit.getPlayer(s));
+        int balance = balanceFuture.join();
+        return balance >= v;
     }
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        if (EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString()) >= v) return true;
-        return false;
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString());
+        int balance = balanceFuture.join();
+        return balance >= v;
     }
-
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
         Player player = Bukkit.getPlayer(s);
-        if (has(s, v)) {
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(player);
+
+        // Handle completion of the CompletableFuture and convert to double
+        int balance = balanceFuture.join();
+        double currentBalance = (double) balance;
+
+        if (currentBalance >= v) {
             EmeraldsCashAPI.deductFunds(player, (int) v);
-            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
         } else {
-            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.FAILURE, "Failed");
         }
     }
@@ -135,12 +147,18 @@ public class EconomyImplement implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        if (has(offlinePlayer, v)) {
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(uuid.toString());
+
+        // Handle completion of the CompletableFuture and convert to double
+        int balance = balanceFuture.join();
+        double currentBalance = (double) balance;
+
+        if (currentBalance >= v) {
             EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
-            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
         } else {
-            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.FAILURE, "Failed");
         }
     }
@@ -148,25 +166,36 @@ public class EconomyImplement implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String s, String s1, double v) {
         Player player = Bukkit.getPlayer(s);
-        if (has(s, v)) {
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(player);
+
+        // Handle completion of the CompletableFuture and convert to double
+        int balance = balanceFuture.join();
+        double currentBalance = (double) balance;
+
+        if (currentBalance >= v) {
             EmeraldsCashAPI.deductFunds(player, (int) v);
-            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
         } else {
-            return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.FAILURE, "Failed");
         }
     }
-
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        if (has(offlinePlayer, v)) {
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(uuid.toString());
+
+        // Handle completion of the CompletableFuture and convert to double
+        int balance = balanceFuture.join();
+        double currentBalance = (double) balance;
+
+        if (currentBalance >= v) {
             EmeraldsCashAPI.deductFundsUUID(uuid.toString(), (int) v);
-            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.SUCCESS, "Withdraw Success");
         } else {
-            return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+            return new EconomyResponse(v, currentBalance,
                     EconomyResponse.ResponseType.FAILURE, "Failed");
         }
     }
@@ -174,32 +203,52 @@ public class EconomyImplement implements Economy {
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
         Player player = Bukkit.getPlayer(s);
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(player);
+        int balance = balanceFuture.join();
+
         EmeraldsCashAPI.addFunds(player, (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+        double newBalance = balance + v;
+
+        return new EconomyResponse(v, newBalance,
                 EconomyResponse.ResponseType.SUCCESS, "Deposit Success");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(uuid.toString());
+        int balance = balanceFuture.join();
+
         EmeraldsCashAPI.addFundsToUUID(uuid.toString(), (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(uuid.toString()),
+        double newBalance = balance + v;
+
+        return new EconomyResponse(v, newBalance,
                 EconomyResponse.ResponseType.SUCCESS, "Deposit Success");
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, String s1, double v) {
         Player player = Bukkit.getPlayer(s);
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getBalance(player);
+        int balance = balanceFuture.join();
+
         EmeraldsCashAPI.addFunds(player, (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getBalance(player),
+        double newBalance = balance + v;
+
+        return new EconomyResponse(v, newBalance,
                 EconomyResponse.ResponseType.SUCCESS, "Deposit Success");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
+        CompletableFuture<Integer> balanceFuture = EmeraldsCashAPI.getUUIDBalance(uuid.toString());
+        int balance = balanceFuture.join();
+
         EmeraldsCashAPI.addFundsToUUID(uuid.toString(), (int) v);
-        return new EconomyResponse(v, EmeraldsCashAPI.getUUIDBalance(offlinePlayer.getUniqueId().toString()),
+        double newBalance = balance + v;
+
+        return new EconomyResponse(v, newBalance,
                 EconomyResponse.ResponseType.SUCCESS, "Deposit Success");
     }
 

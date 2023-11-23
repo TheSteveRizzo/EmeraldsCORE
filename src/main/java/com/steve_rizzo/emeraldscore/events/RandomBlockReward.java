@@ -84,17 +84,17 @@ public class RandomBlockReward implements Listener {
         /*
         Ranks chances:
         OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
-            EMERALD: 1/500
-        DONOR4:
-            EMERALD: 1/750
-        DONOR3:
             EMERALD: 1/1000
-        DONOR2:
-            EMERALD: 1/1250
-        DONOR1:
+        DONOR4:
             EMERALD: 1/1500
-        MEMBER:
+        DONOR3:
             EMERALD: 1/2000
+        DONOR2:
+            EMERALD: 1/2500
+        DONOR1:
+            EMERALD: 1/3000
+        MEMBER:
+            EMERALD: 1/4000
         GUEST:
             EMERALD: N/A
         */
@@ -103,27 +103,27 @@ public class RandomBlockReward implements Listener {
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
                 (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
 
-            return (double) (1 / 500);
+            return (double) (1.0 / 1000.0);
 
         } else if (groupName.equalsIgnoreCase("donor4")) {
 
-            return (double) (1 / 750);
+            return (double) (1.0 / 1500.0);
 
         } else if (groupName.equalsIgnoreCase("donor3")) {
 
-            return (double) (1 / 1000);
+            return (double) (1.0 / 2000.0);
 
         } else if (groupName.equalsIgnoreCase("donor2")) {
 
-            return (double) (1 / 1250);
+            return (double) (1.0 / 2500.0);
 
         } else if (groupName.equalsIgnoreCase("donor1")) {
 
-            return (double) (1 / 1500);
+            return (double) (1.0 / 3000.0);
 
         } else if (groupName.equalsIgnoreCase("member")) {
 
-            return (double) (1 / 2000);
+            return (double) (1.0 / 4000.0);
 
         }
 
@@ -136,17 +136,17 @@ public class RandomBlockReward implements Listener {
         /*
         Ranks chances:
         OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
-            DIAMOND: 1/300
+            DIAMOND: 1/600
         DONOR4:
-            DIAMOND: 1/400
+            DIAMOND: 1/800
         DONOR3:
-            DIAMOND: 1/500
-        DONOR2:
-            DIAMOND: 1/750
-        DONOR1:
             DIAMOND: 1/1000
+        DONOR2:
+            DIAMOND: 1/1500
+        DONOR1:
+            DIAMOND: 1/2000
         MEMBER:
-            DIAMOND: 1/1250
+            DIAMOND: 1/2500
         GUEST:
             DIAMOND: N/A
         */
@@ -156,27 +156,27 @@ public class RandomBlockReward implements Listener {
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
                 (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
 
-            return (double) (1 / 300);
+            return (double) (1.0 / 600.0);
 
         } else if (groupName.equalsIgnoreCase("donor4")) {
 
-            return (double) (1 / 400);
+            return (double) (1.0 / 800.0);
 
         } else if (groupName.equalsIgnoreCase("donor3")) {
 
-            return (double) (1 / 500);
+            return (double) (1.0 / 1000.0);
 
         } else if (groupName.equalsIgnoreCase("donor2")) {
 
-            return (double) (1 / 750);
+            return (double) (1.0 / 1500.0);
 
         } else if (groupName.equalsIgnoreCase("donor1")) {
 
-            return (double) (1 / 1000);
+            return (double) (1.0 / 2000.0);
 
         } else if (groupName.equalsIgnoreCase("member")) {
 
-            return (double) (1 / 1250);
+            return (double) (1.0 / 2500.0);
 
         }
 

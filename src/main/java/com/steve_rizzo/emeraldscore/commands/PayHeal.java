@@ -23,7 +23,7 @@ public class PayHeal implements CommandExecutor {
 
             if (args.length == 0) {
 
-                if (EmeraldsCashAPI.getBalance(p) > 500) {
+                if (EmeraldsCashAPI.returnBalance(p) > 500) {
 
                     p.sendMessage(prefix + ChatColor.YELLOW + "This " + ChatColor.LIGHT_PURPLE + "HEAL " + ChatColor.YELLOW + "will cost " + ChatColor.GREEN + "500 Emeralds Cash" + ChatColor.YELLOW + ". To continue, use " + ChatColor.AQUA + "/pheal confirm" + ChatColor.YELLOW + ".");
                     playersInConfirm.add(p.getUniqueId().toString());

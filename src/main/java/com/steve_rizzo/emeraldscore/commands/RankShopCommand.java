@@ -133,7 +133,7 @@ public class RankShopCommand implements Listener, CommandExecutor {
     }
 
     private boolean canPurchaseRank(Player player, int price) {
-        if ((EmeraldsCashAPI.getBalance(player)) >= price) return true;
+        if ((EmeraldsCashAPI.returnBalance(player)) >= price) return true;
         return false;
     }
 

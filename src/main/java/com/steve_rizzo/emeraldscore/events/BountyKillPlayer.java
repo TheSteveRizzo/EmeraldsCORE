@@ -18,7 +18,7 @@ public class BountyKillPlayer implements Listener {
         if (e.getEntity().getKiller() != null) {
             Player killer = e.getEntity().getKiller();
 
-            if (EmeraldsCashAPI.getBalance(died) >= 100) {
+            if (EmeraldsCashAPI.returnBalance(died) >= 100) {
 
                 EmeraldsCashAPI.deductFunds(died, 100);
                 EmeraldsCashAPI.addFunds(killer, 100);
