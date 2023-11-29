@@ -44,6 +44,21 @@ public class ServerJoinPlayer implements Listener {
         return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
     }
 
+    public static String getPlayerPrefixAndName(String playerName) {
+        Player player = Bukkit.getPlayerExact(playerName);
+        if (player != null) {
+            String playerGroup = perms.getPrimaryGroup(player);
+            String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
+            return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
+        } else {
+            // If the player is offline, use OfflinePlayer to get the data
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+            String playerGroup = perms.getPrimaryGroup(null, offlinePlayer);
+            String prefix = chat.getGroupPrefix("world", playerGroup);
+            return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
+        }
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 

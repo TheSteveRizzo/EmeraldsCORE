@@ -12,6 +12,8 @@ import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SecretSanta;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
+import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
+import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -31,7 +33,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
 
@@ -71,6 +75,7 @@ public class Main extends JavaPlugin {
     public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
     public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
+    public static ArrayList<String> WorldBlackList = new ArrayList<>();
 
     private HikariDataSource hikari;
 
@@ -174,6 +179,18 @@ public class Main extends JavaPlugin {
         createEconomyTable();
         setPVPRegions();
 
+        // Load SecretSanta inventory
+        SecretSanta.loadSantaInventories();
+
+        // Load Villager Features
+
+        Bukkit.getServer().getPluginManager().registerEvents(new VillagerSaverListener(), this);
+        LogInfo("Villager Plugin listener registered.");
+        LoadWorldBlackList();
+        this.getCommand("villagersaver").setExecutor(new VillagerSaverCommands());
+        LogInfo("Villager Plugin commands registered.");
+        LogInfo("VillagerSaver extension loaded!");
+
         // Start TimedXP Timer Function
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
@@ -249,8 +266,13 @@ public class Main extends JavaPlugin {
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " stopped TimedXP Timer function!");
         TimedXP.endTask();
 
+        // Save Villager worlds
+        SaveWorldBlackList();
+        LogInfo("VillagerSaver disabled!");
+
         Bukkit.getServer().getPluginManager().disablePlugin(this);
         System.out.println(Color.RED + ChatColor.stripColor(prefix) + " has SUCCESSFULLY UNLOADED!");
+
 
     }
 
@@ -283,5 +305,56 @@ public class Main extends JavaPlugin {
             System.out.println("[EmeraldsMC - Currency Handler]: Error. See below.");
             e.printStackTrace();
         }
+    }
+
+    private void LogInfo(String line) {
+        this.getLogger().log(Level.INFO, line);
+    }
+
+    private void LogWarn(String line) {
+        this.getLogger().log(Level.WARNING, line);
+    }
+
+    private void LogError(String line) {
+        this.getLogger().log(Level.SEVERE, line);
+    }
+
+    private void SaveWorldBlackList() {
+        LogInfo("Saving blacklist.");
+        File WorldBlackListFile = new File(getDataFolder().getAbsolutePath(), "VillagerBlacklistWorld.yml");
+        try {
+            WorldBlackListFile.delete();
+            WorldBlackListFile.createNewFile();
+            if (WorldBlackList == null)
+                WorldBlackList = new ArrayList<>();
+        } catch (Exception ex) {
+            LogError("Error saving blacklist: " + ex.getMessage());
+            return;
+        }
+        YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(WorldBlackListFile);
+        yamlConfiguration.set("BlackList", WorldBlackList);
+        try {
+            yamlConfiguration.save(WorldBlackListFile);
+        } catch (Exception ex) {
+            LogError("Error saving blacklist: " + ex.getMessage());
+            return;
+        }
+        LogInfo("Blacklist saved.");
+    }
+
+    private void LoadWorldBlackList() {
+        File WorldBlackListFile = new File(getDataFolder().getAbsolutePath(), "VillagerBlacklistWorld.yml");
+        try {
+            WorldBlackListFile.createNewFile();
+            YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(WorldBlackListFile);
+            WorldBlackList = (ArrayList<String>) yamlConfiguration.get("BlackList");
+        } catch (Exception ex) {
+            LogWarn("World blacklist file has not been loaded: " + ex.getMessage());
+            LogWarn("If this is the first time running the plugin the file will be created on server stop.");
+            return;
+        }
+        if (WorldBlackList == null)
+            WorldBlackList = new ArrayList<>();
+        LogInfo("World Blacklist loaded.");
     }
 }

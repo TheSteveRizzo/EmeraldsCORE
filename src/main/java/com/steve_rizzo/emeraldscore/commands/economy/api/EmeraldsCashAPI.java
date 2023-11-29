@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.commands.economy.api;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -21,7 +22,8 @@ public class EmeraldsCashAPI {
 
     private static final String SELECT_CURRENCY_DATA = "SELECT balance FROM EmeraldsCash WHERE uuid=?";
     private static final String SELECT_CURRENCY_DATA_UUID = "SELECT balance FROM EmeraldsCash WHERE uuid=?";
-
+    private static final String DELETE_BALANCE_BY_NAME =
+            "DELETE FROM EmeraldsCash WHERE name=?";
     private static final String UPDATE_CURRENCY_DATA =
             "INSERT INTO EmeraldsCash(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance=?";
 
@@ -262,71 +264,59 @@ public class EmeraldsCashAPI {
             }
         });
     }
-    public static CompletableFuture<Void> returnTopBalances(Player p, int topCount) {
-        return CompletableFuture.runAsync(() -> {
-            final HashMap<String, Integer> balTopList = new HashMap<>();
+
+    public static void sendTopBalancesMessage(Player player) {
+        CompletableFuture.runAsync(() -> {
+            Map<String, Integer> balTopList = new HashMap<>();
 
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BALANCES)) {
                 ResultSet resultBalance = statement.executeQuery();
                 while (resultBalance.next()) {
                     String name = resultBalance.getString(1);
-                    int userBal = resultBalance.getInt(2);
+                    Integer userBal = resultBalance.getInt(2);
 
-                    balTopList.put(name, userBal);
+                    if (userBal != null) {
+                        balTopList.put(name, userBal);
+                    } else {
+                        // If null balance found, remove it from the database
+                        PreparedStatement deleteStatement = connection.prepareStatement(DELETE_BALANCE_BY_NAME);
+                        deleteStatement.setString(1, name);
+                        deleteStatement.executeUpdate();
+                        deleteStatement.close();
+                    }
                 }
 
-                // Sort the balances in descending order asynchronously
-                getTopBalances(balTopList, false, topCount)
-                        .thenAcceptAsync(sortedBalances -> {
-                            // Iterate over the top balances and send them to the player
-                            int rank = 1;
-                            for (Map.Entry<String, Integer> entry : sortedBalances.entrySet()) {
-                                if (rank > topCount) {
-                                    break; // Only send the top 10 balances
-                                }
+                // Get top balances
+                List<Map.Entry<String, Integer>> sortedBalances = balTopList.entrySet().stream()
+                        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                        .limit(10)
+                        .collect(Collectors.toList());
 
-                                String name = entry.getKey();
-                                int balance = entry.getValue();
+                // Send top balances to the player
+                player.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
+                        + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
+                player.sendMessage(ChatColor.GRAY + "Top Balances:");
 
-                                p.sendMessage(ChatColor.AQUA + "#" + rank + " " + name + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + balance);
-                                rank++;
-                            }
+                int rank = 1;
+                for (Map.Entry<String, Integer> entry : sortedBalances) {
+                    String name = entry.getKey();
+                    int balance = entry.getValue();
 
-                            p.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
-                                    + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
-                            System.out.println("[EmeraldsMC - Currency Handler]: Top " + topCount + " balances queried.");
-                        });
+                    player.sendMessage(ChatColor.RED + "#" + rank + " " + ChatColor.GREEN + ServerJoinPlayer.getPlayerPrefixAndName(name) + ChatColor.GRAY + " : " + ChatColor.GREEN + "$" + balance);
+                    rank++;
+                }
 
+                player.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
+                        + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
+
+                System.out.println("[EmeraldsMC - Currency Handler]: Top 10 balances queried by " + player.getName());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private static CompletableFuture<LinkedHashMap<String, Integer>> getTopBalances(HashMap<String, Integer> unsortedMap, final boolean order, int topCount) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<HashMap.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
-
-            // Sorting the list based on values
-            list.sort((o1, o2) -> order ? o1.getValue().compareTo(o2.getValue()) == 0
-                    ? o1.getKey().compareTo(o2.getKey())
-                    : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
-                    ? o2.getKey().compareTo(o1.getKey())
-                    : o2.getValue().compareTo(o1.getValue()));
-
-            // Limit the result to the top 'topCount' entries
-            List<HashMap.Entry<String, Integer>> topEntries = list.stream().limit(topCount).collect(Collectors.toList());
-
-            // Collect the top entries into a LinkedHashMap
-            LinkedHashMap<String, Integer> topBalances = new LinkedHashMap<>();
-            for (HashMap.Entry<String, Integer> entry : topEntries) {
-                topBalances.put(entry.getKey(), entry.getValue());
-            }
-
-            return topBalances;
-        });
-    }
     public static CompletableFuture<Boolean> doesAccountExist(String uuid) {
         return CompletableFuture.supplyAsync(() -> {
             boolean accountExists = false;

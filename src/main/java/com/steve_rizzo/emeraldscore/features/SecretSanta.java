@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -32,58 +33,57 @@ public class SecretSanta implements CommandExecutor, Listener {
 
     static Gson gson;
     public static Map<String, Inventory> secretSantaInventories = new HashMap<>();
-    public static File santaFile;
-
     public SecretSanta() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Inventory.class, new InventoryTypeAdapter());
         gson = gsonBuilder.create();
     }
+    public static void loadSantaInventories() {
+        File secretSantaFolder = new File(Main.core.getDataFolder(), "secretSanta");
+        if (!secretSantaFolder.exists()) {
+            secretSantaFolder.mkdirs();
+        }
+
+        for (File playerFile : secretSantaFolder.listFiles()) {
+            try (Reader reader = new FileReader(playerFile)) {
+                Type inventoryMapType = new TypeToken<Map<String, JsonArray>>() {}.getType();
+                Map<String, JsonArray> loadedInventory = gson.fromJson(reader, inventoryMapType);
+
+                if (loadedInventory != null) {
+                    JsonArray serializedInventory = loadedInventory.get("inventory");
+
+                    if (serializedInventory != null) {
+                        String playerName = playerFile.getName().replace(".json", "");
+                        Inventory inventory = Bukkit.createInventory(null, 54, "Secret Santa for " + playerName);
+
+                        // Deserialize the inventory from the JSON array
+                        deserializeInventory(serializedInventory, inventory);
+
+                        secretSantaInventories.put(playerName, inventory);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void saveSantaInventories() {
-        Map<String, JsonArray> serializableInventories = new HashMap<>();
-
-        // Iterate through the secretSantaInventories and convert Inventory contents to a serializable format
         for (Map.Entry<String, Inventory> entry : secretSantaInventories.entrySet()) {
             String playerName = entry.getKey();
             Inventory inventory = entry.getValue();
 
-            // Convert inventory contents to a JSON array
-            JsonArray serializedInventory = serializeInventory(inventory);
+            // Find the corresponding player based on the player's name
+            OfflinePlayer targetPlayer = getOfflinePlayer(playerName);
 
-            // Store the serialized inventory in the map
-            serializableInventories.put(playerName, serializedInventory);
-        }
-
-        try (Writer writer = new FileWriter(santaFile)) {
-            gson.toJson(serializableInventories, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadSantaInventories() {
-        try (Reader reader = new FileReader(santaFile)) {
-            Type inventoryMapType = new TypeToken<Map<String, JsonArray>>() {}.getType();
-            Map<String, JsonArray> loadedInventories = gson.fromJson(reader, inventoryMapType);
-            if (loadedInventories != null) {
-                for (Map.Entry<String, JsonArray> entry : loadedInventories.entrySet()) {
-                    String playerName = entry.getKey();
-                    JsonArray serializedInventory = entry.getValue();
-
-                    Inventory inventory = Bukkit.createInventory(null, 54, "Secret Santa for " + playerName);
-
-                    // Deserialize the inventory from the JSON array
-                    deserializeInventory(serializedInventory, inventory);
-
-                    secretSantaInventories.put(playerName, inventory);
-                }
+            if (targetPlayer != null) {
+                saveSantaInventoryForTarget(playerName, targetPlayer, inventory);
+            } else {
+                // Handle the case when the target player is not found
+                System.out.println("[EmeraldsCore] Console Notice: Could not find target player: " + playerName);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
-
 
     private JsonObject serializeItemStack(ItemStack itemStack) {
         JsonObject serializedItem = new JsonObject();
@@ -135,21 +135,20 @@ public class SecretSanta implements CommandExecutor, Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
         if (secretSantaInventories.containsKey(player.getName())) {
-            // Check if the closed inventory is the Secret Santa inventory
             Inventory closedInventory = event.getInventory();
             Inventory secretInventory = secretSantaInventories.get(player.getName());
 
             if (closedInventory.equals(secretInventory)) {
-                // Save the Secret Santa inventory
                 secretSantaInventories.put(player.getName(), closedInventory);
                 saveSantaInventories();
 
-                // Check if the player has a target player
-                if (player.getMetadata("SecretSantaTarget").size() > 0) {
-                    OfflinePlayer targetPlayer = (OfflinePlayer) player.getMetadata("SecretSantaTarget").get(0).value();
-                    saveSantaInventoryForTarget(player.getName(), targetPlayer, closedInventory);
-                    player.sendMessage(Main.prefix + ChatColor.AQUA + "Gifted " + ChatColor.RED + "Secret Santa " + ChatColor.AQUA + "items to " + ChatColor.GREEN + targetPlayer.getName() + ChatColor.AQUA + "!");
-
+                if (player.hasMetadata("SecretSantaTarget")) {
+                    MetadataValue metadataValue = player.getMetadata("SecretSantaTarget").get(0);
+                    if (metadataValue.value() instanceof OfflinePlayer) {
+                        OfflinePlayer targetPlayer = (OfflinePlayer) metadataValue.value();
+                        saveSantaInventoryForTarget(player.getName(), targetPlayer, closedInventory);
+                        player.sendMessage(Main.prefix + ChatColor.AQUA + "Gifted " + ChatColor.RED + "Secret Santa " + ChatColor.AQUA + "items to " + ChatColor.GREEN + targetPlayer.getName() + ChatColor.AQUA + "!");
+                    }
                 }
             }
         }
@@ -164,23 +163,21 @@ public class SecretSanta implements CommandExecutor, Listener {
         // Store the serialized inventory in the map
         serializableInventories.put(playerName, serializedInventory);
 
-        File targetDirectory = new File(santaFile.getParentFile(), "secretsanta");
+        // Update the path to the 'secretSanta' sub-folder directory
+        File targetDirectory = new File(Main.core.getDataFolder(), "secretSanta");
         if (!targetDirectory.exists()) {
-            targetDirectory.mkdirs(); // This line creates the directory if it doesn't exist
+            targetDirectory.mkdirs(); // Create the directory if it doesn't exist
         }
         File targetFile = new File(targetDirectory, targetPlayer.getUniqueId() + ".json");
 
-        // Ensure the target file is a JSON file
-        if (!targetFile.exists()) {
-            try {
+        try {
+            if (!targetFile.exists()) {
                 targetFile.createNewFile(); // Create the file if it doesn't exist
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
 
-        try (Writer writer = new FileWriter(targetFile)) {
-            gson.toJson(serializableInventories, writer);
+            try (Writer writer = new FileWriter(targetFile)) {
+                gson.toJson(serializableInventories, writer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,7 +250,7 @@ public class SecretSanta implements CommandExecutor, Listener {
 
 
     private void openSecretSantaInventory(Player player, OfflinePlayer targetPlayer) {
-        if (targetPlayer != null) {
+        if (targetPlayer != null && targetPlayer instanceof OfflinePlayer) {
             player.setMetadata("SecretSantaTarget", new FixedMetadataValue(Main.core, targetPlayer));
             Inventory inventory = secretSantaInventories.getOrDefault(targetPlayer.getName(), Bukkit.createInventory(null, 54, ChatColor.AQUA + "" + ChatColor.BOLD
                     + "Secret Santa for " + ChatColor.GREEN + "" + ChatColor.BOLD + targetPlayer.getName()));

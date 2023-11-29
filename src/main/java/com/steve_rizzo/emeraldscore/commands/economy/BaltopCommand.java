@@ -7,22 +7,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.CompletionException;
+
 public class BaltopCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         if (sender instanceof Player) {
-
             Player p = (Player) sender;
 
-            p.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
-                    + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
-            p.sendMessage(ChatColor.GRAY + "TOP BALANCES: ");
+            EmeraldsCashAPI.sendTopBalancesMessage(p);
 
-            EmeraldsCashAPI.returnTopBalances(p, 10);
             return true;
-
         }
 
         return true;

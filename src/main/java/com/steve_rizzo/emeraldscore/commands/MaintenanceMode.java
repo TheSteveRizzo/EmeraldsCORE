@@ -38,8 +38,9 @@ public class MaintenanceMode implements CommandExecutor {
 
         Main.core.getServer().setWhitelist(false);
 
-        PingServer.defaultMOTD = "§b§l» §a§lWelcome to §c§lplay.emeraldsmc.com §a§lSMP! §b§l«";
-        PingServer.overrideMOTD(PingServer.defaultMOTD);
+        String defaultMOTD = "§b§l» §a§lWelcome to §c§lplay.emeraldsmc.com §a§lSMP! §b§l«\n§b§l» §e§lMcMMO, LANDS, SHOPS, PVP, +MORE§b§l «";
+
+        PingServer.overrideMOTD(defaultMOTD);
 
     }
 

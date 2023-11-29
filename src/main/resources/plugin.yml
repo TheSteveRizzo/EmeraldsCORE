@@ -97,3 +97,5 @@ commands:
     description: Launch a test
   secretsanta:
     description: Gift players using Secret Santa!
+  villagersaver:
+    description: Access villager saver commands.
