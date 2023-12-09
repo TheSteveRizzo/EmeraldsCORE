@@ -182,7 +182,7 @@ public class RankCommand implements CommandExecutor {
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
                 // Set rank of player in tab
                 Player tp = serverEssentials.getServer().getPlayer(target);
-                ServerJoinPlayer.setPlayerTabName(tp);
+                ServerJoinPlayer.setPlayerTabAndTagName(tp);
                 ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
             }
         } catch (NullPointerException ex) {
@@ -212,7 +212,7 @@ public class RankCommand implements CommandExecutor {
             if (serverEssentials.getServer().getPlayer(target).isOnline()) {
                 serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
-                ServerJoinPlayer.setPlayerTabName(tp);
+                ServerJoinPlayer.setPlayerTabAndTagName(tp);
                 ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
             }
         }

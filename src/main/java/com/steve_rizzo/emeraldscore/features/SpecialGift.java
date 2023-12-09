@@ -30,86 +30,92 @@ public class SpecialGift implements Listener {
 
     ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM NOV 01 TO NOV 07
+    // GIFT LIST FOR (NON-DONOR USERS), FROM DEC 01 TO DEC 07
     private List<String> week1GiftList = Arrays.asList(
             "givebal {user} 500",                  // ND Cash amount
             "give {user} minecraft:emerald 1",       // ND Emerald Amount
-            "give {user} minecraft:carrot 16",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 8",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:1}]} 1", // Enchanted book with fire aspect
-            "give {user} minecraft:iron_sword 1");   // Replaced with iron sword for Thanksgiving
+            "give {user} minecraft:diamond 4",       // ND Emerald Amount
+            "give {user} minecraft:carrot 16",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 8",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 8",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 64",   // Replaced with pumpkin pie for Christmas
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1");
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM NOV 07 TO NOV 14
+    // GIFT LIST FOR (NON-DONOR USERS), FROM DEC 07 TO DEC 14
     private List<String> week2GiftList = Arrays.asList(
             "givebal {user} 750",                  // ND Cash amount
-            "give {user} minecraft:emerald 1",       // ND Emerald Amount
-            "give {user} minecraft:carrot 32",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 16",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1", // Enchanted book with fire aspect
-            "give {user} minecraft:iron_sword 1"); // Replaced with iron sword for Thanksgiving
+            "give {user} minecraft:emerald 4",       // ND Emerald Amount
+            "give {user} minecraft:diamond 8",       // ND Emerald Amount
+            "give {user} minecraft:carrot 32",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 16",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 8",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 128",   // Replaced with pumpkin pie for Christmas
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1");
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM NOV OCT 21+
+
+    // GIFT LIST FOR (NON-DONOR USERS), FROM DEC OCT 21+
     private List<String> week3GiftList = Arrays.asList(
-            "givebal {user} 1000",                   // ND Cash amount
-            "give {user} minecraft:emerald 2",       // ND Emerald Amount
-            "give {user} minecraft:carrot 48",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 32",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:fire_aspect,lvl:2}]} 1", // Enchanted book with fire aspect
-            "give {user} minecraft:diamond 1");   // Replaced with diamond sword for Thanksgiving
+            "givebal {user} 1000",                  // ND Cash amount
+            "give {user} minecraft:emerald 8",       // ND Emerald Amount
+            "give {user} minecraft:emerald 12",       // ND Emerald Amount
+            "give {user} minecraft:carrot 48",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 32",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 8",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 128",   // Replaced with pumpkin pie for Christmas
+            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:3}]} 1");
 
 
 ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 
-    // GIFT LIST FOR (DONOR USERS), FROM NOV 01 TO NOV 07 (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM DEC 01 TO DEC 07 (Same as before)
     private List<String> week1DonorGiftList = Arrays.asList(
-            "givebal {user} 1500",                 // Donor Cash Amount
-            "give {user} minecraft:emerald 4",          // Donor Emerald Amount
-            "give {user} minecraft:diamond 8", // Donor Diamond Amount
-            "give {user} minecraft:baked_potato 32",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 32",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:sharpness,lvl:1}]} 1", // Enchanted book with Sharpness
-            // SHARP 1 IRON SWORD
-            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Thanksgiving Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Thanksgiving gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:1}]} 1");
+            "givebal {user} 1500",                  // ND Cash amount
+            "give {user} minecraft:emerald 8",       // ND Emerald Amount
+            "give {user} minecraft:emerald 12",       // ND Emerald Amount
+            "give {user} minecraft:carrot 48",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 32",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 8",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 128",   // Replaced with pumpkin pie for Christmas
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:3}]} 1");
 
-    // GIFT LIST FOR (DONOR USERS), FROM NOV 07 TO NOV 14 (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM DEC 07 TO DEC 14 (Same as before)
     private List<String> week2DonorGiftList = Arrays.asList(
-            "givebal {user} 2000", // Donor Cash Amount
-            "give {user} minecraft:emerald 6",  // Donor Emerald Amount
-            "give {user} minecraft:diamond 12",  // Donor Diamond Amount
-            "give {user} minecraft:baked_potato 48",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 48",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:sharpness,lvl:2}]} 1", // Enchanted book with sharpness
-            // SHARP 2 IRON SWORD
-            "give {user} iron_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Thanksgiving Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Thanksgiving gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1");
+            "givebal {user} 2000",                  // ND Cash amount
+            "give {user} minecraft:emerald 12",       // ND Emerald Amount
+            "give {user} minecraft:emerald 16",       // ND Emerald Amount
+            "give {user} minecraft:carrot 64",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 64",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 16",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 128",   // Replaced with pumpkin pie for Christmas
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:4}]} 1");
 
-    // GIFT LIST FOR (DONOR USERS), FROM NOV 21+ (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM DEC 21+ (Same as before)
     private List<String> week3DonorGiftList = Arrays.asList(
-            "givebal {user} 2500",
-            "give {user} minecraft:emerald 8",
-            "give {user} minecraft:diamond 16",
-            "give {user} minecraft:baked_potato 64",     // Replaced with carrot for Thanksgiving
-            "give {user} minecraft:pumpkin_pie 48",   // Replaced with pumpkin pie for Thanksgiving
-            "give {user} minecraft:carrot 64",   // Replaced with carrot pie for Thanksgiving
-            "give {user} minecraft:enchanted_book{StoredEnchantments:[{id:sharpness,lvl:2}]} 1", // Enchanted book with sharpness
-            // SHARP 2 DIAMOND SWORD
-            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Thanksgiving Gift\\\",\\\"color\\\":\\\"green\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Thanksgiving gift\\\",\\\"color\\\":\\\"orange\\\"}\"]},Enchantments:[{id:sharpness,lvl:2}]} 1");
+            "givebal {user} 2500",                  // ND Cash amount
+            "give {user} minecraft:emerald 16",       // ND Emerald Amount
+            "give {user} minecraft:emerald 32",       // ND Emerald Amount
+            "give {user} minecraft:carrot 64",     // Replaced with carrot for Christmas
+            "give {user} minecraft:pumpkin_pie 64",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:cake 16",   // Replaced with pumpkin pie for Christmas
+            "give {user} minecraft:snowball 256",   // Replaced with pumpkin pie for Christmas
+            "give {user} diamond_sword{display:{Name:\"[{\\\"text\\\":\\\"EmeraldsMC Christmas Gift\\\",\\\"color\\\":\\\"aqua\\\"}]\",Lore:[\"{\\\"text\\\":\\\"A Special Christmas gift\\\",\\\"color\\\":\\\"red\\\"}\"]},Enchantments:[{id:sharpness,lvl:5}]} 1");
 
     @EventHandler
     public void onMagicLordClick(PlayerInteractEntityEvent e) {
 
-        Entity giftScarecrow;
+        Entity giftSanta;
         Player p;
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("Gift Scarecrow")) {
+        if (e.getRightClicked().getName().equalsIgnoreCase("Gift Santa")) {
 
-            giftScarecrow = e.getRightClicked();
+            giftSanta = e.getRightClicked();
             p = e.getPlayer();
             // Current date
             Date curDate = new Date();
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-            if ((year == 2023) && (month == 11)) {
+            if ((year == 2023) && (month == 12)) {
 
                 if (day > 1 && day < 14) {
 

@@ -79,6 +79,11 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
+        <!-- ProtocolLIB Repo -->
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
+        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -130,5 +135,10 @@
             <version>6.0.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+        <groupId>com.comphenix.protocol</groupId>
+        <artifactId>ProtocolLib</artifactId>
+        <version>4.8.0</version>
+    </dependency>
     </dependencies>
 </project>

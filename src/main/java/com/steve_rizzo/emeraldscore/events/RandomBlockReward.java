@@ -13,6 +13,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.Random;
 
+import static com.steve_rizzo.emeraldscore.events.ServerJoinPlayer.getPlayerPrefixAndName;
+
 public class RandomBlockReward implements Listener {
 
     private static Permission permission = Main.perms;
@@ -46,7 +48,7 @@ public class RandomBlockReward implements Listener {
                     }
 
                     serverEssentials.getServer().broadcastMessage(prefix
-                            + ChatColor.GRAY + "CONGRATS: " + ChatColor.GRAY + p.getName() + ChatColor.GRAY
+                            + ChatColor.GRAY + "CONGRATS: " + getPlayerPrefixAndName(e.getPlayer()) + ChatColor.GRAY
                             + " has just found a random lucky " + ChatColor.AQUA + "DIAMOND BLOCK" + ChatColor.GRAY + "!");
 
                     return;
@@ -71,7 +73,7 @@ public class RandomBlockReward implements Listener {
                     }
 
                     serverEssentials.getServer().broadcastMessage(prefix
-                            + ChatColor.GRAY + "CONGRATS: " + ChatColor.GRAY + p.getName() + ChatColor.GRAY
+                            + ChatColor.GRAY + "CONGRATS: " + getPlayerPrefixAndName(e.getPlayer()) + ChatColor.GRAY
                             + " has just found a random lucky " + ChatColor.GREEN + "EMERALD BLOCK" + ChatColor.GRAY + "!");
 
                 }

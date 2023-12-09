@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
+import com.steve_rizzo.emeraldscore.utils.NameTagUpdater;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -17,19 +18,20 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
 
-import static com.steve_rizzo.emeraldscore.Main.prefix;
-
 public class ServerJoinPlayer implements Listener {
 
     public static Permission perms = Main.perms;
     public static Chat chat = Main.chat;
     public static Ranks ranks = new Ranks();
 
-    public static void setPlayerTabName(Player p) {
+    public static void setPlayerTabAndTagName(Player p) {
         String playerGroup = perms.getPrimaryGroup(p);
         String playerName = p.getName();
         String prefix = chat.getGroupPrefix(p.getWorld(), playerGroup);
-        p.setPlayerListName(ChatColor.translateAlternateColorCodes('&', prefix) + playerName);
+        // Update the player's name tag
+        String name = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
+        NameTagUpdater.updatePlayerNameTag(p, name);
+        p.setPlayerListName(name);
     }
 
     public static void setAFKPlayerTabName(Player p) {
@@ -112,7 +114,7 @@ public class ServerJoinPlayer implements Listener {
         // Set flight to disabled
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
         // Set player tab name
-        setPlayerTabName(e.getPlayer());
+        setPlayerTabAndTagName(e.getPlayer());
 
     }
 
@@ -122,7 +124,6 @@ public class ServerJoinPlayer implements Listener {
         ranks.updateAndSaveData(e.getPlayer());
         // Display quit message
         e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
-        e.setQuitMessage(ChatColor.YELLOW + e.getPlayer().getName() + " has left The Emeralds.");
     }
 
     private Color getColor(int i) {
@@ -213,16 +214,6 @@ public class ServerJoinPlayer implements Listener {
         fwm.setPower(rp);
 
         return fwm;
-    }
-
-    // Check if can glow
-    private boolean isPermittedToUseGlow(String rank) {
-        if ((rank.equalsIgnoreCase("elite") || (rank.equalsIgnoreCase("youtuber") ||
-                (rank.equalsIgnoreCase("mod") || (rank.equalsIgnoreCase("helper") ||
-                        (rank.equalsIgnoreCase("admin") || (rank.equalsIgnoreCase("owner"))))))))
-            return true;
-
-        return false;
     }
 
 }

@@ -10,7 +10,6 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
 import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
-import com.steve_rizzo.emeraldscore.features.SecretSanta;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
@@ -121,7 +120,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new SecretSanta(), this);
 
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -157,7 +155,6 @@ public class Main extends JavaPlugin {
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("test").setExecutor(new TestCommand());
-        this.getCommand("secretsanta").setExecutor(new SecretSanta());
 
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
@@ -179,11 +176,7 @@ public class Main extends JavaPlugin {
         createEconomyTable();
         setPVPRegions();
 
-        // Load SecretSanta inventory
-        SecretSanta.loadSantaInventories();
-
         // Load Villager Features
-
         Bukkit.getServer().getPluginManager().registerEvents(new VillagerSaverListener(), this);
         LogInfo("Villager Plugin listener registered.");
         LoadWorldBlackList();
