@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class Ranks {
 
@@ -46,27 +47,24 @@ public class Ranks {
 
         String rank = Main.perms.getPrimaryGroup(p);
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                try (Connection connection = Main.getInstance().getHikari();
-                     PreparedStatement insert = connection.prepareStatement(FIRST_INSERT);
-                     PreparedStatement select = connection.prepareStatement(SELECT_DATA)) {
-                    insert.setString(1, p.getUniqueId().toString());
-                    insert.setString(2, p.getName());
-                    insert.setString(3, rank);
-                    insert.setString(4, currentDateTime);
-                    insert.execute();
+        CompletableFuture.runAsync(() -> {
+            try (Connection connection = Main.getInstance().getHikari();
+                 PreparedStatement insert = connection.prepareStatement(FIRST_INSERT);
+                 PreparedStatement select = connection.prepareStatement(SELECT_DATA)) {
+                insert.setString(1, p.getUniqueId().toString());
+                insert.setString(2, p.getName());
+                insert.setString(3, rank);
+                insert.setString(4, currentDateTime);
+                insert.execute();
 
-                    select.setString(1, p.getUniqueId().toString());
-                    ResultSet result = select.executeQuery();
-                    if (result.next())
-                        rankMap.put(p.getUniqueId(), result.getString("rank"));
-                    result.close();
-                    System.out.println("[EmeraldsMC - Rank Handler]: Data CREATED for " + p.getName() + ".");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                select.setString(1, p.getUniqueId().toString());
+                ResultSet result = select.executeQuery();
+                if (result.next())
+                    rankMap.put(p.getUniqueId(), result.getString("rank"));
+                result.close();
+                System.out.println("[EmeraldsMC - Rank Handler]: Data CREATED for " + p.getName() + ".");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -76,7 +74,7 @@ public class Ranks {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = format.format(date);
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        CompletableFuture.runAsync(() -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_DATA)) {
                 statement.setString(1, Main.perms.getPrimaryGroup(p));
