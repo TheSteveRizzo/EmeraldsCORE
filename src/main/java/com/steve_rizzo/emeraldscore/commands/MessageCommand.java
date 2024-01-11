@@ -9,15 +9,18 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 
 public class MessageCommand implements CommandExecutor {
 
     String prefix = Main.prefix;
-    private final Map<String, String> lastMessageSender = new HashMap<>();
+    private final Map<UUID, UUID> lastMessageSender = new HashMap<>();
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
         if (command.getName().equalsIgnoreCase("message")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(prefix + ChatColor.RED + "Only players can use this command.");
@@ -57,7 +60,8 @@ public class MessageCommand implements CommandExecutor {
             target.sendMessage(message.toString());
 
             // Record the last message sender
-            lastMessageSender.put(target.getUniqueId().toString(), player.getUniqueId().toString());
+            lastMessageSender.put(target.getUniqueId(), player.getUniqueId());
+            lastMessageSender.put(player.getUniqueId(), target.getUniqueId());
 
             // Inform the sender that the message was sent
             player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
@@ -68,7 +72,6 @@ public class MessageCommand implements CommandExecutor {
             return true;
 
         } else if (command.getName().equalsIgnoreCase("reply")) {
-
             if (!(sender instanceof Player)) {
                 sender.sendMessage(prefix + ChatColor.RED + "Only players can use this command.");
                 return true;
@@ -76,14 +79,15 @@ public class MessageCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            if (!lastMessageSender.containsKey(p.getUniqueId().toString())) {
+            if (!lastMessageSender.containsKey(p.getUniqueId())) {
                 p.sendMessage(prefix + ChatColor.RED + "Cannot find a message to reply to.");
                 return true;
             }
 
-            String replyTargetUUID = lastMessageSender.get(p.getUniqueId().toString());
+            UUID replyTargetUUID = lastMessageSender.get(p.getUniqueId());
 
-            if (getServer().getPlayer(replyTargetUUID) != null) {
+            Player target = getServer().getPlayer(replyTargetUUID);
+            if (target != null && target.isOnline()) {
                 StringBuilder messageArgs = new StringBuilder();
                 // Construct the reply message with the prefix
                 StringBuilder reply = new StringBuilder();
@@ -94,14 +98,11 @@ public class MessageCommand implements CommandExecutor {
                     messageArgs.append(arg).append(" ");
                 }
 
-                Player target = getServer().getPlayer(replyTargetUUID);
-
                 // Send the reply message to the target player
                 target.sendMessage(reply.toString());
 
                 // Inform the sender that the reply was sent
                 p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
-                lastMessageSender.put(target.getUniqueId().toString(), p.getUniqueId().toString());
 
                 // Print to console
                 System.out.println(reply);

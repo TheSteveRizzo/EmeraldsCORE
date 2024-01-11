@@ -11,6 +11,7 @@ import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
+import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
 import com.zaxxer.hikari.HikariDataSource;
@@ -19,8 +20,11 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -42,6 +46,8 @@ public class Main extends JavaPlugin {
     public static Permission perms = null;
     public static Economy economy = null;
     public EconomyImplement economyImplementer;
+
+    public static ShapedRecipe pouchRecipe;
 
     private void instanceClasses() {
         economyImplementer = new EconomyImplement();
@@ -109,8 +115,10 @@ public class Main extends JavaPlugin {
 
         prefix = ChatColor.GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.GRAY + "]: ";
 
+        // Load Core Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new ServerJoinPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RandomBlockReward(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new RandomFishingReward(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialTNT(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new ChatPing(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerVanish(), this);
@@ -119,8 +127,16 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
 
+        // Load MiningPouch Listeners
+        Bukkit.getServer().getPluginManager().registerEvents(new PouchPickupItem(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PouchClick(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PouchInteract(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PouchPlayerMove(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PouchPreCraft(), this);
+        loadMiningPouchRecipe();;
+
+        // Load Core Commands
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("flyspeed").setExecutor(new FlyspeedCommand());
@@ -349,5 +365,15 @@ public class Main extends JavaPlugin {
         if (WorldBlackList == null)
             WorldBlackList = new ArrayList<>();
         LogInfo("World Blacklist loaded.");
+    }
+
+    private void loadMiningPouchRecipe() {
+        LogInfo("MINING POUCH RECIPE ENABLED");
+        pouchRecipe = new ShapedRecipe((new Pouch(null)).getPouch());
+        pouchRecipe.shape(new String[]{"XYX", "XZX", "XYX"});
+        pouchRecipe.setIngredient('X', Material.LEATHER);
+        pouchRecipe.setIngredient('Y', Material.CHEST);
+        pouchRecipe.setIngredient('Z', Material.NETHERITE_PICKAXE);
+        getServer().addRecipe((Recipe) pouchRecipe);
     }
 }

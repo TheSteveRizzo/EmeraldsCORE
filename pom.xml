@@ -135,6 +135,7 @@
             <version>6.0.4</version>
             <scope>provided</scope>
         </dependency>
+        <!-- ProtocolLib -->
         <dependency>
         <groupId>com.comphenix.protocol</groupId>
         <artifactId>ProtocolLib</artifactId>

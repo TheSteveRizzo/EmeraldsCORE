@@ -2,7 +2,6 @@ package com.steve_rizzo.emeraldscore.events;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
-import com.steve_rizzo.emeraldscore.utils.NameTagUpdater;
 import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -12,9 +11,11 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Random;
 
@@ -30,7 +31,6 @@ public class ServerJoinPlayer implements Listener {
         String prefix = chat.getGroupPrefix(p.getWorld(), playerGroup);
         // Update the player's name tag
         String name = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
-        NameTagUpdater.updatePlayerNameTag(p, name);
         p.setPlayerListName(name);
     }
 
@@ -77,6 +77,7 @@ public class ServerJoinPlayer implements Listener {
             for (int i = 0; i < 5; i++) {
                 Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
                 FireworkMeta fwm = fw.getFireworkMeta();
+                fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
                 addFireworkEffects(fwm);
                 fw.setFireworkMeta(fwm);
             }
@@ -106,6 +107,7 @@ public class ServerJoinPlayer implements Listener {
             // Spawn a single firework
             Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
             FireworkMeta fwm = fw.getFireworkMeta();
+            fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);
             fw.setFireworkMeta(fwm);
 
@@ -124,6 +126,17 @@ public class ServerJoinPlayer implements Listener {
         ranks.updateAndSaveData(e.getPlayer());
         // Display quit message
         e.setQuitMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has left The Emeralds.");
+    }
+
+    // Disable damage caused by the joining Firework
+    @EventHandler
+    public void fireworkDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Firework) {
+            Firework fw = (Firework) event.getDamager();
+            if (fw.hasMetadata("spawnfirework")) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     private Color getColor(int i) {
