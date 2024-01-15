@@ -4,6 +4,10 @@ import com.garbagemule.MobArena.MobArena;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
 import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
+import com.steve_rizzo.emeraldscore.commands.tokens.GiveTokensCommand;
+import com.steve_rizzo.emeraldscore.commands.tokens.SetTokensCommand;
+import com.steve_rizzo.emeraldscore.commands.tokens.TokenBalanceCommand;
+import com.steve_rizzo.emeraldscore.commands.tokens.TokenHandler;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
 import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
@@ -127,6 +131,10 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
+
+        // Load Token Listener
+        Bukkit.getServer().getPluginManager().registerEvents(new TokenHandler(), this);
 
         // Load MiningPouch Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPickupItem(), this);
@@ -154,13 +162,6 @@ public class Main extends JavaPlugin {
         this.getCommand("afk").setExecutor(new AFKCommand());
         this.getCommand("casino").setExecutor(new CasinoCommand());
         this.getCommand("maintenance").setExecutor(new MaintenanceMode());
-
-        this.getCommand("balance").setExecutor(new BalanceCommand());
-        this.getCommand("pay").setExecutor(new PayCommand());
-        this.getCommand("setbalance").setExecutor(new SetCommand());
-        this.getCommand("takebalance").setExecutor(new TakeCommand());
-        this.getCommand("givebalance").setExecutor(new GiveCommand());
-        this.getCommand("baltop").setExecutor(new BaltopCommand());
         this.getCommand("apply").setExecutor(new ApplyCommand());
         this.getCommand("rankshop").setExecutor(new RankShopCommand());
         this.getCommand("message").setExecutor(new MessageCommand());
@@ -172,6 +173,20 @@ public class Main extends JavaPlugin {
         this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("test").setExecutor(new TestCommand());
 
+        // Currency Commands
+        this.getCommand("balance").setExecutor(new BalanceCommand());
+        this.getCommand("pay").setExecutor(new PayCommand());
+        this.getCommand("setbalance").setExecutor(new SetCommand());
+        this.getCommand("takebalance").setExecutor(new TakeCommand());
+        this.getCommand("givebalance").setExecutor(new GiveCommand());
+        this.getCommand("baltop").setExecutor(new BaltopCommand());
+
+        // Tokens Commands
+        this.getCommand("tokens").setExecutor(new TokenBalanceCommand());
+        this.getCommand("settokens").setExecutor(new SetTokensCommand());
+        this.getCommand("givetokens").setExecutor(new GiveTokensCommand());
+
+        // GUI Menus
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
         this.getCommand("eg").setExecutor(new EGCommand());
         Bukkit.getServer().getPluginManager().registerEvents(openGamesGUI, this);
@@ -180,6 +195,7 @@ public class Main extends JavaPlugin {
         this.getCommand("kit").setExecutor(new KitCommand());
         Bukkit.getServer().getPluginManager().registerEvents(kitGUI, this);
 
+        // Database Connection
         hikari = new HikariDataSource();
         hikari.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
         hikari.addDataSourceProperty("serverName", hostEmeralds);
@@ -188,8 +204,10 @@ public class Main extends JavaPlugin {
         hikari.addDataSourceProperty("user", usernameEmeralds);
         hikari.addDataSourceProperty("password", passwordEmeralds);
 
+        // Create Databases
         createTable();
         createEconomyTable();
+        createTokensTable();
         setPVPRegions();
 
         // Load Villager Features
@@ -315,6 +333,18 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    public void createTokensTable() {
+        try (Connection connection = hikari.getConnection();
+             Statement statement = connection.createStatement();) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS EmeraldsTokens(UUID varchar(36) UNIQUE, name VARCHAR(16), balance INT, date DATE, PRIMARY KEY (UUID));");
+            System.out.println("[EmeraldsMC - Token Handler]: Tokens table created and/or connected successfully.");
+        } catch (SQLException e) {
+            System.out.println("[EmeraldsMC - Token Handler]: Error. See below.");
+            e.printStackTrace();
+        }
+    }
+
 
     private void LogInfo(String line) {
         this.getLogger().log(Level.INFO, line);

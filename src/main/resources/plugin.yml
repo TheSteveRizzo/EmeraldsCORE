@@ -47,6 +47,13 @@ commands:
   maintenance:
     aliases: [ maintenancemode, mm, maint ]
     description: Puts the server into maintenance mode.
+  tokens:
+    aliases: [ tokens, emeraldstokens ]
+    description: Displays your tokens balance.
+  settokens:
+    description: Sets the Tokens of a player.
+  givetokens:
+    description: Gives Tokens to a player.
   balance:
     description: Displays your balance.
     aliases: [ bal , eco ]
