@@ -130,6 +130,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PingServer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new TokenShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
 
@@ -164,6 +165,7 @@ public class Main extends JavaPlugin {
         this.getCommand("maintenance").setExecutor(new MaintenanceMode());
         this.getCommand("apply").setExecutor(new ApplyCommand());
         this.getCommand("rankshop").setExecutor(new RankShopCommand());
+        this.getCommand("tokenshop").setExecutor(new TokenShopCommand());
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new MessageCommand());
         this.getCommand("payheal").setExecutor(new PayHeal());
@@ -172,6 +174,7 @@ public class Main extends JavaPlugin {
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("test").setExecutor(new TestCommand());
+        this.getCommand("clearchat").setExecutor(new ClearChatCommand());
 
         // Currency Commands
         this.getCommand("balance").setExecutor(new BalanceCommand());

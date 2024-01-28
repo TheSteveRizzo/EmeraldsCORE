@@ -80,6 +80,8 @@ commands:
     description: Go to the Emeralds Casino!
   rankshop:
     description: Opens the Emeralds Rank Shop.
+  tokenshop:
+    description: Opens the Emeralds Token Shop.
   message:
     description: Message another player.
     aliases: [ msg, whisper, pm ]
@@ -104,3 +106,6 @@ commands:
     description: Launch a test
   villagersaver:
     description: Access villager saver commands.
+  clearchat:
+    description: Clears the chat.
+    aliases: [ cc ]

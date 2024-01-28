@@ -167,6 +167,19 @@ public class Pouch {
         }
     }
 
+    public Pouch() {
+        this.item = new ItemStack(Material.ENDER_CHEST);
+        ItemMeta meta = this.item.getItemMeta();
+        meta.setDisplayName(TITLE);
+        List<String> lore = new ArrayList<>();
+        for (String line : LORE) {
+            lore.add(line);
+        }
+        meta.setLore(lore);
+        this.item.setItemMeta(meta);
+    }
+
+
     public ItemStack getPouch() {
         return this.item;
     }

@@ -40,7 +40,7 @@ public class SetTokensCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (amount > 0) {
+                if (amount >= 0) {
 
 
                     Player target = Bukkit.getServer().getPlayer(tarPlayerName);
