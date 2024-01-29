@@ -156,8 +156,6 @@ public class RankCommand implements CommandExecutor {
     }
     //Update rank
     private void setRankPlayer(Player p, String target, String rank) {
-        System.out.println("DETAILS PL TARGET: " + target + " RANK: " + rank);
-
         // Update player rank in console
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
                 "user " + target);
@@ -193,7 +191,6 @@ public class RankCommand implements CommandExecutor {
     // Command is issued via console
     private void setRankConsole(String target, String rank) {
 
-        System.out.println("DETAILS CN TARGET: " + target + " RANK: " + rank);
         // Update player rank in console
         serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
                 "user " + target);

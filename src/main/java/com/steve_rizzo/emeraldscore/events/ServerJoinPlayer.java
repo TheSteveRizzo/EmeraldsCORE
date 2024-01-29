@@ -30,8 +30,10 @@ public class ServerJoinPlayer implements Listener {
         String playerName = p.getName();
         String prefix = chat.getGroupPrefix(p.getWorld(), playerGroup);
         // Update the player's name tag
-        String name = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
-        p.setPlayerListName(name);
+        String listName = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
+        p.setPlayerListName(listName);
+        String displayName = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
+        p.setDisplayName(displayName);
     }
 
     public static void setAFKPlayerTabName(Player p) {

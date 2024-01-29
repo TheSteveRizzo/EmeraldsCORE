@@ -79,41 +79,45 @@ public class MessageCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            if (!lastMessageSender.containsKey(p.getUniqueId())) {
+            UUID replyTargetUUID = lastMessageSender.get(p.getUniqueId());
+
+            if (replyTargetUUID != null) {
+                Player target = getServer().getPlayer(replyTargetUUID);
+
+                if (target != null && target.isOnline()) {
+                    StringBuilder messageArgs = new StringBuilder();
+                    // Construct the reply message with the prefix
+                    StringBuilder reply = new StringBuilder();
+                    reply.append(ChatColor.GRAY).append("[").append(ChatColor.GREEN).append("EmeraldsMC").append(ChatColor.GRAY).append("]: (");
+                    reply.append(ChatColor.YELLOW).append(p.getName()).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
+
+                    for (String arg : args) {
+                        reply.append(arg).append(" ");
+                        messageArgs.append(arg).append(" ");
+                    }
+
+                    // Send the reply message to the target player
+                    target.sendMessage(reply.toString());
+
+                    // Inform the sender that the reply was sent
+                    p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
+
+                    // Print to console
+                    System.out.println(reply);
+
+                    // Clear the entry for p.getUniqueId()
+                    lastMessageSender.remove(p.getUniqueId());
+
+                } else {
+                    p.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");
+                }
+
+                return true;
+            } else {
                 p.sendMessage(prefix + ChatColor.RED + "Cannot find a message to reply to.");
                 return true;
             }
-
-            UUID replyTargetUUID = lastMessageSender.get(p.getUniqueId());
-
-            Player target = getServer().getPlayer(replyTargetUUID);
-            if (target != null && target.isOnline()) {
-                StringBuilder messageArgs = new StringBuilder();
-                // Construct the reply message with the prefix
-                StringBuilder reply = new StringBuilder();
-                reply.append(ChatColor.GRAY).append("[").append(ChatColor.GREEN).append("EmeraldsMC").append(ChatColor.GRAY).append("]: (");
-                reply.append(ChatColor.YELLOW).append(p.getName()).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
-                for (String arg : args) {
-                    reply.append(arg).append(" ");
-                    messageArgs.append(arg).append(" ");
-                }
-
-                // Send the reply message to the target player
-                target.sendMessage(reply.toString());
-
-                // Inform the sender that the reply was sent
-                p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
-
-                // Print to console
-                System.out.println(reply);
-
-            } else {
-                p.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");
-            }
-
-            return true;
         }
-
-        return false;
+        return true;
     }
 }
