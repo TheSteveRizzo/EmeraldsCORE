@@ -18,6 +18,8 @@ import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
+import com.steve_rizzo.emeraldscore.jobs.JobCommands;
+import com.steve_rizzo.emeraldscore.jobs.JobMenu;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -188,6 +190,10 @@ public class Main extends JavaPlugin {
         this.getCommand("tokens").setExecutor(new TokenBalanceCommand());
         this.getCommand("settokens").setExecutor(new SetTokensCommand());
         this.getCommand("givetokens").setExecutor(new GiveTokensCommand());
+
+        // Jobs Feature
+        this.getCommand("jobs").setExecutor(new JobCommands());
+        Bukkit.getServer().getPluginManager().registerEvents(new JobMenu(), this);
 
         // GUI Menus
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();

@@ -109,3 +109,6 @@ commands:
   clearchat:
     description: Clears the chat.
     aliases: [ cc ]
+  jobs:
+    description: Open the jobs menu and assign yourself a job!
+    aliases: [ job ]

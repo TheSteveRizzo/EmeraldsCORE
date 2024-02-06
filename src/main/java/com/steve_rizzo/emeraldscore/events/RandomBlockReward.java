@@ -27,7 +27,7 @@ public class RandomBlockReward implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
-        if (e.getBlock().getType().equals(Material.STONE)) {
+        if (e.getBlock().getType().equals(Material.STONE) || (e.getBlock().getType().equals(Material.DEEPSLATE))) {
 
             Player p = e.getPlayer();
 
