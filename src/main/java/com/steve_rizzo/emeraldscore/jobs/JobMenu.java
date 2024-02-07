@@ -12,20 +12,31 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 public class JobMenu implements Listener {
 
-    static String prefix = Main.prefix;
+    private static final String prefix = Main.prefix;
+    private final JobTasks jobTasks;
+
+    // Constructor to initialize job tasks
+    public JobMenu() {
+        jobTasks = new JobTasks();
+        jobTasks.scheduleDailyReset(); // Schedule the daily reset of tasks
+    }
 
     // Open the main job selection menu
     public static void openJobSelectionMenu(Player player) {
         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
-        if (jobPlayer != null && JobAPI.isPlayerInCooldown(jobPlayer)) {
+        if (jobPlayer != null && JobAPI.isPlayerInCooldown(jobPlayer.getPlayerName())) {
             // Player is in cooldown, notify them and prevent opening the menu
             player.sendMessage(prefix + ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
             return;
         }
 
-        Inventory jobMenu = Bukkit.createInventory(null, 9, ChatColor.BLUE + "Job Selection");
+        Inventory jobMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Job Selection");
 
         for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
             ItemStack jobItem = getJobIcon(jobType);
@@ -66,7 +77,7 @@ public class JobMenu implements Listener {
                 break;
             default:
                 material = Material.STONE;
-                displayName = ChatColor.YELLOW + "Unknown Job";
+                displayName = ChatColor.YELLOW + "Invalid Job";
                 break;
         }
 
@@ -78,25 +89,35 @@ public class JobMenu implements Listener {
     }
 
     // Open the task selection menu based on the selected job type
-    public static void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
-        Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.BLUE + jobType.toString() + " Tasks");
+    public void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
+        Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + jobType.toString() + ChatColor.GRAY + " Tasks");
 
-        for (int i = 1; i <= 3; i++) {
-            ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
-            taskItem.getItemMeta().setDisplayName(ChatColor.YELLOW + "Task " + i);
-            taskMenu.addItem(taskItem);
+        List<DailyTask> tasks = jobTasks.getJobTasks().get(jobType);
+        if (tasks != null) {
+            Random random = new Random();
+            for (int i = 0; i < Math.min(tasks.size(), 4); i++) {
+                int randomIndex = random.nextInt(tasks.size());
+                DailyTask task = tasks.get(randomIndex);
+                ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
+                ItemMeta taskMeta = taskItem.getItemMeta();
+                taskMeta.setDisplayName(ChatColor.YELLOW + task.getName());
+                taskItem.setItemMeta(taskMeta);
+                taskMenu.addItem(taskItem);
+                tasks.remove(randomIndex);
+            }
         }
 
         ItemStack backButton = new ItemStack(Material.ARROW, 1);
-        backButton.getItemMeta().setDisplayName(ChatColor.RED + "Back to Job Selection");
+        ItemMeta backMeta = backButton.getItemMeta();
+        backMeta.setDisplayName(ChatColor.RED + "Back to Job Selection");
+        backButton.setItemMeta(backMeta);
         taskMenu.setItem(8, backButton);
 
         player.openInventory(taskMenu);
     }
 
-    // Handle inventory clicks
     @EventHandler
-    public static void onInventoryClick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
         ItemStack clickedItem = event.getCurrentItem();
@@ -106,13 +127,23 @@ public class JobMenu implements Listener {
 
             if (inventoryTitle.equals("Job Selection")) {
                 event.setCancelled(true);
-
+                // Check cooldown before opening job selection menu
+                if (JobAPI.isPlayerInCooldown(player.getName())) {
+                    player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
+                    return;
+                }
+                // Open task selection menu if a job is selected
                 for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
-                    if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()
-                            && ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName()).equals(jobType.toString())) {
-                        // Player clicked on a job type
+                    if (clickedItem.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + jobType.toString())) {
+                        // Save the player's job before opening task selection menu
+                        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+                        if (jobPlayer != null) {
+                            jobPlayer.setJob(jobType);
+                        }
                         openTaskSelectionMenu(player, jobType);
-                        break;
+                        // Save cooldown data to file
+                        JobAPI.saveCooldownData();
+                        return;
                     }
                 }
             } else if (inventoryTitle.endsWith("Tasks")) {
@@ -126,10 +157,44 @@ public class JobMenu implements Listener {
                         openJobSelectionMenu(player);
                     } else {
                         // Handle task selection logic based on the selected job type
-                        player.sendMessage(prefix + "You selected job task: " + itemName);
+                        String taskId = ""; // Retrieve the task ID based on the clicked item
+                        DailyTask task = getTaskById(taskId);
+                        if (task != null && task.isCompleted() && !task.isClaimed()) {
+                            // Task has been completed but not yet claimed
+                            // Provide rewards to the player
+                            player.sendMessage(prefix + "You completed the task and received your reward!");
+                            // Mark the task as claimed
+                            task.setClaimed(true);
+                        } else if (task != null && task.isClaimed()) {
+                            // Task has already been claimed
+                            player.sendMessage(prefix + "You have already claimed the reward for this task.");
+                        } else {
+                            // Task has not been completed
+                            player.sendMessage(prefix + "You have not completed this task yet.");
+                        }
                     }
                 }
             }
         }
+    }
+
+    private DailyTask getTaskById(String taskId) {
+        // Check if the taskId is a valid integer
+        try {
+            int id = Integer.parseInt(taskId);
+            // Iterate over each job type and its associated tasks
+            for (Map.Entry<JobAPI.JOB_TYPE, List<DailyTask>> entry : jobTasks.getJobTasks().entrySet()) {
+                // Iterate over tasks for the current job type
+                for (DailyTask task : entry.getValue()) {
+                    // Check if the task ID matches the specified ID
+                    if (task.getTaskId() == id) {
+                        return task; // Return the task if found
+                    }
+                }
+            }
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        }
+        return null; // Return null if no task with the specified ID is found
     }
 }

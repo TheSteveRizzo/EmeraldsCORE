@@ -18,6 +18,7 @@ import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
+import com.steve_rizzo.emeraldscore.jobs.JobAPI;
 import com.steve_rizzo.emeraldscore.jobs.JobCommands;
 import com.steve_rizzo.emeraldscore.jobs.JobMenu;
 import com.zaxxer.hikari.HikariDataSource;
@@ -104,15 +105,21 @@ public class Main extends JavaPlugin {
         instanceClasses();
         hook();
 
+        // Save config files
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
 
+        // Set up hooks
         setupPermissions();
         setupChat();
         setupEconomy();
         setupMobArena();
 
+        // Call initialize method of JobAPI
+        JobAPI.initialize();
+
+        // Database info
         hostEmeralds = emeraldsConfig.getString("db_host");
         portEmeralds = emeraldsConfig.getString("db_port");
         passwordEmeralds = emeraldsConfig.getString("db_pass");

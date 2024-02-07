@@ -23,9 +23,20 @@ public class JobCommands implements CommandExecutor {
                 return true;
             } else if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("help")) {
-                    p.sendMessage(prefix + ChatColor.GRAY + "Set your job type using "
-                            + ChatColor.GREEN + "/jobs set <job>\n" + ChatColor.AQUA
-                            + "Available job types: " + ChatColor.GRAY + Arrays.toString(JobAPI.JOB_TYPE.values()));
+                    p.sendMessage(prefix + ChatColor.GRAY + "Learn more about jobs using: "
+                            + ChatColor.AQUA + "/jobs set <job>" + ChatColor.GRAY + " or " + ChatColor.AQUA + "/jobs list");
+                    return true;
+                } else if (args[0].equalsIgnoreCase("list")) {
+                    p.sendMessage(prefix + ChatColor.GRAY + "Available job types:");
+                    StringBuilder jobList = new StringBuilder();
+                    for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
+                        jobList.append(ChatColor.LIGHT_PURPLE).append(jobType.name()).append(ChatColor.GRAY).append(", ");
+                    }
+                    // Remove the last comma and space
+                    if (jobList.length() > 2) {
+                        jobList.delete(jobList.length() - 2, jobList.length());
+                    }
+                    p.sendMessage(jobList.toString());
                     return true;
                 } else if (args[0].equalsIgnoreCase("menu")) {
                     JobMenu.openJobSelectionMenu(p);
@@ -44,7 +55,7 @@ public class JobCommands implements CommandExecutor {
                         JobAPI.JobPlayer player = JobAPI.getPlayer(p.getName());
 
                         // Check if the player is in cooldown
-                        if (player != null && JobAPI.isPlayerInCooldown(player)) {
+                        if (player != null && JobAPI.isPlayerInCooldown(player.getPlayerName())) {
                             p.sendMessage(prefix + player.getCooldownMessage());
                             return true;
                         }
@@ -56,6 +67,14 @@ public class JobCommands implements CommandExecutor {
                         } else {
                             player.setJob(jobType);
                         }
+
+                        // Save player's job to file after setting it only if not in cooldown
+                        if (!JobAPI.isPlayerInCooldown(player.getPlayerName())) {
+                            JobAPI.savePlayerJobToFile(player);
+                        }
+
+                        // Save cooldown data to file
+                        JobAPI.saveCooldownData();
 
                         p.sendMessage(prefix + ChatColor.GRAY + "You've set your job to "
                                 + ChatColor.AQUA + jobType);

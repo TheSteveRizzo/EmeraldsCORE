@@ -1,11 +1,15 @@
 package com.steve_rizzo.emeraldscore.jobs;
 
+import com.steve_rizzo.emeraldscore.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,25 +17,97 @@ import java.util.Map;
 
 public class JobAPI {
 
-    public enum JOB_TYPE {
-        FARMER,
-        MINER,
-        GATHERER,
-        HUNTER,
-        EXPLORER,
-        FISHER
+    private static final Map<String, Long> lastTeamChange = new HashMap<>();
+    private static final String JOBS_FILE_NAME = "jobs.yml";
+    private static FileConfiguration jobsConfig;
+
+    public static void initialize() {
+        File jobsFile = new File(Main.core.getDataFolder(), JOBS_FILE_NAME);
+        if (!jobsFile.exists()) {
+            Main.core.saveResource(JOBS_FILE_NAME, false);
+        }
+        jobsConfig = YamlConfiguration.loadConfiguration(jobsFile);
+
+        // Load cooldown data from the file
+        loadCooldownData();
+    }
+
+    public static void loadCooldownData() {
+        if (jobsConfig.contains("cooldowns")) {
+            ConfigurationSection cooldownsSection = jobsConfig.getConfigurationSection("cooldowns");
+            if (cooldownsSection != null) {
+                for (String playerName : cooldownsSection.getKeys(false)) {
+                    long lastChangeTimestamp = cooldownsSection.getLong(playerName);
+                    lastTeamChange.put(playerName, lastChangeTimestamp);
+                }
+            }
+        }
+    }
+
+    public static void saveCooldownData() {
+        ConfigurationSection cooldownsSection = jobsConfig.createSection("cooldowns");
+        for (Map.Entry<String, Long> entry : lastTeamChange.entrySet()) {
+            cooldownsSection.set(entry.getKey(), entry.getValue());
+        }
+
+        saveJobsFile();
+    }
+
+    public static long getLastTeamChange(String playerName) {
+        return lastTeamChange.getOrDefault(playerName, 0L);
+    }
+
+    private static void setLastTeamChange(String playerName, long timestamp) {
+        lastTeamChange.put(playerName, timestamp);
+    }
+
+    public static boolean isPlayerInCooldown(String playerName) {
+        return System.currentTimeMillis() - getLastTeamChange(playerName) < 3 * 24 * 60 * 60 * 1000;
+    }
+
+    public static JobPlayer getPlayer(String playerName) {
+        for (JobPlayer player : getPlayerList()) {
+            if (player.getPlayerName().equals(playerName)) {
+                return player;
+            }
+        }
+        return null; // Player not found
+    }
+
+    public static List<JobPlayer> getPlayerList() {
+        List<JobPlayer> players = new ArrayList<>();
+        if (jobsConfig.contains("players")) {
+            for (String playerName : jobsConfig.getConfigurationSection("players").getKeys(false)) {
+                String jobName = jobsConfig.getString("players." + playerName + ".job");
+                JobPlayer jobPlayer = new JobPlayer(playerName, JOB_TYPE.valueOf(jobName));
+                players.add(jobPlayer);
+            }
+        }
+        return players;
+    }
+
+    public static void savePlayerJobToFile(JobPlayer player) {
+        jobsConfig.set("players." + player.getPlayerName() + ".job", player.getJob().name());
+        saveJobsFile();
+    }
+
+    private static void saveJobsFile() {
+        try {
+            jobsConfig.save(new File(Main.core.getDataFolder(), JOBS_FILE_NAME));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class JobPlayer {
-        private final String playerName; // Unique identifier for each player
+        private final String playerName;
         private JOB_TYPE job;
 
         public JobPlayer(String playerName, JOB_TYPE job) {
             this.playerName = playerName;
             this.job = job;
-            // Add the player to the player list when creating a JobPlayer instance
-            addPlayerToList(this);
         }
+
         public JOB_TYPE getJob() {
             return job;
         }
@@ -40,6 +116,7 @@ public class JobAPI {
             if (this.job == null || System.currentTimeMillis() - getLastTeamChange(playerName) >= 3 * 24 * 60 * 60 * 1000) {
                 this.job = job;
                 setLastTeamChange(playerName, System.currentTimeMillis());
+                savePlayerJobToFile(this); // Save player's job to file
             } else {
                 Player player = Bukkit.getPlayer(playerName);
                 if (player != null) {
@@ -69,95 +146,12 @@ public class JobAPI {
         }
     }
 
-    public static class JobTeam {
-        private final JOB_TYPE jobType;
-        private final List<String> players;
-
-        public JobTeam(JOB_TYPE jobType) {
-            this.jobType = jobType;
-            this.players = new ArrayList<>();
-        }
-
-        public JOB_TYPE getJobType() {
-            return jobType;
-        }
-
-        public List<String> getPlayers() {
-            return players;
-        }
-
-        public void addPlayer(String playerName) {
-            for (JobTeam team : loadTeams()) {
-                if (team.getPlayers().contains(playerName)) {
-                    team.removePlayer(playerName);
-                }
-            }
-            players.add(playerName);
-        }
-
-        public void removePlayer(String playerName) {
-            players.remove(playerName);
-        }
-    }
-
-    private static final Map<String, Long> lastTeamChange = new HashMap<>();
-
-    public static long getLastTeamChange(String playerName) {
-        return lastTeamChange.getOrDefault(playerName, 0L);
-    }
-
-    public static void setLastTeamChange(String playerName, long timestamp) {
-        lastTeamChange.put(playerName, timestamp);
-    }
-
-    public static boolean isPlayerInCooldown(JobPlayer player) {
-        return player != null && System.currentTimeMillis() - getLastTeamChange(player.getPlayerName()) < 3 * 24 * 60 * 60 * 1000;
-    }
-
-    public static JobPlayer getPlayer(String playerName) {
-        // Assuming you have a list of JobPlayer instances stored somewhere accessible
-        for (JobPlayer player : getPlayerList()) {
-            if (player.getPlayerName().equals(playerName)) {
-                return player;
-            }
-        }
-        return null; // Player not found
-    }
-
-    private static final List<JobPlayer> playerList = new ArrayList<>();
-
-    // Method to add a JobPlayer to the list
-    public static void addPlayerToList(JobPlayer player) {
-        playerList.add(player);
-    }
-
-    // Method to get all JobPlayers
-    public static List<JobPlayer> getPlayerList() {
-        return playerList;
-    }
-
-
-    public static void saveTeams(List<JobTeam> teams) {
-        try (FileWriter writer = new FileWriter("teams.yml")) {
-            Yaml yaml = new Yaml();
-            yaml.dump(teams, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<JobTeam> loadTeams() {
-        List<JobTeam> teams = new ArrayList<>();
-        File file = new File("teams.yml");
-        if (file.exists()) {
-            try (FileReader reader = new FileReader(file)) {
-                Yaml yaml = new Yaml();
-                teams = yaml.loadAs(reader, List.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return teams;
+    public enum JOB_TYPE {
+        FARMER,
+        MINER,
+        GATHERER,
+        HUNTER,
+        EXPLORER,
+        FISHER
     }
 }
