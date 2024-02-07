@@ -146,6 +146,31 @@ public class JobAPI {
         }
     }
 
+    // Method to add a player to the cooldown list
+    public static void addPlayerToCooldown(String playerName) {
+        // Retrieve cooldown data
+        Map<String, Long> cooldownData = getCooldownData();
+
+        // Add the player to the cooldown list with current timestamp
+        cooldownData.put(playerName, System.currentTimeMillis());
+
+        // Save updated cooldown data to file
+        saveCooldownData();
+    }
+
+    // Method to retrieve cooldown data from file
+    public static Map<String, Long> getCooldownData() {
+        File cooldownFile = new File(Main.getPlugin().getDataFolder(), "cooldown.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(cooldownFile);
+        Map<String, Long> cooldownData = new HashMap<>();
+        if (cooldownFile.exists()) {
+            for (String key : config.getKeys(false)) {
+                cooldownData.put(key, config.getLong(key));
+            }
+        }
+        return cooldownData;
+    }
+
     public enum JOB_TYPE {
         FARMER,
         MINER,

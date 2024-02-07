@@ -27,25 +27,6 @@ public class JobMenu implements Listener {
         jobTasks.scheduleDailyReset(); // Schedule the daily reset of tasks
     }
 
-    // Open the main job selection menu
-    public static void openJobSelectionMenu(Player player) {
-        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
-        if (jobPlayer != null && JobAPI.isPlayerInCooldown(jobPlayer.getPlayerName())) {
-            // Player is in cooldown, notify them and prevent opening the menu
-            player.sendMessage(prefix + ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
-            return;
-        }
-
-        Inventory jobMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Job Selection");
-
-        for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
-            ItemStack jobItem = getJobIcon(jobType);
-            jobMenu.addItem(jobItem);
-        }
-
-        player.openInventory(jobMenu);
-    }
-
     // Get the icon for the specified job type
     private static ItemStack getJobIcon(JobAPI.JOB_TYPE jobType) {
         Material material;
@@ -116,6 +97,18 @@ public class JobMenu implements Listener {
         player.openInventory(taskMenu);
     }
 
+    // Open the main job selection menu
+    public static void openJobSelectionMenu(Player player) {
+        Inventory jobMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Job Selection");
+
+        for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
+            ItemStack jobItem = getJobIcon(jobType);
+            jobMenu.addItem(jobItem);
+        }
+
+        player.openInventory(jobMenu);
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -127,14 +120,14 @@ public class JobMenu implements Listener {
 
             if (inventoryTitle.equals("Job Selection")) {
                 event.setCancelled(true);
-                // Check cooldown before opening job selection menu
-                if (JobAPI.isPlayerInCooldown(player.getName())) {
-                    player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
-                    return;
-                }
                 // Open task selection menu if a job is selected
                 for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
                     if (clickedItem.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + jobType.toString())) {
+                        // Check cooldown before allowing job change
+                        if (JobAPI.isPlayerInCooldown(player.getName())) {
+                            player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
+                            return;
+                        }
                         // Save the player's job before opening task selection menu
                         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
                         if (jobPlayer != null) {
@@ -147,6 +140,7 @@ public class JobMenu implements Listener {
                     }
                 }
             } else if (inventoryTitle.endsWith("Tasks")) {
+
                 event.setCancelled(true);
 
                 if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {

@@ -64,6 +64,8 @@ public class JobCommands implements CommandExecutor {
                         if (player == null) {
                             // If the player is selecting their first job
                             player = new JobAPI.JobPlayer(p.getName(), jobType);
+                            // Add the player to cooldown list on the first job set
+                            JobAPI.addPlayerToCooldown(player.getPlayerName());
                         } else {
                             player.setJob(jobType);
                         }
@@ -92,4 +94,5 @@ public class JobCommands implements CommandExecutor {
         }
         return false;
     }
+
 }
