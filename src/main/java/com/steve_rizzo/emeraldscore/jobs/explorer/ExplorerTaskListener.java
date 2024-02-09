@@ -35,8 +35,9 @@ public class ExplorerTaskListener implements Listener {
         Location to = event.getTo();
         Location from = event.getFrom();
 
-        // Check if the player is an explorer
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.EXPLORER) {
+        // Check if the player is an explorer and has a job assigned
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.EXPLORER) {
             // Check for cave exploration
             if (to.getBlockY() <= 25 && from.getBlockY() > 25) {
                 incrementAndCheckCaveCounter(player);

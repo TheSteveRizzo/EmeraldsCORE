@@ -34,8 +34,9 @@ public class FarmerTaskListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block brokenBlock = event.getBlock();
         Player player = event.getPlayer();
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
 
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.FARMER) {
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FARMER) {
             if (brokenBlock.getType() == Material.WHEAT) {
                 incrementAndCheckWheatBreakCounter(player);
             } else if (brokenBlock.getType() == Material.CARROTS) {
@@ -47,14 +48,16 @@ public class FarmerTaskListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
 
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.FARMER) {
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FARMER) {
             if (event.getRightClicked() instanceof Animals) {
                 if (player.getInventory().getItemInMainHand().getType().equals(Material.COOKED_BEEF) ||
-                        (player.getInventory().getItemInMainHand().getType().equals(Material.APPLE)) ||
-                        (player.getInventory().getItemInMainHand().getType().equals(Material.BONE)) ||
-                        (player.getInventory().getItemInMainHand().getType().equals(Material.WHEAT)))
+                        player.getInventory().getItemInMainHand().getType().equals(Material.APPLE) ||
+                        player.getInventory().getItemInMainHand().getType().equals(Material.BONE) ||
+                        player.getInventory().getItemInMainHand().getType().equals(Material.WHEAT)) {
                     incrementAndCheckAnimalFeedCounter(player);
+                }
             }
         }
     }

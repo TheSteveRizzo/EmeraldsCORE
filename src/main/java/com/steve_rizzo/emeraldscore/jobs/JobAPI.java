@@ -109,14 +109,21 @@ public class JobAPI {
         }
 
         public JOB_TYPE getJob() {
-            return job;
+            if (job != null) {
+                return job;
+            } else {
+                // If the job is null, you can return a default job type or handle the situation as needed
+                return JOB_TYPE.NONE;
+            }
         }
+
 
         public void setJob(JOB_TYPE job) {
             if (this.job == null || System.currentTimeMillis() - getLastTeamChange(playerName) >= 3 * 24 * 60 * 60 * 1000) {
                 this.job = job;
                 setLastTeamChange(playerName, System.currentTimeMillis());
                 savePlayerJobToFile(this); // Save player's job to file
+                addPlayerToCooldown(playerName); // Add player to cooldown list
             } else {
                 Player player = Bukkit.getPlayer(playerName);
                 if (player != null) {
@@ -177,6 +184,7 @@ public class JobAPI {
         GATHERER,
         HUNTER,
         EXPLORER,
-        FISHER
+        FISHER,
+        NONE
     }
 }

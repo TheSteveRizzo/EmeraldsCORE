@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +35,8 @@ public class GathererTaskListener implements Listener {
         Player player = event.getPlayer();
 
         // Check if the player is a gatherer
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.GATHERER) {
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.GATHERER) {
             // Check the broken block type and increment counters accordingly
             if (brokenBlock.getType() == Material.OAK_LEAVES || brokenBlock.getType() == Material.BIRCH_LEAVES ||
                     brokenBlock.getType() == Material.SPRUCE_LEAVES || brokenBlock.getType() == Material.JUNGLE_LEAVES ||

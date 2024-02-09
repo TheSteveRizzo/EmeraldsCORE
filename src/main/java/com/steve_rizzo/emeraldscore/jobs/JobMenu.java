@@ -121,27 +121,47 @@ public class JobMenu implements Listener {
 
             if (inventoryTitle.equals("Job Selection")) {
                 event.setCancelled(true);
-                // Open task selection menu if a job is selected
+                // Check if the clicked item is a job icon
                 for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
-                    if (clickedItem.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + jobType.toString())) {
+                    if (clickedItem.getType() == getJobMaterial(jobType)) {
                         // Check cooldown before allowing job change
                         if (JobAPI.isPlayerInCooldown(player.getName())) {
                             player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
                             return;
                         }
-                        // Save the player's job before opening task selection menu
+                        // Save the player's job as the corresponding job type
                         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
                         if (jobPlayer != null) {
                             jobPlayer.setJob(jobType);
+                            player.sendMessage(ChatColor.GREEN + "You are now a " + jobType.toString() + "!");
                         }
-                        openTaskSelectionMenu(player, jobType); // Open task selection menu for the player's job type
+                        // Open task selection menu for the corresponding job type
+                        openTaskSelectionMenu(player, jobType);
                         // Save cooldown data to file
                         JobAPI.saveCooldownData();
                         return;
                     }
                 }
             }
-            // Handle other inventory interactions...
+        }
+    }
+
+    private Material getJobMaterial(JobAPI.JOB_TYPE jobType) {
+        switch (jobType) {
+            case FARMER:
+                return Material.CARROT;
+            case MINER:
+                return Material.DIAMOND_PICKAXE;
+            case GATHERER:
+                return Material.CHEST;
+            case HUNTER:
+                return Material.DIAMOND_SWORD;
+            case EXPLORER:
+                return Material.SPYGLASS;
+            case FISHER:
+                return Material.FISHING_ROD;
+            default:
+                return Material.STONE;
         }
     }
 

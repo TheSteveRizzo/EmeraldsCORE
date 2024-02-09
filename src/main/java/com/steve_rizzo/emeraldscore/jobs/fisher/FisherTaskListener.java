@@ -5,14 +5,13 @@ import com.steve_rizzo.emeraldscore.jobs.DailyTask;
 import com.steve_rizzo.emeraldscore.jobs.JobAPI;
 import com.steve_rizzo.emeraldscore.jobs.JobTasks;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,9 +33,10 @@ public class FisherTaskListener implements Listener {
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
         Player player = event.getPlayer();
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
 
-        // Check if the player is a fisher
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.FISHER) {
+        // Check if the player is a fisher and has a job assigned
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER) {
             // Check if the event is a successful catch
             if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
                 incrementAndCheckFishCatchCounter(player);
@@ -47,18 +47,48 @@ public class FisherTaskListener implements Listener {
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
-        // Check if the player is a fisher and consumes tropical fish
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.FISHER &&
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+
+        // Check if the player is a fisher, has a job assigned, and consumes tropical fish
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER &&
                 event.getItem().getType() == Material.TROPICAL_FISH) {
             incrementAndCheckTropicalFishCounter(player);
         }
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        // Check if the player is a fisher and has an enchanted fishing rod
+    public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.FISHER &&
+        Location to = event.getTo();
+
+        // Check if the player is a fisher and has a job assigned
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER) {
+            Biome biome = to.getBlock().getBiome();
+            // Check if the player enters a sea biome
+            if (biome == Biome.OCEAN || biome == Biome.DEEP_OCEAN || biome == Biome.WARM_OCEAN || biome == Biome.LUKEWARM_OCEAN || biome == Biome.COLD_OCEAN || biome == Biome.FROZEN_OCEAN) {
+                incrementAndCheckSeaBiomeCounter(player);
+            }
+        }
+    }
+
+    private void incrementAndCheckSeaBiomeCounter(Player player) {
+        int count = seaBiomeCounter.getOrDefault(player.getUniqueId().toString(), 0);
+        seaBiomeCounter.put(player.getUniqueId().toString(), count + 1);
+
+        // Check if the player has entered a sea biome a certain number of times
+        if (count + 1 >= 2) {
+            markTaskCompleted(player, "Explore the seas");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+
+        // Check if the player is a fisher, has a job assigned, and has an enchanted fishing rod
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER &&
                 player.getInventory().contains(Material.ENCHANTED_BOOK) &&
                 player.getInventory().contains(Material.FISHING_ROD)) {
             rodEnchantment.put(player.getUniqueId().toString(), true);

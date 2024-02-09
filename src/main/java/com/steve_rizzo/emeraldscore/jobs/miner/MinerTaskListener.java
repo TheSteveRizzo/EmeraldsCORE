@@ -35,8 +35,8 @@ public class MinerTaskListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block brokenBlock = event.getBlock();
         Player player = event.getPlayer();
-
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.MINER) {
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.MINER) {
             if (brokenBlock.getType() == Material.COAL_ORE) {
                 incrementAndCheckCoalBreakCounter(player);
             } else if (brokenBlock.getType() == Material.IRON_ORE) {
@@ -50,8 +50,8 @@ public class MinerTaskListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-
-        if (JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.MINER &&
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.MINER &&
                 event.getView().getTitle().equals("Crafting") && event.getRawSlot() == 0) {
             ItemStack craftedItem = event.getCurrentItem();
             if (craftedItem != null && craftedItem.getType() == Material.DIAMOND_PICKAXE) {

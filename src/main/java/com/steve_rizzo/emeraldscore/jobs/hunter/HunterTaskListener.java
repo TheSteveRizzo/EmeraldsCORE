@@ -30,30 +30,29 @@ public class HunterTaskListener implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            Player player = event.getEntity().getKiller();
-            if (player != null && JobAPI.getPlayer(player.getName()).getJob() == JobAPI.JOB_TYPE.HUNTER) {
-                if (event.getEntity().getKiller() != null) {
-                    // Check if the killed entity is a valid target
-                    switch (event.getEntityType()) {
-                        case COW:
-                        case PIG:
-                        case CHICKEN:
-                        case SHEEP:
-                            incrementAndCheckRawMeatCounter(player);
-                            break;
-                        case RABBIT:
-                            incrementAndCheckRabbitMeatCounter(player);
-                            break;
-                        case ZOMBIE:
-                        case SKELETON:
-                        case SPIDER:
-                        case CREEPER:
-                        case ENDERMAN:
-                        case WITCH:
-                            incrementAndCheckHostileMobCounter(player);
-                            break;
-                    }
+        Player player = event.getEntity().getKiller();
+        if (player != null) {
+            JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+            if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.HUNTER) {
+                // Check if the killed entity is a valid target
+                switch (event.getEntityType()) {
+                    case COW:
+                    case PIG:
+                    case CHICKEN:
+                    case SHEEP:
+                        incrementAndCheckRawMeatCounter(player);
+                        break;
+                    case RABBIT:
+                        incrementAndCheckRabbitMeatCounter(player);
+                        break;
+                    case ZOMBIE:
+                    case SKELETON:
+                    case SPIDER:
+                    case CREEPER:
+                    case ENDERMAN:
+                    case WITCH:
+                        incrementAndCheckHostileMobCounter(player);
+                        break;
                 }
             }
         }
@@ -64,7 +63,8 @@ public class HunterTaskListener implements Listener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             Player attacker = (Player) event.getDamager();
             Player victim = (Player) event.getEntity();
-            if (JobAPI.getPlayer(attacker.getName()).getJob() == JobAPI.JOB_TYPE.HUNTER) {
+            JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(attacker.getName());
+            if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.HUNTER) {
                 if (event.getCause() == EntityDamageByEntityEvent.DamageCause.PROJECTILE &&
                         attacker.getInventory().getItemInMainHand().getType().toString().contains("BOW")) {
                     incrementAndCheckBowKillCounter(attacker);
@@ -123,3 +123,4 @@ public class HunterTaskListener implements Listener {
         }
     }
 }
+
