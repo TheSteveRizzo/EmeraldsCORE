@@ -69,33 +69,34 @@ public class JobMenu implements Listener {
         return item;
     }
 
-    // Open the task selection menu based on the selected job type
+    // Open the task selection menu based on the selected job type and player
     public void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
         Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + jobType.toString() + ChatColor.GRAY + " Tasks");
 
-        List<DailyTask> tasks = jobTasks.getJobTasks().get(jobType);
+        // Get the randomly generated subset of tasks for the player's job type
+        List<DailyTask> tasks = jobTasks.getPlayerJobTasks(player.getName(), jobType);
         if (tasks != null) {
-            Random random = new Random();
-            for (int i = 0; i < Math.min(tasks.size(), 4); i++) {
-                int randomIndex = random.nextInt(tasks.size());
-                DailyTask task = tasks.get(randomIndex);
+            // Add each task to the inventory
+            for (DailyTask task : tasks) {
                 ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
                 ItemMeta taskMeta = taskItem.getItemMeta();
                 taskMeta.setDisplayName(ChatColor.YELLOW + task.getName());
                 taskItem.setItemMeta(taskMeta);
                 taskMenu.addItem(taskItem);
-                tasks.remove(randomIndex);
             }
         }
 
+        // Add back button
         ItemStack backButton = new ItemStack(Material.ARROW, 1);
         ItemMeta backMeta = backButton.getItemMeta();
         backMeta.setDisplayName(ChatColor.RED + "Back to Job Selection");
         backButton.setItemMeta(backMeta);
         taskMenu.setItem(8, backButton);
 
+        // Open the inventory for the player
         player.openInventory(taskMenu);
     }
+
 
     // Open the main job selection menu
     public static void openJobSelectionMenu(Player player) {
@@ -133,14 +134,28 @@ public class JobMenu implements Listener {
                         if (jobPlayer != null) {
                             jobPlayer.setJob(jobType);
                         }
-                        openTaskSelectionMenu(player, jobType);
+                        openTaskSelectionMenu(player, jobType); // Open task selection menu for the player's job type
                         // Save cooldown data to file
                         JobAPI.saveCooldownData();
                         return;
                     }
                 }
-            } else if (inventoryTitle.endsWith("Tasks")) {
+            }
+            // Handle other inventory interactions...
+        }
+    }
 
+    @EventHandler
+    public void onInventoryItemClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        Inventory clickedInventory = event.getClickedInventory();
+        ItemStack clickedItem = event.getCurrentItem();
+
+        if (clickedInventory != null && clickedItem != null) {
+            String inventoryTitle = ChatColor.stripColor(event.getView().getTitle());
+
+            if (inventoryTitle.endsWith("Tasks")) {
                 event.setCancelled(true);
 
                 if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
@@ -155,10 +170,19 @@ public class JobMenu implements Listener {
                         DailyTask task = getTaskById(taskId);
                         if (task != null && task.isCompleted() && !task.isClaimed()) {
                             // Task has been completed but not yet claimed
-                            // Provide rewards to the player
-                            player.sendMessage(prefix + "You completed the task and received your reward!");
+                            // Apply rewards to the player
+                            JobRewards.applyReward(player.getName(), jobPlayer.getJob(), task.getTaskId());
                             // Mark the task as claimed
                             task.setClaimed(true);
+                            // Change the icon to BEDROCK and update display name
+                            ItemStack completedItem = new ItemStack(Material.BEDROCK);
+                            ItemMeta meta = completedItem.getItemMeta();
+                            meta.setDisplayName(ChatColor.GREEN + "Completed and Claimed");
+                            completedItem.setItemMeta(meta);
+                            clickedItem.setType(Material.BEDROCK);
+                            clickedItem.setItemMeta(meta);
+                            // Inform the player that the task has been completed and claimed
+                            player.sendMessage(prefix + "You've completed and claimed the reward for this task!");
                         } else if (task != null && task.isClaimed()) {
                             // Task has already been claimed
                             player.sendMessage(prefix + "You have already claimed the reward for this task.");

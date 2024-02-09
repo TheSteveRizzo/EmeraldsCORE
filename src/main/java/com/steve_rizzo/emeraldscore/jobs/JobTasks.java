@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class JobTasks {
-    private Set<String> completedTasks = new HashSet<>();
+    private Map<String, Boolean> completedTasks = new HashMap<>(); // Use Map to track completion status of each task
     private Map<JobAPI.JOB_TYPE, List<DailyTask>> jobTasks = new HashMap<>();
 
     // Constructor to initialize job tasks and schedule daily reset
@@ -24,12 +24,12 @@ public class JobTasks {
 
     // Method to check if a task is completed
     public boolean isTaskCompleted(String taskId) {
-        return completedTasks.contains(taskId);
+        return completedTasks.getOrDefault(taskId, false);
     }
 
     // Method to mark a task as completed
     public void markTaskCompleted(String taskId) {
-        completedTasks.add(taskId);
+        completedTasks.put(taskId, true);
     }
 
     // Method to reset completion status of all tasks
@@ -37,7 +37,7 @@ public class JobTasks {
         completedTasks.clear();
     }
 
-    // Method to schedule daily task to reset completion status
+    // Modified scheduleDailyReset method to refresh job tasks and reset completion status
     public void scheduleDailyReset() {
         // Get the current time in New York timezone
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/New_York"));
@@ -53,10 +53,12 @@ public class JobTasks {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                refreshJobTasks();
                 resetCompletionStatus();
             }
         }, initialDelay.toMillis(), Duration.ofDays(1).toMillis());
     }
+
 
     // Method to initialize job tasks
     private void initializeJobTasks() {
@@ -67,9 +69,16 @@ public class JobTasks {
         jobTasks.put(JobAPI.JOB_TYPE.HUNTER, HunterTasks.generateTasksForHunter());
         jobTasks.put(JobAPI.JOB_TYPE.EXPLORER, ExplorerTasks.generateTasksForExplorer());
         jobTasks.put(JobAPI.JOB_TYPE.FISHER, FisherTasks.generateTasksForFisher());
+
+        // Initialize completion status of tasks
+        for (List<DailyTask> tasks : jobTasks.values()) {
+            for (DailyTask task : tasks) {
+                completedTasks.put(task.getName(), false);
+            }
+        }
     }
 
-    // Method to refresh job tasks with new random tasks
+    // Method to refresh job tasks with new random tasks for each job type
     public void refreshJobTasks() {
         for (JobAPI.JOB_TYPE jobType : jobTasks.keySet()) {
             List<DailyTask> tasks = jobTasks.get(jobType);
@@ -79,37 +88,52 @@ public class JobTasks {
         }
     }
 
-    // Method to generate random tasks for a job type
+    // Overloaded method to refresh job tasks with new random tasks for a specific job type
+    public void refreshJobTasks(JobAPI.JOB_TYPE jobType) {
+        List<DailyTask> tasks = jobTasks.get(jobType);
+        List<DailyTask> newTasks = generateRandomTasks(jobType);
+        tasks.clear();
+        tasks.addAll(newTasks);
+    }
+
+    // Modified method to generate random tasks for a job type
     private List<DailyTask> generateRandomTasks(JobAPI.JOB_TYPE jobType) {
         switch (jobType) {
             case FARMER:
-                return generateRandomTasks(FarmerTasks.generateTasksForFarmer());
+                return FarmerTasks.generateTasksForFarmer();
             case MINER:
-                return generateRandomTasks(MinerTasks.generateTasksForMiner());
+                return MinerTasks.generateTasksForMiner();
             case GATHERER:
-                return generateRandomTasks(GathererTasks.generateTasksForGatherer());
+                return GathererTasks.generateTasksForGatherer();
             case HUNTER:
-                return generateRandomTasks(HunterTasks.generateTasksForHunter());
+                return HunterTasks.generateTasksForHunter();
             case EXPLORER:
-                return generateRandomTasks(ExplorerTasks.generateTasksForExplorer());
+                return ExplorerTasks.generateTasksForExplorer();
             case FISHER:
-                return generateRandomTasks(FisherTasks.generateTasksForFisher());
+                return FisherTasks.generateTasksForFisher();
             default:
                 return new ArrayList<>();
         }
     }
 
-    // Method to generate a random subset of tasks
-    private List<DailyTask> generateRandomTasks(List<DailyTask> sourceTasks) {
-        List<DailyTask> randomTasks = new ArrayList<>();
-        Collections.shuffle(sourceTasks); // Shuffle the tasks to get a random order
-        int numTasks = Math.min(sourceTasks.size(), 4); // Select up to 4 tasks (or less if fewer available)
-        for (int i = 0; i < numTasks; i++) {
-            randomTasks.add(sourceTasks.get(i));
+
+    public List<DailyTask> getPlayerJobTasks(String playerName, JobAPI.JOB_TYPE jobType) {
+        List<DailyTask> allTasks = jobTasks.get(jobType);
+        List<DailyTask> playerTasks = new ArrayList<>();
+        if (allTasks != null) {
+            for (DailyTask task : allTasks) {
+                // Add tasks to playerTasks only if they are not completed and not claimed
+                if (!completedTasks.getOrDefault(task.getName(), false) && !task.isClaimed()) {
+                    playerTasks.add(task);
+                }
+            }
         }
-        return randomTasks;
+        return playerTasks;
     }
+
+
+    // Getters
     public Map<JobAPI.JOB_TYPE, List<DailyTask>> getJobTasks() {
-        return this.jobTasks;
+        return jobTasks;
     }
 }

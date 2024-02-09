@@ -9,10 +9,10 @@ public class MinerTasks {
 
     public static List<DailyTask> generateTasksForMiner() {
         List<DailyTask> tasks = new ArrayList<>();
-        tasks.add(new DailyTask("Coal Miner", 1, "Mine coal from the underground"));
-        tasks.add(new DailyTask("Iron Extractor", 2, "Extract iron ore from the mountains"));
-        tasks.add(new DailyTask("Gem Collector", 3, "Collect precious gems from the caves"));
-        tasks.add(new DailyTask("Tool Crafter", 4, "Craft new tools in the workshop"));
+        tasks.add(new DailyTask("Coal Miner", 1, "Mine 256 coal ores from the underground"));
+        tasks.add(new DailyTask("Iron Extractor", 2, "Extract 128 iron ores from the mountains"));
+        tasks.add(new DailyTask("Gem Collector", 3, "Collect 8 precious diamonds from the caves"));
+        tasks.add(new DailyTask("Tool Crafter", 4, "Craft a new diamond pickaxe in the workshop"));
         return tasks;
     }
 }

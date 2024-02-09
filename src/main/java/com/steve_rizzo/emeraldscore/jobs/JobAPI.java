@@ -160,7 +160,7 @@ public class JobAPI {
 
     // Method to retrieve cooldown data from file
     public static Map<String, Long> getCooldownData() {
-        File cooldownFile = new File(Main.getPlugin().getDataFolder(), "cooldown.yml");
+        File cooldownFile = new File(Main.core.getDataFolder(), "cooldown.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(cooldownFile);
         Map<String, Long> cooldownData = new HashMap<>();
         if (cooldownFile.exists()) {

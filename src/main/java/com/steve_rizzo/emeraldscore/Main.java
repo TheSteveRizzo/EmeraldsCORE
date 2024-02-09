@@ -21,6 +21,13 @@ import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
 import com.steve_rizzo.emeraldscore.jobs.JobAPI;
 import com.steve_rizzo.emeraldscore.jobs.JobCommands;
 import com.steve_rizzo.emeraldscore.jobs.JobMenu;
+import com.steve_rizzo.emeraldscore.jobs.JobTasks;
+import com.steve_rizzo.emeraldscore.jobs.explorer.ExplorerTaskListener;
+import com.steve_rizzo.emeraldscore.jobs.farmer.FarmerTaskListener;
+import com.steve_rizzo.emeraldscore.jobs.fisher.FisherTaskListener;
+import com.steve_rizzo.emeraldscore.jobs.gatherer.GathererTaskListener;
+import com.steve_rizzo.emeraldscore.jobs.hunter.HunterTaskListener;
+import com.steve_rizzo.emeraldscore.jobs.miner.MinerTaskListener;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -201,6 +208,15 @@ public class Main extends JavaPlugin {
         // Jobs Feature
         this.getCommand("jobs").setExecutor(new JobCommands());
         Bukkit.getServer().getPluginManager().registerEvents(new JobMenu(), this);
+
+        // Jobs Feature, Listeners
+        JobTasks jobTasks = new JobTasks();
+        Bukkit.getServer().getPluginManager().registerEvents(new ExplorerTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new FarmerTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new FisherTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new HunterTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new GathererTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new MinerTaskListener(jobTasks), this);
 
         // GUI Menus
         OpenGamesGUI openGamesGUI = new OpenGamesGUI();
