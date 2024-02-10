@@ -66,7 +66,7 @@ public class GathererTaskListener implements Listener {
         herbCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 64) {
-            markTaskCompleted(player, "Herb Collector");
+            markTaskCompleted(player, "Herb Collector", 1);
         }
     }
 
@@ -75,7 +75,7 @@ public class GathererTaskListener implements Listener {
         mushroomCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 32) {
-            markTaskCompleted(player, "Mushroom Gatherer");
+            markTaskCompleted(player, "Mushroom Gatherer", 2);
         }
     }
 
@@ -84,7 +84,7 @@ public class GathererTaskListener implements Listener {
         flowerCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 32) {
-            markTaskCompleted(player, "Flower Collector");
+            markTaskCompleted(player, "Flower Collector", 3);
         }
     }
 
@@ -93,17 +93,17 @@ public class GathererTaskListener implements Listener {
         honeyCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 8) {
-            markTaskCompleted(player, "Honey Gatherer");
+            markTaskCompleted(player, "Honey Gatherer", 4);
         }
     }
 
-    private void markTaskCompleted(Player player, String taskName) {
+    private void markTaskCompleted(Player player, String taskName, int taskId) {
         // Mark the task as completed and notify the player
         List<DailyTask> gathererTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.GATHERER);
         if (gathererTasks != null) {
             for (DailyTask task : gathererTasks) {
-                if (task.getName().equalsIgnoreCase(taskName)) {
-                    jobTasks.markTaskCompleted(task.getName());
+                if (task.getTaskId() == taskId) {
+                    jobTasks.markTaskCompleted(taskName);
                     player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + taskName + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
                     break;
                 }

@@ -12,7 +12,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HunterTaskListener implements Listener {
@@ -111,16 +110,7 @@ public class HunterTaskListener implements Listener {
 
     private void markTaskCompleted(Player player, String taskName) {
         // Mark the task as completed and notify the player
-        List<DailyTask> hunterTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.HUNTER);
-        if (hunterTasks != null) {
-            for (DailyTask task : hunterTasks) {
-                if (task.getName().equalsIgnoreCase(taskName)) {
-                    jobTasks.markTaskCompleted(task.getName());
-                    player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + taskName + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
-                    break;
-                }
-            }
-        }
+        jobTasks.markTaskCompleted(taskName);
+        player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + taskName + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
     }
 }
-

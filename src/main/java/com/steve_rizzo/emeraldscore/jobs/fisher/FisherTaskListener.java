@@ -5,13 +5,16 @@ import com.steve_rizzo.emeraldscore.jobs.DailyTask;
 import com.steve_rizzo.emeraldscore.jobs.JobAPI;
 import com.steve_rizzo.emeraldscore.jobs.JobTasks;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
+import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,26 +62,27 @@ public class FisherTaskListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        Location to = event.getTo();
-
         // Check if the player is a fisher and has a job assigned
         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
         if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER) {
-            Biome biome = to.getBlock().getBiome();
             // Check if the player enters a sea biome
-            if (biome == Biome.OCEAN || biome == Biome.DEEP_OCEAN || biome == Biome.WARM_OCEAN || biome == Biome.LUKEWARM_OCEAN || biome == Biome.COLD_OCEAN || biome == Biome.FROZEN_OCEAN) {
+            if (event.getTo().getBlock().getBiome().name().contains("OCEAN")) {
                 incrementAndCheckSeaBiomeCounter(player);
             }
         }
     }
 
-    private void incrementAndCheckSeaBiomeCounter(Player player) {
-        int count = seaBiomeCounter.getOrDefault(player.getUniqueId().toString(), 0);
-        seaBiomeCounter.put(player.getUniqueId().toString(), count + 1);
-
-        // Check if the player has entered a sea biome a certain number of times
-        if (count + 1 >= 2) {
-            markTaskCompleted(player, "Explore the seas");
+    @EventHandler
+    public void onEnchantItem(EnchantItemEvent event) {
+        Player player = event.getEnchanter();
+        // Check if the player is a fisher and has a job assigned
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.FISHER) {
+            // Check if the enchanted item is a fishing rod
+            if (event.getItem().getType() == Material.FISHING_ROD) {
+                rodEnchantment.put(player.getUniqueId().toString(), true);
+                markTaskCompleted(player, "Repair fishing gear and maintain equipment", 4);
+            }
         }
     }
 
@@ -92,7 +96,7 @@ public class FisherTaskListener implements Listener {
                 player.getInventory().contains(Material.ENCHANTED_BOOK) &&
                 player.getInventory().contains(Material.FISHING_ROD)) {
             rodEnchantment.put(player.getUniqueId().toString(), true);
-            markTaskCompleted(player, "Repair fishing gear and maintain equipment");
+            markTaskCompleted(player, "Repair fishing gear and maintain equipment", 4);
         }
     }
 
@@ -112,7 +116,7 @@ public class FisherTaskListener implements Listener {
         fishCatchCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 15) {
-            markTaskCompleted(player, "Cast a line and fish in different bodies of water");
+            markTaskCompleted(player, "Cast a line and fish in different bodies of water", 1);
         }
     }
 
@@ -121,16 +125,26 @@ public class FisherTaskListener implements Listener {
         tropicalFishCounter.put(player.getUniqueId().toString(), count + 1);
 
         if (count + 1 >= 10) {
-            markTaskCompleted(player, "Eat specific types of fish from a fish market");
+            markTaskCompleted(player, "Eat specific types of fish from a fish market", 2);
         }
     }
 
-    private void markTaskCompleted(Player player, String taskName) {
+    private void incrementAndCheckSeaBiomeCounter(Player player) {
+        int count = seaBiomeCounter.getOrDefault(player.getUniqueId().toString(), 0);
+        seaBiomeCounter.put(player.getUniqueId().toString(), count + 1);
+
+        // Check if the player has entered a sea biome a certain number of times
+        if (count + 1 >= 2) {
+            markTaskCompleted(player, "Explore coastal areas for unique marine life", 3);
+        }
+    }
+
+    private void markTaskCompleted(Player player, String taskName, int taskId) {
         // Mark the task as completed and notify the player
         List<DailyTask> fisherTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.FISHER);
         if (fisherTasks != null) {
             for (DailyTask task : fisherTasks) {
-                if (task.getName().equalsIgnoreCase(taskName)) {
+                if (task.getTaskId() == taskId) {
                     jobTasks.markTaskCompleted(task.getName());
                     player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + ChatColor.GRAY + taskName + ChatColor.LIGHT_PURPLE + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
                     break;

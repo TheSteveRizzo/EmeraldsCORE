@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -69,7 +70,6 @@ public class JobMenu implements Listener {
         return item;
     }
 
-    // Open the task selection menu based on the selected job type and player
     public void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
         Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + jobType.toString() + ChatColor.GRAY + " Tasks");
 
@@ -78,10 +78,7 @@ public class JobMenu implements Listener {
         if (tasks != null) {
             // Add each task to the inventory
             for (DailyTask task : tasks) {
-                ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
-                ItemMeta taskMeta = taskItem.getItemMeta();
-                taskMeta.setDisplayName(ChatColor.YELLOW + task.getName());
-                taskItem.setItemMeta(taskMeta);
+                ItemStack taskItem = getItemStack(task);
                 taskMenu.addItem(taskItem);
             }
         }
@@ -97,19 +94,35 @@ public class JobMenu implements Listener {
         player.openInventory(taskMenu);
     }
 
+    private static ItemStack getItemStack(DailyTask task) {
+        ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
+        ItemMeta taskMeta = taskItem.getItemMeta();
+        taskMeta.setDisplayName(ChatColor.YELLOW + task.getName());
+
+        // Set the lore to include the task description and progress
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + task.getDescription());
+        lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + task.getCurrentProgress() + "/" + task.getTotalProgress());
+        taskMeta.setLore(lore);
+
+        taskItem.setItemMeta(taskMeta);
+        return taskItem;
+    }
 
     // Open the main job selection menu
     public static void openJobSelectionMenu(Player player) {
         Inventory jobMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Job Selection");
 
         for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
-            ItemStack jobItem = getJobIcon(jobType);
-            jobMenu.addItem(jobItem);
+            // Exclude the NONE job type
+            if (jobType != JobAPI.JOB_TYPE.NONE) {
+                ItemStack jobItem = getJobIcon(jobType);
+                jobMenu.addItem(jobItem);
+            }
         }
 
         player.openInventory(jobMenu);
     }
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -124,22 +137,36 @@ public class JobMenu implements Listener {
                 // Check if the clicked item is a job icon
                 for (JobAPI.JOB_TYPE jobType : JobAPI.JOB_TYPE.values()) {
                     if (clickedItem.getType() == getJobMaterial(jobType)) {
-                        // Check cooldown before allowing job change
-                        if (JobAPI.isPlayerInCooldown(player.getName())) {
-                            player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
-                            return;
-                        }
-                        // Save the player's job as the corresponding job type
+
                         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
-                        if (jobPlayer != null) {
-                            jobPlayer.setJob(jobType);
-                            player.sendMessage(ChatColor.GREEN + "You are now a " + jobType.toString() + "!");
+
+                        if (jobPlayer == null) {
+                            jobPlayer = new JobAPI.JobPlayer(player.getName(), JobAPI.JOB_TYPE.NONE);
                         }
-                        // Open task selection menu for the corresponding job type
-                        openTaskSelectionMenu(player, jobType);
-                        // Save cooldown data to file
-                        JobAPI.saveCooldownData();
-                        return;
+
+                        if (jobType.equals(jobPlayer.getJob())) {
+
+                            openTaskSelectionMenu(player, jobPlayer.getJob());
+                            return;
+
+                        } else {
+                            // Check cooldown before allowing job change
+                            if (JobAPI.isPlayerInCooldown(player.getName())) {
+                                player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
+                                return;
+                            }
+
+                            jobPlayer.setJob(jobType);
+                            player.sendMessage(ChatColor.GREEN + "You are now a " + jobType + "!");
+
+                            // Open task selection menu for the corresponding job type
+                            openTaskSelectionMenu(player, jobType);
+                            // Save cooldown data to file
+                            JobAPI.addPlayerToCooldown(player.getName());
+                            JobAPI.saveCooldownData();
+                            return;
+
+                        }
                     }
                 }
             }
@@ -217,22 +244,24 @@ public class JobMenu implements Listener {
     }
 
     private DailyTask getTaskById(String taskId) {
-        // Check if the taskId is a valid integer
-        try {
-            int id = Integer.parseInt(taskId);
-            // Iterate over each job type and its associated tasks
-            for (Map.Entry<JobAPI.JOB_TYPE, List<DailyTask>> entry : jobTasks.getJobTasks().entrySet()) {
-                // Iterate over tasks for the current job type
-                for (DailyTask task : entry.getValue()) {
-                    // Check if the task ID matches the specified ID
-                    if (task.getTaskId() == id) {
-                        return task; // Return the task if found
+        // Check if the taskId is not empty and is a valid integer
+        if (taskId != null && !taskId.isEmpty()) {
+            try {
+                int id = Integer.parseInt(taskId);
+                // Iterate over each job type and its associated tasks
+                for (Map.Entry<JobAPI.JOB_TYPE, List<DailyTask>> entry : jobTasks.getJobTasks().entrySet()) {
+                    // Iterate over tasks for the current job type
+                    for (DailyTask task : entry.getValue()) {
+                        // Check if the task ID matches the specified ID
+                        if (task.getTaskId() == id) {
+                            return task; // Return the task if found
+                        }
                     }
                 }
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
             }
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
         }
-        return null; // Return null if no task with the specified ID is found
+        return null; // Return null if taskId is empty or not a valid integer
     }
 }

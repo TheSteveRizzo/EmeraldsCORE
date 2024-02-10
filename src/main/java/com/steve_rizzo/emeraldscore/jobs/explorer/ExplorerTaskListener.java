@@ -85,8 +85,11 @@ public class ExplorerTaskListener implements Listener {
     }
 
     private void markHeightAchieved(Player player) {
-        heightAchieved.put(player.getUniqueId().toString(), true);
-        markTaskCompleted(player, "Mountaineer");
+        boolean heightAchieved = this.heightAchieved.getOrDefault(player.getUniqueId().toString(), false);
+        if (!heightAchieved) {
+            this.heightAchieved.put(player.getUniqueId().toString(), true);
+            markTaskCompleted(player, "Mountaineer");
+        }
     }
 
     private void markTaskCompleted(Player player, String taskName) {

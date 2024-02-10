@@ -64,8 +64,16 @@ public class MinerTaskListener implements Listener {
         int count = coalBreakCounter.getOrDefault(player.getUniqueId().toString(), 0);
         coalBreakCounter.put(player.getUniqueId().toString(), count + 1);
 
-        if (count + 1 >= 128) {
-            markTaskCompleted(player, "Coal Miner");
+        if (count + 1 <= 256) { // Make sure not to exceed the total progress
+            List<DailyTask> minerTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.MINER);
+            if (minerTasks != null) {
+                for (DailyTask task : minerTasks) {
+                    if (task.getName().equals("Coal Miner")) {
+                        task.incrementProgress(1); // Increment progress by 1
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -73,8 +81,16 @@ public class MinerTaskListener implements Listener {
         int count = ironBreakCounter.getOrDefault(player.getUniqueId().toString(), 0);
         ironBreakCounter.put(player.getUniqueId().toString(), count + 1);
 
-        if (count + 1 >= 64) {
-            markTaskCompleted(player, "Iron Extractor");
+        if (count + 1 <= 128) { // Make sure not to exceed the total progress
+            List<DailyTask> minerTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.MINER);
+            if (minerTasks != null) {
+                for (DailyTask task : minerTasks) {
+                    if (task.getName().equals("Iron Extractor")) {
+                        task.incrementProgress(1); // Increment progress by 1
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -82,22 +98,31 @@ public class MinerTaskListener implements Listener {
         int count = diamondBreakCounter.getOrDefault(player.getUniqueId().toString(), 0);
         diamondBreakCounter.put(player.getUniqueId().toString(), count + 1);
 
-        if (count + 1 >= 32) {
-            markTaskCompleted(player, "Gem Collector");
+        if (count + 1 <= 8) { // Make sure not to exceed the total progress
+            List<DailyTask> minerTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.MINER);
+            if (minerTasks != null) {
+                for (DailyTask task : minerTasks) {
+                    if (task.getName().equals("Gem Collector")) {
+                        task.incrementProgress(1); // Increment progress by 1
+                        break;
+                    }
+                }
+            }
         }
     }
 
     private void markDiamondPickaxeCrafted(Player player) {
         diamondPickaxeCrafted.put(player.getUniqueId().toString(), true);
-        markTaskCompleted(player, "Tool Crafter");
+        markTaskCompleted(player, "Tool Crafter", 4);
     }
 
-    private void markTaskCompleted(Player player, String taskName) {
+    private void markTaskCompleted(Player player, String taskName, int taskId) {
         List<DailyTask> minerTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.MINER);
         if (minerTasks != null) {
             for (DailyTask task : minerTasks) {
-                if (task.getName().equalsIgnoreCase(taskName)) {
-                    jobTasks.markTaskCompleted(task.getName());
+                if (task.getTaskId() == taskId) {
+                    // Mark the task as completed and update its completion status
+                    task.setCompleted(true);
                     player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + ChatColor.GRAY + taskName + ChatColor.LIGHT_PURPLE + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
                     break;
                 }

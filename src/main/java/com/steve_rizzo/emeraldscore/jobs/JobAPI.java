@@ -167,15 +167,16 @@ public class JobAPI {
 
     // Method to retrieve cooldown data from file
     public static Map<String, Long> getCooldownData() {
-        File cooldownFile = new File(Main.core.getDataFolder(), "cooldown.yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(cooldownFile);
-        Map<String, Long> cooldownData = new HashMap<>();
-        if (cooldownFile.exists()) {
-            for (String key : config.getKeys(false)) {
-                cooldownData.put(key, config.getLong(key));
+        if (jobsConfig.contains("cooldowns")) {
+            ConfigurationSection cooldownsSection = jobsConfig.getConfigurationSection("cooldowns");
+            if (cooldownsSection != null) {
+                for (String playerName : cooldownsSection.getKeys(false)) {
+                    long lastChangeTimestamp = cooldownsSection.getLong(playerName);
+                    lastTeamChange.put(playerName, lastChangeTimestamp);
+                }
             }
         }
-        return cooldownData;
+        return lastTeamChange;
     }
 
     public enum JOB_TYPE {
