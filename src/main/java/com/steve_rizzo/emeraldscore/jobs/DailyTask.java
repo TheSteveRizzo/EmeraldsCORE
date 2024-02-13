@@ -1,6 +1,10 @@
 package com.steve_rizzo.emeraldscore.jobs;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.jobs.explorer.ExplorerTasks;
+import com.steve_rizzo.emeraldscore.jobs.farmer.FarmerTasks;
+import com.steve_rizzo.emeraldscore.jobs.fisher.FisherTasks;
+import com.steve_rizzo.emeraldscore.jobs.gatherer.GathererTasks;
 import com.steve_rizzo.emeraldscore.jobs.hunter.HunterTasks;
 import com.steve_rizzo.emeraldscore.jobs.miner.MinerTasks;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -131,6 +135,39 @@ public class DailyTask {
                     case "Trap Setter" -> HunterTasks.TRAP_SETTER_TOTAL_PROG;
                     case "Rare Prey Hunter" -> HunterTasks.RARE_PREY_HUNTER_TOTAL_PROG;
                     case "Archery Practice" -> HunterTasks.ARCHERY_PRACTICE_TOTAL_PROG;
+                    default -> 0;
+                };
+            } else if (jobType.equalsIgnoreCase("GATHERER")) {
+                return switch (name) {
+                    case "Herb Collector" -> GathererTasks.HERB_COLLECTOR_TOTAL_PROG;
+                    case "Mushroom Gatherer" -> GathererTasks.MUSHROOM_GATHERER_TOTAL_PROG;
+                    case "Flower Collector" -> GathererTasks.FLOWER_COLLECTOR_TOTAL_PROG;
+                    case "Honey Gatherer" -> GathererTasks.HONEY_GATHERER_TOTAL_PROG;
+                    default -> 0;
+                };
+            } else if (jobType.equalsIgnoreCase("FISHER")) {
+                return switch (name) {
+                    case "Cast a line and fish in different bodies of water" -> FisherTasks.CATCH_FISH_TOTAL_PROG;
+                    case "Eat specific types of fish from a fish market" -> FisherTasks.EAT_FISH_TOTAL_PROG;
+                    case "Explore coastal areas for unique marine life" -> FisherTasks.EXPLORE_COAST_TOTAL_PROG;
+                    case "Repair fishing gear and maintain equipment" -> FisherTasks.ENCHANT_ROD_TOTAL_PROG;
+                    default -> 0;
+                };
+
+            } else if (jobType.equalsIgnoreCase("FARMER")) {
+                return switch (name) {
+                    case "Wheat Harvester" -> FarmerTasks.WHEAT_HARVESTER_TOTAL_PROG;
+                    case "Animal Feeder" -> FarmerTasks.ANIMAL_FEEDER_TOTAL_PROG;
+                    case "Crop Planter" -> FarmerTasks.CROP_PLANTER_TOTAL_PROG;
+                    case "Produce Deliverer" -> FarmerTasks.PRODUCE_DELIVERER_TOTAL_PROG;
+                    default -> 0;
+                };
+            } else if (jobType.equalsIgnoreCase("EXPLORER")) {
+                return switch (name) {
+                    case "Cave Explorer" -> ExplorerTasks.CAVE_EXPLORER_TOTAL_PROG;
+                    case "Cartographer" -> ExplorerTasks.CARTOGRAPHER_TOTAL_PROG;
+                    case "Archeologist" -> ExplorerTasks.ARCHEOLOGIST_TOTAL_PROG;
+                    case "Mountaineer" -> ExplorerTasks.MOUNTAINEER_TOTAL_PROG;
                     default -> 0;
                 };
             }

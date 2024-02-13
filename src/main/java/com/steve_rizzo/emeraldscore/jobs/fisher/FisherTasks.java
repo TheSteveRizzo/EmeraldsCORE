@@ -13,6 +13,12 @@ public class FisherTasks {
 
     private static final String JOB_TYPE = "FISHER";
 
+    // Define constants for total progress values for each task
+    public static final int CATCH_FISH_TOTAL_PROG = 15;
+    public static final int EAT_FISH_TOTAL_PROG = 10;
+    public static final int EXPLORE_COAST_TOTAL_PROG = 2;
+    public static final int ENCHANT_ROD_TOTAL_PROG = 1;
+
     public static List<DailyTask> generateTasksForFisher() {
         List<DailyTask> tasks = new ArrayList<>();
         tasks.add(new DailyTask("Cast a line and fish in different bodies of water", 1, "Explore the waters and catch 15 fish", 15));
@@ -57,16 +63,16 @@ public class FisherTasks {
             // Assign default total progress based on the task
             switch (task.getName()) {
                 case "Cast a line and fish in different bodies of water":
-                    defaultTotalProgress = 15;
+                    defaultTotalProgress = CATCH_FISH_TOTAL_PROG;
                     break;
                 case "Eat specific types of fish from a fish market":
-                    defaultTotalProgress = 10;
+                    defaultTotalProgress = EAT_FISH_TOTAL_PROG;
                     break;
                 case "Explore coastal areas for unique marine life":
-                    defaultTotalProgress = 2;
+                    defaultTotalProgress = EXPLORE_COAST_TOTAL_PROG;
                     break;
                 case "Repair fishing gear and maintain equipment":
-                    defaultTotalProgress = 1;
+                    defaultTotalProgress = ENCHANT_ROD_TOTAL_PROG;
                     break;
                 default:
                     // Handle default case if task name doesn't match any predefined tasks
