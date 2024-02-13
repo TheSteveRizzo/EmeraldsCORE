@@ -3,6 +3,7 @@ package com.steve_rizzo.emeraldscore.jobs.gatherer;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.jobs.DailyTask;
 import com.steve_rizzo.emeraldscore.jobs.JobAPI;
+import com.steve_rizzo.emeraldscore.jobs.JobMenu;
 import com.steve_rizzo.emeraldscore.jobs.JobTasks;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,17 +13,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static com.steve_rizzo.emeraldscore.jobs.gatherer.GathererTasks.savePlayerTaskProgress;
 
 public class GathererTaskListener implements Listener {
 
     private final JobTasks jobTasks;
-    private final Map<String, Integer> herbCounter = new HashMap<>();
-    private final Map<String, Integer> mushroomCounter = new HashMap<>();
-    private final Map<String, Integer> flowerCounter = new HashMap<>();
-    private final Map<String, Integer> honeyCounter = new HashMap<>();
+    private static final String JOB_TYPE = "GATHERER";
 
     // Constructor to initialize GathererTaskListener with JobTasks instance
     public GathererTaskListener(JobTasks jobTasks) {
@@ -33,19 +31,18 @@ public class GathererTaskListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block brokenBlock = event.getBlock();
         Player player = event.getPlayer();
-
-        // Check if the player is a gatherer
+        JobAPI.JOB_TYPE jobType = JobAPI.JOB_TYPE.NONE;
         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
-        if (jobPlayer != null && jobPlayer.getJob() == JobAPI.JOB_TYPE.GATHERER) {
-            // Check the broken block type and increment counters accordingly
+        if (jobPlayer != null) jobType = jobPlayer.getJob();
+        if (jobType == JobAPI.JOB_TYPE.GATHERER) {
             if (brokenBlock.getType() == Material.OAK_LEAVES || brokenBlock.getType() == Material.BIRCH_LEAVES ||
                     brokenBlock.getType() == Material.SPRUCE_LEAVES || brokenBlock.getType() == Material.JUNGLE_LEAVES ||
                     brokenBlock.getType() == Material.ACACIA_LEAVES || brokenBlock.getType() == Material.DARK_OAK_LEAVES ||
                     brokenBlock.getType() == Material.GRASS || brokenBlock.getType() == Material.FERN) {
-                incrementAndCheckHerbCounter(player);
+                incrementAndCheckProgress(player, "Herb Collector");
             } else if (brokenBlock.getType() == Material.RED_MUSHROOM || brokenBlock.getType() == Material.BROWN_MUSHROOM ||
                     brokenBlock.getType() == Material.RED_BED || brokenBlock.getType() == Material.BROWN_BED) {
-                incrementAndCheckMushroomCounter(player);
+                incrementAndCheckProgress(player, "Mushroom Gatherer");
             } else if (brokenBlock.getType() == Material.DANDELION || brokenBlock.getType() == Material.POPPY ||
                     brokenBlock.getType() == Material.BLUE_ORCHID || brokenBlock.getType() == Material.ALLIUM ||
                     brokenBlock.getType() == Material.AZURE_BLUET || brokenBlock.getType() == Material.RED_TULIP ||
@@ -54,57 +51,48 @@ public class GathererTaskListener implements Listener {
                     brokenBlock.getType() == Material.CORNFLOWER || brokenBlock.getType() == Material.LILY_OF_THE_VALLEY ||
                     brokenBlock.getType() == Material.SUNFLOWER || brokenBlock.getType() == Material.LILAC ||
                     brokenBlock.getType() == Material.ROSE_BUSH || brokenBlock.getType() == Material.PEONY) {
-                incrementAndCheckFlowerCounter(player);
+                incrementAndCheckProgress(player, "Flower Collector");
             } else if (brokenBlock.getType() == Material.BEEHIVE || brokenBlock.getType() == Material.BEE_NEST) {
-                incrementAndCheckHoneyCounter(player);
+                incrementAndCheckProgress(player, "Honey Gatherer");
             }
         }
     }
 
-    private void incrementAndCheckHerbCounter(Player player) {
-        int count = herbCounter.getOrDefault(player.getUniqueId().toString(), 0);
-        herbCounter.put(player.getUniqueId().toString(), count + 1);
+    private void incrementAndCheckProgress(Player player, String taskName) {
+        String playerUUID = player.getUniqueId().toString();
+        List<DailyTask> gathererTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.GATHERER);
+        if (gathererTasks != null) {
+            for (DailyTask task : gathererTasks) {
+                if (task.getName().equals(taskName)) {
+                    task.incrementProgress(1, player.getUniqueId().toString(), JOB_TYPE); // Increment progress by 1
+                    if (task.getProgress(player.getUniqueId().toString(), JOB_TYPE) == task.getTotalProgress(playerUUID, JOB_TYPE)) {
+                        markTaskCompleted(player, taskName, task.getTaskId());
+                    }
+                    // Update the task item in the menu with the new progress
+                    JobMenu.updateTaskMenuItem(player, task, JOB_TYPE);
 
-        if (count + 1 >= 64) {
-            markTaskCompleted(player, "Herb Collector", 1);
-        }
-    }
+                    // Save the player's task progress
+                    savePlayerTaskProgress(player.getName(), task); // This line saves the player's task progress
 
-    private void incrementAndCheckMushroomCounter(Player player) {
-        int count = mushroomCounter.getOrDefault(player.getUniqueId().toString(), 0);
-        mushroomCounter.put(player.getUniqueId().toString(), count + 1);
-
-        if (count + 1 >= 32) {
-            markTaskCompleted(player, "Mushroom Gatherer", 2);
-        }
-    }
-
-    private void incrementAndCheckFlowerCounter(Player player) {
-        int count = flowerCounter.getOrDefault(player.getUniqueId().toString(), 0);
-        flowerCounter.put(player.getUniqueId().toString(), count + 1);
-
-        if (count + 1 >= 32) {
-            markTaskCompleted(player, "Flower Collector", 3);
-        }
-    }
-
-    private void incrementAndCheckHoneyCounter(Player player) {
-        int count = honeyCounter.getOrDefault(player.getUniqueId().toString(), 0);
-        honeyCounter.put(player.getUniqueId().toString(), count + 1);
-
-        if (count + 1 >= 8) {
-            markTaskCompleted(player, "Honey Gatherer", 4);
+                    break;
+                }
+            }
         }
     }
 
     private void markTaskCompleted(Player player, String taskName, int taskId) {
-        // Mark the task as completed and notify the player
+        String playerUUID = player.getUniqueId().toString();
         List<DailyTask> gathererTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.GATHERER);
         if (gathererTasks != null) {
             for (DailyTask task : gathererTasks) {
                 if (task.getTaskId() == taskId) {
-                    jobTasks.markTaskCompleted(taskName);
-                    player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + taskName + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
+                    // Mark the task as completed
+                    task.setCompleted(true, playerUUID, JOB_TYPE);
+                    player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + ChatColor.GRAY + taskName + ChatColor.LIGHT_PURPLE + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
+
+                    // Save the player's task progress
+                    savePlayerTaskProgress(player.getName(), task);
+
                     break;
                 }
             }

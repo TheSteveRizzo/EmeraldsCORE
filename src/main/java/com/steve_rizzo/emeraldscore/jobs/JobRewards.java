@@ -9,18 +9,19 @@ import java.util.List;
 
 public class JobRewards {
 
-    public static void applyReward(String playerName, JobAPI.JOB_TYPE jobType, int taskId) {
+    public static void applyReward(String playerUUID, JobAPI.JOB_TYPE jobType, int taskId) {
         // Get the JobTasks instance
         JobTasks jobTasks = new JobTasks();
 
         // Get the list of tasks for the specified job type assigned to the player
-        List<DailyTask> tasks = jobTasks.getPlayerJobTasks(playerName, jobType);
+        List<DailyTask> tasks = jobTasks.getPlayerJobTasks(playerUUID, jobType);
         if (tasks != null) {
             // Iterate through the tasks to find the one with the specified task ID
             for (DailyTask task : tasks) {
-                if (task.getTaskId() == taskId && task.isCompleted() && task.isClaimed()) {
+                if (task.getTaskId() == taskId && task.isCompleted(playerUUID, jobType.toString())
+                        && task.isClaimed(playerUUID, jobType.toString())) {
                     // Apply the reward if the task is completed and claimed
-                    Player player = Bukkit.getPlayerExact(playerName);
+                    Player player = Bukkit.getPlayer(playerUUID);
                     if (player != null) {
                         // Apply the specific reward based on the task
                         switch (taskId) {

@@ -15,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class JobMenu implements Listener {
 
@@ -25,7 +24,6 @@ public class JobMenu implements Listener {
     // Constructor to initialize job tasks
     public JobMenu() {
         jobTasks = new JobTasks();
-        jobTasks.scheduleDailyReset(); // Schedule the daily reset of tasks
     }
 
     // Get the icon for the specified job type
@@ -70,15 +68,21 @@ public class JobMenu implements Listener {
         return item;
     }
 
+    // Inside the JobMenu class
+
     public void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
         Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + jobType.toString() + ChatColor.GRAY + " Tasks");
+
+        // Clear the map before populating it with new task items
+        TaskItemManager.clear();
 
         // Get the randomly generated subset of tasks for the player's job type
         List<DailyTask> tasks = jobTasks.getPlayerJobTasks(player.getName(), jobType);
         if (tasks != null) {
             // Add each task to the inventory
             for (DailyTask task : tasks) {
-                ItemStack taskItem = getItemStack(task);
+                ItemStack taskItem = getItemStack(task, player, jobType.toString());
+                TaskItemManager.addTaskItem(taskItem, task); // Store the task item and its corresponding DailyTask
                 taskMenu.addItem(taskItem);
             }
         }
@@ -94,17 +98,67 @@ public class JobMenu implements Listener {
         player.openInventory(taskMenu);
     }
 
-    private static ItemStack getItemStack(DailyTask task) {
+    public static void updateTaskMenuItem(Player player, DailyTask task, String jobType) {
+        String playerUUID = player.getUniqueId().toString();
+        for (Map.Entry<ItemStack, DailyTask> entry : TaskItemManager.getTaskItemMap().entrySet()) {
+            if (entry.getValue().equals(task)) {
+                ItemStack taskItem = entry.getKey();
+                ItemMeta taskMeta = taskItem.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                lore.add(ChatColor.GRAY + task.getDescription());
+
+                if (task.isCompleted(playerUUID, jobType)) {
+                    if (task.isClaimed(playerUUID, jobType)) {
+                        // Task is completed and claimed, mark as bedrock and inform the player
+                        taskItem.setType(Material.BEDROCK);
+                        lore.add(ChatColor.GRAY + "Progress: " + ChatColor.GREEN + "Completed and Claimed");
+                    } else {
+                        // Task is completed but not claimed, allow the player to claim it
+                        taskItem.setType(Material.EMERALD_BLOCK);
+                        lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + "Completed");
+                        lore.add(ChatColor.GREEN + "Right-click to claim reward");
+                    }
+                } else {
+                    // Task is not completed yet
+                    lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + task.getProgress(playerUUID, jobType) + "/" + task.getTotalProgress(playerUUID, jobType));
+                }
+
+                taskMeta.setLore(lore);
+                taskItem.setItemMeta(taskMeta);
+                // Update the task item in the inventory
+                player.updateInventory();
+                break;
+            }
+        }
+    }
+
+    private ItemStack getItemStack(DailyTask task, Player player, String jobType) {
+        String playerUUID = player.getUniqueId().toString();
         ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
         ItemMeta taskMeta = taskItem.getItemMeta();
         taskMeta.setDisplayName(ChatColor.YELLOW + task.getName());
 
-        // Set the lore to include the task description and progress
+        // Set the lore to include the task description and dynamic progress
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + task.getDescription());
-        lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + task.getCurrentProgress() + "/" + task.getTotalProgress());
-        taskMeta.setLore(lore);
 
+        if (task.isCompleted(playerUUID, jobType)) {
+            if (task.isClaimed(playerUUID, jobType)) {
+                // Task is completed and claimed
+                taskItem.setType(Material.BEDROCK);
+                lore.add(ChatColor.GRAY + "Progress: " + ChatColor.GREEN + "Completed and Claimed");
+            } else {
+                // Task is completed but not claimed
+                taskItem.setType(Material.EMERALD_BLOCK);
+                lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + "Completed");
+                lore.add(ChatColor.GREEN + "Right-click to claim reward");
+            }
+        } else {
+            // Task is not completed yet
+            lore.add(ChatColor.GRAY + "Progress: " + ChatColor.YELLOW + task.getProgress(playerUUID, jobType) + "/" + task.getTotalProgress(playerUUID, jobType));
+        }
+
+        taskMeta.setLore(lore);
         taskItem.setItemMeta(taskMeta);
         return taskItem;
     }
@@ -123,6 +177,7 @@ public class JobMenu implements Listener {
 
         player.openInventory(jobMenu);
     }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -195,7 +250,9 @@ public class JobMenu implements Listener {
     @EventHandler
     public void onInventoryItemClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
+        String playerUUID = player.getUniqueId().toString();
         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        String JOB_TYPE = jobPlayer.getJob().toString();
         Inventory clickedInventory = event.getClickedInventory();
         ItemStack clickedItem = event.getCurrentItem();
 
@@ -205,38 +262,42 @@ public class JobMenu implements Listener {
             if (inventoryTitle.endsWith("Tasks")) {
                 event.setCancelled(true);
 
-                if (clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
-                    String itemName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+                if (clickedItem.getType() == Material.EMERALD_BLOCK && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
 
-                    if (itemName.equals("Back to Job Selection")) {
-                        // Player clicked on the back button
-                        openJobSelectionMenu(player);
-                    } else {
-                        // Handle task selection logic based on the selected job type
-                        String taskId = ""; // Retrieve the task ID based on the clicked item
-                        DailyTask task = getTaskById(taskId);
-                        if (task != null && task.isCompleted() && !task.isClaimed()) {
+                    // Handle task selection logic based on the selected job type
+                    String taskId = null;
+                    for (Map.Entry<ItemStack, DailyTask> entry : TaskItemManager.getTaskItemMap().entrySet()) {
+                        if (entry.getKey().equals(clickedItem)) {
+                            taskId = String.valueOf(entry.getValue().getTaskId());
+                            break;
+                        }
+                    }
+                    DailyTask task = getTaskById(taskId);
+                    if (task != null && task.isCompleted(playerUUID, JOB_TYPE) && !task.isClaimed(playerUUID, JOB_TYPE)) {
+                        if (jobPlayer.getJob() != null) {
                             // Task has been completed but not yet claimed
                             // Apply rewards to the player
                             JobRewards.applyReward(player.getName(), jobPlayer.getJob(), task.getTaskId());
-                            // Mark the task as claimed
-                            task.setClaimed(true);
-                            // Change the icon to BEDROCK and update display name
-                            ItemStack completedItem = new ItemStack(Material.BEDROCK);
-                            ItemMeta meta = completedItem.getItemMeta();
-                            meta.setDisplayName(ChatColor.GREEN + "Completed and Claimed");
-                            completedItem.setItemMeta(meta);
-                            clickedItem.setType(Material.BEDROCK);
-                            clickedItem.setItemMeta(meta);
+                            // Mark the task as claimed and completed
+                            task.setClaimed(true, playerUUID, JOB_TYPE);
+                            task.setCompleted(true, playerUUID, JOB_TYPE); // Mark the task as completed
+                            // Update the inventory display to show the task as completed and claimed
+                            updateTaskMenuItem(player, task, jobPlayer.getJob().toString());
                             // Inform the player that the task has been completed and claimed
                             player.sendMessage(prefix + "You've completed and claimed the reward for this task!");
-                        } else if (task != null && task.isClaimed()) {
+                        } else if (task.isClaimed(playerUUID, JOB_TYPE)) {
                             // Task has already been claimed
                             player.sendMessage(prefix + "You have already claimed the reward for this task.");
                         } else {
                             // Task has not been completed
                             player.sendMessage(prefix + "You have not completed this task yet.");
                         }
+                    }
+                } else if (clickedItem.getType().equals(Material.ARROW)) {
+                    String itemName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+                    if (itemName.equals("Back to Job Selection")) {
+                        // Player clicked on the back button
+                        openJobSelectionMenu(player);
                     }
                 }
             }

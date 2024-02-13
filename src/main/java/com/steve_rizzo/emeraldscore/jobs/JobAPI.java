@@ -117,9 +117,13 @@ public class JobAPI {
             }
         }
 
-
         public void setJob(JOB_TYPE job) {
             if (this.job == null || System.currentTimeMillis() - getLastTeamChange(playerName) >= 3 * 24 * 60 * 60 * 1000) {
+                // Remove old task data if the player had a previous job
+                if (this.job != null && this.job != JOB_TYPE.NONE) {
+                    removeOldTaskData(playerName, this.job);
+                }
+
                 this.job = job;
                 setLastTeamChange(playerName, System.currentTimeMillis());
                 savePlayerJobToFile(this); // Save player's job to file
@@ -128,6 +132,22 @@ public class JobAPI {
                 Player player = Bukkit.getPlayer(playerName);
                 if (player != null) {
                     player.sendMessage(getCooldownMessage());
+                }
+            }
+        }
+
+        private void removeOldTaskData(String playerName, JOB_TYPE oldJob) {
+            // Get the file corresponding to the old job
+            File taskFile = new File(Main.core.getDataFolder(), "tasks_" + oldJob.toString() + ".yml");
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(taskFile);
+
+            // Remove the player's task data from the file
+            if (config.contains("players." + playerName)) {
+                config.set("players." + playerName, null);
+                try {
+                    config.save(taskFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -186,6 +206,7 @@ public class JobAPI {
         HUNTER,
         EXPLORER,
         FISHER,
-        NONE
+        NONE;
+
     }
 }

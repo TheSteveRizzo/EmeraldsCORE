@@ -1,12 +1,16 @@
 package com.steve_rizzo.emeraldscore.jobs;
 
+import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.jobs.explorer.ExplorerTasks;
 import com.steve_rizzo.emeraldscore.jobs.farmer.FarmerTasks;
 import com.steve_rizzo.emeraldscore.jobs.fisher.FisherTasks;
 import com.steve_rizzo.emeraldscore.jobs.gatherer.GathererTasks;
 import com.steve_rizzo.emeraldscore.jobs.hunter.HunterTasks;
 import com.steve_rizzo.emeraldscore.jobs.miner.MinerTasks;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -78,23 +82,39 @@ public class JobTasks {
         }
     }
 
-    // Method to refresh job tasks with new random tasks for each job type
+    // Method to refresh job tasks with new random tasks for each job type and delete existing player task data
     public void refreshJobTasks() {
         for (JobAPI.JOB_TYPE jobType : jobTasks.keySet()) {
+            // Delete existing player task data for all tasks in the job tasks data file
+            deletePlayerTaskData(jobType);
+
+            // Generate new random tasks for the job type
             List<DailyTask> tasks = jobTasks.get(jobType);
             List<DailyTask> newTasks = generateRandomTasks(jobType);
+
+            // Clear existing tasks and add new tasks
             tasks.clear();
             tasks.addAll(newTasks);
         }
     }
 
-    // Overloaded method to refresh job tasks with new random tasks for a specific job type
-    public void refreshJobTasks(JobAPI.JOB_TYPE jobType) {
-        List<DailyTask> tasks = jobTasks.get(jobType);
-        List<DailyTask> newTasks = generateRandomTasks(jobType);
-        tasks.clear();
-        tasks.addAll(newTasks);
+    // Method to delete existing player task data for all tasks in the job tasks data file
+    private void deletePlayerTaskData(JobAPI.JOB_TYPE jobType) {
+        for (DailyTask task : jobTasks.get(jobType)) {
+            File taskFile = new File(Main.core.getDataFolder(), "tasks_" + jobType.toString() + ".yml");
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(taskFile);
+            String taskIdStr = String.valueOf(task.getTaskId());
+            if (config.contains(taskIdStr + ".players")) {
+                config.set(taskIdStr + ".players", null); // Delete player task data for the task
+                try {
+                    config.save(taskFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
 
     // Modified method to generate random tasks for a job type
     private List<DailyTask> generateRandomTasks(JobAPI.JOB_TYPE jobType) {
@@ -117,13 +137,13 @@ public class JobTasks {
     }
 
 
-    public List<DailyTask> getPlayerJobTasks(String playerName, JobAPI.JOB_TYPE jobType) {
+    public List<DailyTask> getPlayerJobTasks(String playerUUID, JobAPI.JOB_TYPE jobType) {
         List<DailyTask> allTasks = jobTasks.get(jobType);
         List<DailyTask> playerTasks = new ArrayList<>();
         if (allTasks != null) {
             for (DailyTask task : allTasks) {
                 // Add tasks to playerTasks only if they are not completed and not claimed
-                if (!completedTasks.getOrDefault(task.getName(), false) && !task.isClaimed()) {
+                if (!completedTasks.getOrDefault(task.getName(), false) && !task.isClaimed(playerUUID, jobType.toString())) {
                     playerTasks.add(task);
                 }
             }
