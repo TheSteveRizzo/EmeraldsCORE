@@ -214,7 +214,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new ExplorerTaskListener(jobTasks), this);
         Bukkit.getServer().getPluginManager().registerEvents(new FarmerTaskListener(jobTasks), this);
         Bukkit.getServer().getPluginManager().registerEvents(new FisherTaskListener(jobTasks), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new HunterTaskListener(jobTasks), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new HunterTaskListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new GathererTaskListener(jobTasks), this);
         Bukkit.getServer().getPluginManager().registerEvents(new MinerTaskListener(jobTasks), this);
 

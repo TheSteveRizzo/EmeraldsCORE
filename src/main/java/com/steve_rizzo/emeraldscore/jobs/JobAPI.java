@@ -121,7 +121,7 @@ public class JobAPI {
             if (this.job == null || System.currentTimeMillis() - getLastTeamChange(playerName) >= 3 * 24 * 60 * 60 * 1000) {
                 // Remove old task data if the player had a previous job
                 if (this.job != null && this.job != JOB_TYPE.NONE) {
-                    removeOldTaskData(playerName, this.job);
+                    removeOldTaskData(playerName, this.job); // Call method to remove old task data
                 }
 
                 this.job = job;
@@ -141,14 +141,20 @@ public class JobAPI {
             File taskFile = new File(Main.core.getDataFolder(), "tasks_" + oldJob.toString() + ".yml");
             YamlConfiguration config = YamlConfiguration.loadConfiguration(taskFile);
 
-            // Remove the player's task data from the file
-            if (config.contains("players." + playerName)) {
-                config.set("players." + playerName, null);
-                try {
-                    config.save(taskFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            // Loop through all task IDs available for the old job
+            for (String taskIdStr : config.getKeys(false)) {
+                // Check if the task contains player progress data
+                if (config.contains(taskIdStr + ".players." + playerName)) {
+                    // Remove the player's progress data for the task
+                    config.set(taskIdStr + ".players." + playerName, null);
                 }
+            }
+
+            try {
+                // Save the changes to the file
+                config.save(taskFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
