@@ -107,8 +107,7 @@ public class ExplorerTaskListener implements Listener {
                             // Check if the player has explored 3 different biomes
                             if (getVisitedBiomeCount(playerUUID) == 3) {
                                 // Mark the task as completed
-                                task.setCompleted(true, playerUUID, JOB_TYPE);
-                                player.sendMessage(Main.prefix + ChatColor.LIGHT_PURPLE + "You've completed the " + ChatColor.GRAY + taskName + ChatColor.LIGHT_PURPLE + " task! Claim your reward in " + ChatColor.AQUA + "/jobs menu" + ChatColor.LIGHT_PURPLE + "!");
+                                markTaskCompleted(player, taskName, task.getTaskId());
                             }
                         }
                     }
