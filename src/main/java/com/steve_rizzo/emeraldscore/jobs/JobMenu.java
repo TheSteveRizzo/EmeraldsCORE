@@ -277,14 +277,13 @@ public class JobMenu implements Listener {
                         if (jobPlayer.getJob() != null) {
                             // Task has been completed but not yet claimed
                             // Apply rewards to the player
-                            JobRewards.applyReward(player.getName(), jobPlayer.getJob(), task.getTaskId());
+                            JobRewards.applyReward(player, jobPlayer.getJob(), task.getTaskId());
                             // Mark the task as claimed and completed
                             task.setClaimed(true, playerUUID, JOB_TYPE);
                             task.setCompleted(true, playerUUID, JOB_TYPE); // Mark the task as completed
                             // Update the inventory display to show the task as completed and claimed
                             updateTaskMenuItem(player, task, jobPlayer.getJob().toString());
                             // Inform the player that the task has been completed and claimed
-                            player.sendMessage(prefix + "You've completed and claimed the reward for this task!");
                         } else if (task.isClaimed(playerUUID, JOB_TYPE)) {
                             // Task has already been claimed
                             player.sendMessage(prefix + "You have already claimed the reward for this task.");

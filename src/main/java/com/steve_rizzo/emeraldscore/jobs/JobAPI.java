@@ -23,13 +23,18 @@ public class JobAPI {
 
     public static void initialize() {
         File jobsFile = new File(Main.core.getDataFolder(), JOBS_FILE_NAME);
-        if (!jobsFile.exists()) {
-            Main.core.saveResource(JOBS_FILE_NAME, false);
+        try {
+            if (!jobsFile.exists()) {
+                Main.core.saveResource(JOBS_FILE_NAME, false);
+            }
+            jobsConfig = YamlConfiguration.loadConfiguration(jobsFile);
+            // Load cooldown data from the file
+            loadCooldownData();
+            Bukkit.getLogger().info("Jobs configuration file loaded successfully.");
+        } catch (Exception e) {
+            Bukkit.getLogger().severe("Error loading jobs configuration file: " + e.getMessage());
+            e.printStackTrace();
         }
-        jobsConfig = YamlConfiguration.loadConfiguration(jobsFile);
-
-        // Load cooldown data from the file
-        loadCooldownData();
     }
 
     public static void loadCooldownData() {
@@ -71,20 +76,35 @@ public class JobAPI {
                 return player;
             }
         }
-        return null; // Player not found
+
+        // If the player is not found, create a new JobPlayer with the default job type
+        return new JobPlayer(playerName, JOB_TYPE.NONE);
     }
 
     public static List<JobPlayer> getPlayerList() {
         List<JobPlayer> players = new ArrayList<>();
         if (jobsConfig.contains("players")) {
-            for (String playerName : jobsConfig.getConfigurationSection("players").getKeys(false)) {
-                String jobName = jobsConfig.getString("players." + playerName + ".job");
-                JobPlayer jobPlayer = new JobPlayer(playerName, JOB_TYPE.valueOf(jobName));
-                players.add(jobPlayer);
+            ConfigurationSection playersSection = jobsConfig.getConfigurationSection("players");
+            if (playersSection != null) {
+                for (String playerName : playersSection.getKeys(false)) {
+                    String jobName = jobsConfig.getString("players." + playerName + ".job");
+                    JOB_TYPE jobType;
+                    try {
+                        jobType = JOB_TYPE.valueOf(jobName);
+                    } catch (IllegalArgumentException e) {
+                        // Handle the case where the job type retrieved from the file is invalid
+                        // For example, set a default job type or log a warning message
+                        jobType = JOB_TYPE.NONE; // Set a default job type
+                        e.printStackTrace(); // Log the exception for debugging purposes
+                    }
+                    JobPlayer jobPlayer = new JobPlayer(playerName, jobType);
+                    players.add(jobPlayer);
+                }
             }
         }
         return players;
     }
+
 
     public static void savePlayerJobToFile(JobPlayer player) {
         jobsConfig.set("players." + player.getPlayerName() + ".job", player.getJob().name());
@@ -131,7 +151,7 @@ public class JobAPI {
             } else {
                 Player player = Bukkit.getPlayer(playerName);
                 if (player != null) {
-                    player.sendMessage(getCooldownMessage());
+                    player.sendMessage(Main.prefix + getCooldownMessage());
                 }
             }
         }
