@@ -37,11 +37,11 @@ public class MinerTaskListener implements Listener {
         JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
         if (jobPlayer != null) jobType = jobPlayer.getJob();
         if (jobType == JobAPI.JOB_TYPE.MINER) {
-            if (brokenBlock.getType() == Material.COAL_ORE) {
+            if (brokenBlock.getType() == Material.COAL_ORE || brokenBlock.getType() == Material.DEEPSLATE_COAL_ORE) {
                 incrementAndCheckProgress(player, "Coal Miner");
-            } else if (brokenBlock.getType() == Material.IRON_ORE) {
+            } else if (brokenBlock.getType() == Material.IRON_ORE || brokenBlock.getType() == Material.DEEPSLATE_IRON_ORE) {
                 incrementAndCheckProgress(player, "Iron Extractor");
-            } else if (brokenBlock.getType() == Material.DIAMOND_ORE) {
+            } else if (brokenBlock.getType() == Material.DIAMOND_ORE || brokenBlock.getType() == Material.DEEPSLATE_DIAMOND_ORE) {
                 incrementAndCheckProgress(player, "Gem Collector");
             }
         }
