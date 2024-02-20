@@ -14,13 +14,17 @@ public class HelpCommand implements CommandExecutor {
 
             if (p.isOp()) {
 
+                String sep = ChatColor.GRAY + "" + ChatColor.BOLD + ">> ";
+
                 p.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.YELLOW + "" + ChatColor.BOLD +  "=====\n" +
                         ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "!\nMake sure to:\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Apply for Member using " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Join our Discord using " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit our PVP World using " + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Go back to Survival using " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Read the " + sep + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "View commands " + sep + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "/commands\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Apply for Member " + sep + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Join our Discord " + sep + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit the PVP World " + sep + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Go back to Survival " + sep + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Vote & Earn Cash " + sep + ChatColor.YELLOW + ChatColor.BOLD + "/vote\n" +
                         ChatColor.YELLOW + ChatColor.BOLD + "===== ===== =====");
 
             }

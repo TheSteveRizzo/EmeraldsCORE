@@ -191,6 +191,7 @@ public class Main extends JavaPlugin {
         this.getCommand("help").setExecutor(new HelpCommand());
         this.getCommand("test").setExecutor(new TestCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
+        this.getCommand("commands").setExecutor(new CommandsCommand());
 
         // Currency Commands
         this.getCommand("balance").setExecutor(new BalanceCommand());

@@ -89,7 +89,8 @@ public class HunterTaskListener implements Listener {
     private void incrementAndCheckProgress(Player player, DailyTask task) {
         String playerUUID = player.getUniqueId().toString();
         task.incrementProgress(1, playerUUID, JOB_TYPE); // Increment progress by 1
-        if (task.getProgress(playerUUID, JOB_TYPE) == task.getTotalProgress(playerUUID, JOB_TYPE)) {
+        if (task.getProgress(playerUUID, JOB_TYPE) == task.getTotalProgress(playerUUID, JOB_TYPE) &&
+                (!task.isCompleted(playerUUID, JOB_TYPE))) {
             markTaskCompleted(player, task.getName(), task.getTaskId());
         }
         // Update the task item in the menu with the new progress

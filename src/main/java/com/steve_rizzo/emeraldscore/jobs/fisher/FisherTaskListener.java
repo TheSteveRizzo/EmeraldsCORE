@@ -67,12 +67,14 @@ public class FisherTaskListener implements Listener {
     }
 
     private void incrementAndCheckProgress(Player player, String taskName, int taskId) {
+        String playerUUID = player.getUniqueId().toString();
         List<DailyTask> fisherTasks = jobTasks.getJobTasks().get(JobAPI.JOB_TYPE.FISHER);
         if (fisherTasks != null) {
             for (DailyTask task : fisherTasks) {
                 if (task.getName().equals(taskName)) {
                     task.incrementProgress(1, player.getUniqueId().toString(), JOB_TYPE); // Increment progress by 1
-                    if (task.getProgress(player.getUniqueId().toString(), JOB_TYPE) == task.getTotalProgress(player.getUniqueId().toString(), JOB_TYPE)) {
+                    if (task.getProgress(playerUUID, JOB_TYPE) == task.getTotalProgress(playerUUID, JOB_TYPE) &&
+                            (!task.isCompleted(playerUUID, JOB_TYPE))) {
                         markTaskCompleted(player, taskName, taskId);
                     }
                     break;

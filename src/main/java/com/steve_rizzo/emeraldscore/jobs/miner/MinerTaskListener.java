@@ -69,7 +69,8 @@ public class MinerTaskListener implements Listener {
             for (DailyTask task : minerTasks) {
                 if (task.getName().equals(taskName)) {
                     task.incrementProgress(1, playerUUID, JOB_TYPE); // Increment progress by 1
-                    if (task.getProgress(playerUUID, JOB_TYPE) >= task.getTotalProgress(playerUUID, JOB_TYPE)) {
+                    if (task.getProgress(playerUUID, JOB_TYPE) == task.getTotalProgress(playerUUID, JOB_TYPE) &&
+                            (!task.isCompleted(playerUUID, JOB_TYPE))) {
                         markTaskCompleted(player, taskName, task.getTaskId());
                     }
                     // Update the task item in the menu with the new progress

@@ -112,3 +112,6 @@ commands:
   jobs:
     description: Open the jobs menu and assign yourself a job!
     aliases: [ job ]
+  commands:
+    description: List available server commands.
+    aliases: [ cmds ]
