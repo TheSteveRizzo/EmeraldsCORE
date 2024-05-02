@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.jobs;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.commands.tokens.TokensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -61,38 +62,44 @@ public class JobRewards {
                 // Apply reward for Explorer Task 1
                 // For example:
                 player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received a diamond as a reward for completing Explorer Task 1!");
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing Explorer Task 1!");
                 break;
             case FARMER:
                 // Apply reward for Farmer Task 1
                 // For example:
-                player.getInventory().addItem(new ItemStack(Material.WHEAT, 1));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received wheat as a reward for completing Farmer Task 1!");
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing for completing Farmer Task 1!");
                 break;
             // Add cases for other job types as needed
             case MINER:
                 // Apply reward for Miner Task 1
                 // For example:
-                player.getInventory().addItem(new ItemStack(Material.COAL, 3));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received 3 coal as a reward for completing Miner Task 1!");
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing Miner Task 1!");
                 break;
             case GATHERER:
                 // Apply reward for Gatherer Task 1
                 // For example:
-                player.getInventory().addItem(new ItemStack(Material.STICK, 16));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received 16 sticks as a reward for completing Gatherer Task 1!");
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing Gatherer Task 1!");
                 break;
             case HUNTER:
                 // Apply reward for Hunter Task 1
                 // For example:
-                player.getInventory().addItem(new ItemStack(Material.BOW, 1));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received a bow as a reward for completing Hunter Task 1!");
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing Hunter Task 1!");
                 break;
             case FISHER:
                 // Apply reward for Fisher Task 1
                 // For example:
-                player.getInventory().addItem(new ItemStack(Material.COD, 3));
-                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received 3 raw cod as a reward for completing Fisher Task 1!");
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND, 1));
+                TokensAPI.addTokens(player, 1);
+                player.sendMessage(Main.prefix + ChatColor.GREEN + "You received an Emerald Token and 1x Diamond for completing Fisher Task 1!");
                 break;
             default:
                 // Handle unknown job types

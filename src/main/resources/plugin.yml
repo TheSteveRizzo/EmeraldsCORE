@@ -5,7 +5,7 @@ description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
 depend: [Vault]
-soft-depend: [MobArena, GlowAPI, SuperVanish]
+soft-depend: [SuperVanish]
 commands:
   rank:
     description: Set a user's rank.
@@ -27,8 +27,7 @@ commands:
     description: Receive a EmeraldsGames Navigator.
   farmworld:
     description: Go to FarmWorld!
-  kit:
-    description: Choose your kit for the MobArena!
+    aliases: [ fw ]
   floorparty:
     description: Floor party!
   floatitem:
@@ -54,6 +53,9 @@ commands:
     description: Sets the Tokens of a player.
   givetokens:
     description: Gives Tokens to a player.
+  tokenstop:
+    description: Lists the top token balances of players on the server.
+    aliases: [ ttop , tokentop ]
   balance:
     description: Displays your balance.
     aliases: [ bal , eco ]
@@ -115,3 +117,18 @@ commands:
   commands:
     description: List available server commands.
     aliases: [ cmds ]
+  plugins:
+    description: Show available plugins.
+    aliases: [ pl ]
+  hub:
+    description: Teleport to the Hub world.
+  boost:
+    description: BOOST yourself into the air!
+  claimfurnaces:
+    description: Claim nearby smelted furnace items!
+    aliases: [ cfurnaces ]
+  buytokens:
+    description: Purchase tokens using Emeralds Cash!
+    aliases: [ buytoken, tokenbuy ]
+  fireworks:
+    description: Turn on/off the fireworks at spawn.

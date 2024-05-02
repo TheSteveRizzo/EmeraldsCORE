@@ -17,7 +17,6 @@ public class NoLongerAFK implements Listener {
             Bukkit.broadcastMessage(Main.prefix + ChatColor.GOLD + p.getName() + ChatColor.GRAY
                     + " is " + ChatColor.GREEN + "no longer AFK" + ChatColor.GRAY + ".");
             AFKCommand.listOfAFKPlayers.remove(p.getName());
-            ServerJoinPlayer.setPlayerTabAndTagName(p);
         }
     }
 }

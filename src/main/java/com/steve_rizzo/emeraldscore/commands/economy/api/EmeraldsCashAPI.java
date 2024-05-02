@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -18,22 +19,17 @@ import java.util.stream.Collectors;
 
 public class EmeraldsCashAPI {
 
-    // Prepared Statements for accessing, updating, and storing EmeraldsCashAPI information
-
     private static final String SELECT_CURRENCY_DATA = "SELECT balance FROM EmeraldsCash WHERE uuid=?";
     private static final String SELECT_CURRENCY_DATA_UUID = "SELECT balance FROM EmeraldsCash WHERE uuid=?";
-    private static final String DELETE_BALANCE_BY_NAME =
-            "DELETE FROM EmeraldsCash WHERE name=?";
+    private static final String DELETE_BALANCE_BY_NAME = "DELETE FROM EmeraldsCash WHERE name=?";
     private static final String UPDATE_CURRENCY_DATA =
             "INSERT INTO EmeraldsCash(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance=?";
-
     private static final String ADD_CURRENCY_DATA =
             "INSERT INTO EmeraldsCash(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance = balance + ?";
-
     private static final String DEDUCT_CURRENCY_DATA =
             "INSERT INTO EmeraldsCash(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance = balance - ?";
-
     private static final String SELECT_ALL_BALANCES = "SELECT name, balance FROM EmeraldsCash";
+    private static final String UPDATE_PLAYER_NAME = "UPDATE EmeraldsCash SET name=? WHERE uuid=?";
 
     public static CompletableFuture<Integer> displayBalance(Player player) {
         return CompletableFuture.supplyAsync(() -> {
@@ -46,9 +42,8 @@ public class EmeraldsCashAPI {
                 if (resultBalance.next()) {
                     returnedBal = resultBalance.getInt(1);
                     p.sendMessage(Main.prefix + ChatColor.GRAY + "Your " + ChatColor.GREEN + "EmeraldsCash" + ChatColor.GRAY + " balance is: "
-                            + ChatColor.GREEN + "$" + returnedBal + ChatColor.GRAY + ".");
+                            + ChatColor.GREEN + "$" + formatBalance(returnedBal) + ChatColor.GRAY + ".");
                 }
-                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + p.getName() + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -67,9 +62,8 @@ public class EmeraldsCashAPI {
                     returnedBal = resultBalance.getInt(1);
                     playerRequestingBalance.sendMessage(Main.prefix + ChatColor.GRAY + "The " + ChatColor.GREEN + "EmeraldsCash" + ChatColor.GRAY + " balance of " +
                             ChatColor.AQUA + balanceUserName + ChatColor.GRAY + " is: "
-                            + ChatColor.GREEN + "$" + returnedBal + ChatColor.GRAY + ".");
+                            + ChatColor.GREEN + "$" + formatBalance(returnedBal) + ChatColor.GRAY + ".");
                 }
-                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + balanceUserName + " REQUESTED BY " + playerRequestingBalance.getName() + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -132,7 +126,7 @@ public class EmeraldsCashAPI {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(DEDUCT_CURRENCY_DATA)) {
                 selectionStatement.setString(1, uuid);
-                selectionStatement.setString(2, getPlayerName(uuid));
+                selectionStatement.setString(2, getPlayerNameFromDB(connection, uuid));
                 selectionStatement.setInt(3, amount);
                 selectionStatement.setString(4, currentDateTime);
                 selectionStatement.setInt(5, amount);
@@ -175,7 +169,7 @@ public class EmeraldsCashAPI {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement selectionStatement = connection.prepareStatement(ADD_CURRENCY_DATA)) {
                 selectionStatement.setString(1, uuid);
-                selectionStatement.setString(2, getPlayerName(uuid));
+                selectionStatement.setString(2, getPlayerNameFromDB(connection, uuid));
                 selectionStatement.setInt(3, amount);
                 selectionStatement.setString(4, currentDateTime);
                 selectionStatement.setInt(5, amount);
@@ -198,7 +192,6 @@ public class EmeraldsCashAPI {
                 if (resultBalance.next()) {
                     returnedBal = resultBalance.getInt(1);
                 }
-                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + p.getName() + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -216,13 +209,13 @@ public class EmeraldsCashAPI {
                 if (resultBalance.next()) {
                     returnedBal = resultBalance.getInt(1);
                 }
-                System.out.println("[EmeraldsMC - Currency Handler]: Data RETURNED for " + uuid + ".");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             return returnedBal;
         });
     }
+
     public static CompletableFuture<Void> updatePlayerCurrencyAmount(Player p, int amount) {
         return CompletableFuture.runAsync(() -> {
             Date date = new Date();
@@ -231,6 +224,12 @@ public class EmeraldsCashAPI {
 
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
+
+                String currentNameInDB = getPlayerNameFromDB(connection, p.getUniqueId().toString());
+                if (currentNameInDB == null || !currentNameInDB.equals(p.getName())) {
+                    updatePlayerNameInDB(p.getUniqueId().toString(), p.getName());
+                }
+
                 statement.setString(1, p.getUniqueId().toString());
                 statement.setString(2, p.getName());
                 statement.setInt(3, amount);
@@ -244,7 +243,19 @@ public class EmeraldsCashAPI {
         });
     }
 
-    private static CompletableFuture<Void> updatePlayerUUIDCurrencyAmount(String uuid, int amount) {
+    private static void updatePlayerNameInDB(String uuid, String newName) {
+        try (Connection connection = Main.getInstance().getHikari();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAYER_NAME)) {
+            statement.setString(1, newName);
+            statement.setString(2, uuid);
+            statement.executeUpdate();
+            System.out.println("[EmeraldsMC - Currency Handler]: Player name UPDATED in the database for UUID: " + uuid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static CompletableFuture<Void> updatePlayerUUIDCurrencyAmount(String uuid, int amount) {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateTime = format.format(date);
@@ -252,8 +263,13 @@ public class EmeraldsCashAPI {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
+                String currentNameInDB = getPlayerNameFromDB(connection, uuid);
+                if (currentNameInDB == null || !currentNameInDB.equals(Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName())) {
+                    updatePlayerNameInDB(uuid, Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName());
+                }
+
                 statement.setString(1, uuid);
-                statement.setString(2, getPlayerName(uuid));
+                statement.setString(2, getPlayerNameFromDB(connection, uuid));
                 statement.setInt(3, amount);
                 statement.setString(4, currentDateTime);
                 statement.setInt(5, amount);
@@ -279,7 +295,6 @@ public class EmeraldsCashAPI {
                     if (userBal != null) {
                         balTopList.put(name, userBal);
                     } else {
-                        // If null balance found, remove it from the database
                         PreparedStatement deleteStatement = connection.prepareStatement(DELETE_BALANCE_BY_NAME);
                         deleteStatement.setString(1, name);
                         deleteStatement.executeUpdate();
@@ -287,13 +302,11 @@ public class EmeraldsCashAPI {
                     }
                 }
 
-                // Get top balances
                 List<Map.Entry<String, Integer>> sortedBalances = balTopList.entrySet().stream()
                         .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                         .limit(10)
                         .collect(Collectors.toList());
 
-                // Send top balances to the player
                 player.sendMessage(ChatColor.GREEN + "---" + ChatColor.AQUA + "---["
                         + ChatColor.GREEN + "EmeraldsCash" + ChatColor.AQUA + "]---" + ChatColor.GREEN + "---");
                 player.sendMessage(ChatColor.GRAY + "Top Balances:");
@@ -335,15 +348,20 @@ public class EmeraldsCashAPI {
         });
     }
 
-    private static void printMap(HashMap<String, Integer> map) {
-        map.forEach((key, value) -> System.out.println("Key : " + key + " Value : " + value));
-    }
-
-    private static String getPlayerName(String uuid) {
-        for (OfflinePlayer allOffP : Bukkit.getServer().getOfflinePlayers()) {
-            if (uuid.equalsIgnoreCase(allOffP.getUniqueId().toString()))
-                return allOffP.getName();
+    private static String getPlayerNameFromDB(Connection connection, String uuid) throws SQLException {
+        String SELECT_NAME = "SELECT name FROM EmeraldsCash WHERE uuid=?";
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_NAME)) {
+            statement.setString(1, uuid);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("name");
+            }
         }
         return null;
+    }
+
+    private static String formatBalance(int balance) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        return numberFormat.format(balance);
     }
 }

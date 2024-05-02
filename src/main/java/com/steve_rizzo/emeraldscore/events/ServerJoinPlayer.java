@@ -25,22 +25,6 @@ public class ServerJoinPlayer implements Listener {
     public static Chat chat = Main.chat;
     public static Ranks ranks = new Ranks();
 
-    public static void setPlayerTabAndTagName(Player p) {
-        String playerGroup = perms.getPrimaryGroup(p);
-        String playerName = p.getName();
-        String prefix = chat.getGroupPrefix(p.getWorld(), playerGroup);
-        // Update the player's name tag
-        String listName = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
-        p.setPlayerListName(listName);
-        String displayName = ChatColor.translateAlternateColorCodes('&', prefix) + playerName;
-        p.setDisplayName(displayName);
-    }
-
-    public static void setAFKPlayerTabName(Player p) {
-        String playerName = p.getName();
-        p.setPlayerListName(ChatColor.GRAY + playerName);
-    }
-
     public static String getPlayerPrefixAndName(Player player) {
         String playerGroup = perms.getPrimaryGroup(player);
         String playerName = player.getName();
@@ -66,7 +50,11 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
+        Location spawn = Bukkit.getWorld("Hub").getSpawnLocation();
+
         if (!e.getPlayer().hasPlayedBefore()) {
+
+            e.getPlayer().teleport(spawn);
 
             // Set money first time user
             EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
@@ -117,9 +105,6 @@ public class ServerJoinPlayer implements Listener {
 
         // Set flight to disabled
         if (e.getPlayer().getAllowFlight()) e.getPlayer().setAllowFlight(false);
-        // Set player tab name
-        setPlayerTabAndTagName(e.getPlayer());
-
     }
 
     @EventHandler

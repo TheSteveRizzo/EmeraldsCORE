@@ -1,17 +1,9 @@
 package com.steve_rizzo.emeraldscore;
 
-import com.garbagemule.MobArena.MobArena;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
 import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
-import com.steve_rizzo.emeraldscore.commands.tokens.GiveTokensCommand;
-import com.steve_rizzo.emeraldscore.commands.tokens.SetTokensCommand;
-import com.steve_rizzo.emeraldscore.commands.tokens.TokenBalanceCommand;
-import com.steve_rizzo.emeraldscore.commands.tokens.TokenHandler;
-import com.steve_rizzo.emeraldscore.emeraldsgames.commands.games.EGCommand;
-import com.steve_rizzo.emeraldscore.emeraldsgames.commands.mobarena.KitCommand;
-import com.steve_rizzo.emeraldscore.emeraldsgames.events.OpenGamesGUI;
-import com.steve_rizzo.emeraldscore.emeraldsgames.games.mobarena.KitGUI;
+import com.steve_rizzo.emeraldscore.commands.tokens.*;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
@@ -39,7 +31,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -86,7 +77,6 @@ public class Main extends JavaPlugin {
     public static String
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
     public static Main core;
-    public static MobArena mobarena;
     private static Main instance;
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
@@ -121,7 +111,6 @@ public class Main extends JavaPlugin {
         setupPermissions();
         setupChat();
         setupEconomy();
-        setupMobArena();
 
         // Call initialize method of JobAPI
         JobAPI.initialize();
@@ -152,6 +141,7 @@ public class Main extends JavaPlugin {
 
         // Load Token Listener
         Bukkit.getServer().getPluginManager().registerEvents(new TokenHandler(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new BuyTokensCommand(), this);
 
         // Load MiningPouch Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPickupItem(), this);
@@ -192,6 +182,12 @@ public class Main extends JavaPlugin {
         this.getCommand("test").setExecutor(new TestCommand());
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("commands").setExecutor(new CommandsCommand());
+        this.getCommand("plugins").setExecutor(new PluginsCommand());
+        this.getCommand("hub").setExecutor(new HubCommand());
+        this.getCommand("boost").setExecutor(new BoostCommand());
+        this.getCommand("claimfurnaces").setExecutor(new FurnaceClaimCommand());
+        this.getCommand("buytokens").setExecutor(new BuyTokensCommand());
+        this.getCommand("fireworks").setExecutor(new FireworksCommand());
 
         // Currency Commands
         this.getCommand("balance").setExecutor(new BalanceCommand());
@@ -205,6 +201,7 @@ public class Main extends JavaPlugin {
         this.getCommand("tokens").setExecutor(new TokenBalanceCommand());
         this.getCommand("settokens").setExecutor(new SetTokensCommand());
         this.getCommand("givetokens").setExecutor(new GiveTokensCommand());
+        this.getCommand("tokenstop").setExecutor(new TokenstopCommand());
 
         // Jobs Feature
         this.getCommand("jobs").setExecutor(new JobCommands());
@@ -218,15 +215,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new HunterTaskListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new GathererTaskListener(jobTasks), this);
         Bukkit.getServer().getPluginManager().registerEvents(new MinerTaskListener(jobTasks), this);
-
-        // GUI Menus
-        OpenGamesGUI openGamesGUI = new OpenGamesGUI();
-        this.getCommand("eg").setExecutor(new EGCommand());
-        Bukkit.getServer().getPluginManager().registerEvents(openGamesGUI, this);
-
-        KitGUI kitGUI = new KitGUI();
-        this.getCommand("kit").setExecutor(new KitCommand());
-        Bukkit.getServer().getPluginManager().registerEvents(kitGUI, this);
 
         // Database Connection
         hikari = new HikariDataSource();
@@ -293,14 +281,6 @@ public class Main extends JavaPlugin {
             Objects.requireNonNull(getServer().getWorld("farmworld")).setPVP(false);
         if (getServer().getWorld("lootworld") != null)
             Objects.requireNonNull(getServer().getWorld("lootworld")).setPVP(true);
-    }
-
-    private void setupMobArena() {
-        Plugin plugin = getServer().getPluginManager().getPlugin("MobArena");
-        if (plugin == null) {
-            return;
-        }
-        this.mobarena = (MobArena) plugin;
     }
 
     public void saveYML(FileConfiguration ymlConfig, File ymlFile) {

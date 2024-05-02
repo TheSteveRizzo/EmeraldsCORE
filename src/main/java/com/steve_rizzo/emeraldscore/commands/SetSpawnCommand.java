@@ -11,55 +11,51 @@ import org.bukkit.entity.Player;
 
 public class SetSpawnCommand implements CommandExecutor {
 
-    private final Main serverEssentials;
+    private final Main core;
     private FileConfiguration spawnyml;
 
-    public SetSpawnCommand(Main serverEssentials) {
-        this.serverEssentials = serverEssentials;
+    public SetSpawnCommand(Main core) {
+        this.core = core;
     }
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         String prefix = Main.prefix;
-        spawnyml = serverEssentials.spawnConfig;
+        spawnyml = core.spawnConfig;
 
         if (sender instanceof Player) {
-
             Player p = (Player) sender;
 
             if (p.hasPermission("emeraldsmc.setspawn")) {
                 if (args.length == 0) {
-
                     Location loc = p.getLocation();
-                    String locSerialized = loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getPitch() + "," + loc.getYaw();
+                    String worldName = p.getWorld().getName();
+                    String locSerialized = loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() + "," + loc.getPitch() + "," + p.getLocation().getYaw();
 
-                    spawnyml.set(p.getWorld().getName() + ".Location", locSerialized);
+                    // Save spawn data to the configuration file
+                    spawnyml.set(worldName + ".Location", locSerialized); // Store location
 
-                    p.sendMessage(prefix + ChatColor.GREEN + "Spawnpoint for "
-                            + ChatColor.AQUA + p.getWorld().getName() + ChatColor.GREEN + " successfully set!");
+                    // Inform the player about the action
+                    if (spawnyml.contains(worldName)) {
+                        p.sendMessage(prefix + ChatColor.GREEN + "Spawnpoint for " + ChatColor.AQUA + worldName + ChatColor.GREEN + " successfully updated!");
+                    } else {
+                        p.sendMessage(prefix + ChatColor.GREEN + "Spawnpoint for " + ChatColor.AQUA + worldName + ChatColor.GREEN + " successfully set!");
+                    }
+
+                    core.saveConfig(); // Save changes to the config file
                     return true;
-
                 } else {
-
                     p.sendMessage(prefix + ChatColor.RED + "Incorrect usage. Use " + ChatColor.AQUA + "/setspawn");
                     return true;
-
                 }
-
             } else {
-
                 p.sendMessage(prefix + ChatColor.RED + "No permission.");
-
                 return true;
             }
-
         } else {
-
             System.out.println("You can't do this.");
             return true;
-
         }
     }
 }

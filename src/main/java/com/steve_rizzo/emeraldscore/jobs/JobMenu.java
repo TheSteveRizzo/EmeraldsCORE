@@ -19,7 +19,7 @@ import java.util.Map;
 public class JobMenu implements Listener {
 
     private static final String prefix = Main.prefix;
-    private final JobTasks jobTasks;
+    private static JobTasks jobTasks = null;
 
     // Constructor to initialize job tasks
     public JobMenu() {
@@ -70,7 +70,7 @@ public class JobMenu implements Listener {
 
     // Inside the JobMenu class
 
-    public void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
+    public static void openTaskSelectionMenu(Player player, JobAPI.JOB_TYPE jobType) {
         Inventory taskMenu = Bukkit.createInventory(null, 9, ChatColor.AQUA + jobType.toString() + ChatColor.GRAY + " Tasks");
 
         // Clear the map before populating it with new task items
@@ -132,7 +132,16 @@ public class JobMenu implements Listener {
         }
     }
 
-    private ItemStack getItemStack(DailyTask task, Player player, String jobType) {
+    public static void openTaskSelectorMenu(Player player) {
+        JobAPI.JobPlayer jobPlayer = JobAPI.getPlayer(player.getName());
+        if (jobPlayer != null && jobPlayer.getJob() != JobAPI.JOB_TYPE.NONE) {
+            openTaskSelectionMenu(player, jobPlayer.getJob());
+        } else {
+            player.sendMessage(ChatColor.RED + "You do not have any tasks available as you do not have a job set.");
+        }
+    }
+
+    private static ItemStack getItemStack(DailyTask task, Player player, String jobType) {
         String playerUUID = player.getUniqueId().toString();
         ItemStack taskItem = new ItemStack(Material.GOLD_NUGGET, 1);
         ItemMeta taskMeta = taskItem.getItemMeta();
@@ -199,30 +208,36 @@ public class JobMenu implements Listener {
                             jobPlayer = new JobAPI.JobPlayer(player.getName(), JobAPI.JOB_TYPE.NONE);
                         }
 
-                        if (jobType.equals(jobPlayer.getJob())) {
-
-                            openTaskSelectionMenu(player, jobPlayer.getJob());
-                            return;
-
-                        } else {
-                            // Check cooldown before allowing job change
-                            if (JobAPI.isPlayerInCooldown(player.getName())) {
-                                player.sendMessage(ChatColor.RED + "You are currently in cooldown and cannot change your job yet.");
-                                return;
-                            }
-
-                            jobPlayer.setJob(jobType);
-                            player.sendMessage(ChatColor.GREEN + "You are now a " + jobType + "!");
-
-                            // Open task selection menu for the corresponding job type
-                            openTaskSelectionMenu(player, jobType);
-                            // Save cooldown data to file
-                            JobAPI.addPlayerToCooldown(player.getName());
-                            JobAPI.saveCooldownData();
-                            return;
-
-                        }
+                        JobCommands.openJobPlayerMenu(player, jobType);
+                        player.sendMessage(prefix + ChatColor.DARK_AQUA + "Trying to switch to this job? Type: " + ChatColor.GRAY + "/job set " + jobType);
+                        return;
                     }
+                }
+            }
+
+            if (inventoryTitle.endsWith("] User Directory")) {
+
+                event.setCancelled(true);
+
+                // Check if the clicked item is the task button
+                if (clickedItem.getType() == Material.DIAMOND && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
+                    openTaskSelectorMenu(player);
+                    event.setCancelled(true); // Cancel the event to prevent further actions
+                }
+
+
+                if (clickedItem.getType() == Material.ARROW && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
+
+                    openJobSelectionMenu(player);
+                    event.setCancelled(true);
+
+                }
+
+                if (clickedItem.getType() == Material.PLAYER_HEAD && clickedItem.hasItemMeta() && clickedItem.getItemMeta().hasDisplayName()) {
+
+                    // Stats soon
+                    event.setCancelled(true);
+
                 }
             }
         }

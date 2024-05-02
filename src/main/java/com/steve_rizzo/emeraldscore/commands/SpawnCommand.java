@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class SpawnCommand implements CommandExecutor {
 
@@ -24,30 +25,41 @@ public class SpawnCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            String locSerialized = spawnyml.getString(p.getWorld().getName() + ".Location");
-            String[] locString = locSerialized.split(",");
-
             if (args.length == 0) {
+                String worldName = p.getWorld().getName();
+                if (spawnyml.contains(worldName + ".Location")) {
+                    String locSerialized = spawnyml.getString(worldName + ".Location");
+                    String[] locString = locSerialized.split(",");
+                    double x = Double.parseDouble(locString[1]);
+                    double y = Double.parseDouble(locString[2]);
+                    double z = Double.parseDouble(locString[3]);
+                    float yaw = Float.parseFloat(locString[4]);
+                    float pitch = Float.parseFloat(locString[5]);
 
-                Location spawnLoc = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]),
-                        Double.parseDouble(locString[3]));
+                    // Get the world instance
+                    Location spawnLoc = new Location(Bukkit.getServer().getWorld(worldName), x, y, z, yaw, pitch);
 
-                p.teleport(spawnLoc);
+                    // Teleport the player and set their direction
+                    p.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
 
-                p.sendMessage(prefix + ChatColor.GREEN + "Teleported back to " + ChatColor.AQUA + spawnLoc.getWorld().getName()
-                        + ChatColor.GREEN + "'s spawn!");
+                    // You need to update the player's location after teleporting
+                    p.getLocation().setYaw(yaw);
+                    p.getLocation().setPitch(pitch);
 
-                return true;
+                    p.sendMessage(prefix + ChatColor.GREEN + "Teleported back to " + ChatColor.AQUA + spawnLoc.getWorld().getName()
+                            + ChatColor.GREEN + "'s spawn!");
 
+                    return true;
+                } else {
+                    p.sendMessage(prefix + ChatColor.RED + "No spawn-point set for this world!");
+                    return true;
+                }
             } else {
-
-                p.sendMessage(prefix + ChatColor.GREEN + "Use " + ChatColor.AQUA + "/spawn");
-
+                p.sendMessage(prefix + ChatColor.RED + "Usage: /spawn");
                 return true;
             }
         }
 
         return true;
-
     }
 }

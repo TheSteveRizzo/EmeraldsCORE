@@ -171,36 +171,33 @@ public class RankShopCommand implements Listener, CommandExecutor {
     private void purchaseRank(Player player, ItemStack rankItem, int price) {
 
         getServer().dispatchCommand(getServer().getConsoleSender(),
-                "user " + player.getName());
-
-        getServer().dispatchCommand(getServer().getConsoleSender(),
                 "takebal " + player.getName() + " " + price);
 
         switch (rankItem.getType()) {
             case COAL_BLOCK:
                 // Purchasing $ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "user setgroup donor1");
+                        "lp user " + player.getName() + " parent set " + "donor1");
                 return;
             case IRON_BLOCK:
                 // Purchasing $$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "user setgroup donor2");
+                        "lp user " + player.getName() + " parent set " + "donor2");
                 return;
             case GOLD_BLOCK:
                 // Attempting $$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "user setgroup donor3");
+                        "lp user " + player.getName() + " parent set " + "donor3");
                 return;
             case DIAMOND_BLOCK:
                 // Attempting <3$$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "user setgroup donor4");
+                        "lp user " + player.getName() + " parent set " + "donor4");
                 return;
             case EMERALD_BLOCK:
                 // Attempting ELITE rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "user setgroup elite");
+                        "lp user " + player.getName() + " parent set " + "elite");
                 return;
         }
     }

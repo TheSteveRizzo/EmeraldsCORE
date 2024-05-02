@@ -63,6 +63,7 @@ public class MessageCommand implements CommandExecutor {
             lastMessageSender.put(target.getUniqueId(), player.getUniqueId());
             lastMessageSender.put(player.getUniqueId(), target.getUniqueId());
 
+
             // Inform the sender that the message was sent
             player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
 

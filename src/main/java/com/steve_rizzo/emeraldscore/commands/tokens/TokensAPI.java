@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.commands.tokens;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -11,10 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -33,7 +31,7 @@ public class TokensAPI {
     private static final String DEDUCT_CURRENCY_DATA =
             "INSERT INTO EmeraldsTokens(uuid, name, balance, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE balance = balance - ?";
     private static final String SELECT_ALL_BALANCES = "SELECT name, balance FROM EmeraldsTokens";
-
+    private static final String UPDATE_PLAYER_NAME = "UPDATE EmeraldsCash SET name=? WHERE uuid=?";
 
     public static CompletableFuture<Integer> displayTokenBalance(Player player) {
         return CompletableFuture.supplyAsync(() -> {
@@ -47,6 +45,9 @@ public class TokensAPI {
                     returnedBal = resultBalance.getInt(1);
                     p.sendMessage(Main.prefix + ChatColor.GRAY + "Your " + ChatColor.GREEN + "EmeraldsTokens" + ChatColor.GRAY + " balance is: "
                             + ChatColor.AQUA + returnedBal + ChatColor.GRAY + ".");
+                } else {
+                    p.sendMessage(Main.prefix + ChatColor.GRAY + "Your " + ChatColor.GREEN + "EmeraldsTokens" + ChatColor.GRAY + " balance is: "
+                            + ChatColor.AQUA + 0 + ChatColor.GRAY + ".");
                 }
                 System.out.println("[EmeraldsMC - Token Handler]: Data RETURNED for " + p.getName() + ".");
             } catch (SQLException e) {
@@ -55,8 +56,6 @@ public class TokensAPI {
             return returnedBal;
         });
     }
-
-
 
     public static CompletableFuture<Integer> displayTokenBalanceUUID(String balanceUserName, String balanceUsersUUID, Player playerRequestingBalance) {
         return CompletableFuture.supplyAsync(() -> {
@@ -225,6 +224,7 @@ public class TokensAPI {
             return returnedBal;
         });
     }
+
     public static CompletableFuture<Void> updatePlayerTokensAmount(Player p, int amount) {
         return CompletableFuture.runAsync(() -> {
             Date date = new Date();
@@ -233,6 +233,13 @@ public class TokensAPI {
 
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
+                // Check if the player's name in the database matches the current name
+                String currentNameInDB = getPlayerNameFromDB(connection, p.getUniqueId().toString());
+                if (currentNameInDB == null || !currentNameInDB.equals(p.getName())) {
+                    // If names don't match or player not found, update the name in the database
+                    updatePlayerNameInDB(p.getUniqueId().toString(), p.getName());
+                }
+
                 statement.setString(1, p.getUniqueId().toString());
                 statement.setString(2, p.getName());
                 statement.setInt(3, amount);
@@ -254,6 +261,13 @@ public class TokensAPI {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = Main.getInstance().getHikari();
                  PreparedStatement statement = connection.prepareStatement(UPDATE_CURRENCY_DATA)) {
+                // Check if the player's name in the database matches the current name
+                String currentNameInDB = getPlayerNameFromDB(connection, uuid);
+                if (currentNameInDB == null || !currentNameInDB.equals(Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName())) {
+                    // If names don't match or player not found, update the name in the database
+                    updatePlayerNameInDB(uuid, Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName());
+                }
+
                 statement.setString(1, uuid);
                 statement.setString(2, getPlayerName(uuid));
                 statement.setInt(3, amount);
@@ -340,7 +354,19 @@ public class TokensAPI {
     private static void printMap(HashMap<String, Integer> map) {
         map.forEach((key, value) -> System.out.println("Key : " + key + " Value : " + value));
     }
-    
+
+    private static void updatePlayerNameInDB(String uuid, String newName) {
+        try (Connection connection = Main.getInstance().getHikari();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAYER_NAME)) {
+            statement.setString(1, newName);
+            statement.setString(2, uuid);
+            statement.executeUpdate();
+            System.out.println("[EmeraldsMC - Token Handler]: Player name UPDATED in the database for UUID: " + uuid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static String getPlayerName(String uuid) {
         for (OfflinePlayer allOffP : Main.getInstance().getServer().getOfflinePlayers()) {
             if (uuid.equalsIgnoreCase(allOffP.getUniqueId().toString()))
@@ -348,5 +374,16 @@ public class TokensAPI {
         }
         return null;
     }
-    
+
+    private static String getPlayerNameFromDB(Connection connection, String uuid) throws SQLException {
+        String SELECT_NAME = "SELECT name FROM EmeraldsTokens WHERE uuid=?";
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_NAME)) {
+            statement.setString(1, uuid);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("name");
+            }
+        }
+        return null;
+    }
 }

@@ -25,13 +25,11 @@ public class AFKCommand implements CommandExecutor {
                 Bukkit.broadcastMessage(Main.prefix + ChatColor.GOLD + p.getName() + ChatColor.GRAY
                         + " is " + ChatColor.GREEN + "no longer AFK" + ChatColor.GRAY + ".");
                 listOfAFKPlayers.remove(p.getName());
-                ServerJoinPlayer.setPlayerTabAndTagName(p);
                 return true;
             } else {
                 Bukkit.broadcastMessage(Main.prefix + ChatColor.GOLD + p.getName() + ChatColor.GRAY
                         + " is now " + ChatColor.RED + "AFK" + ChatColor.GRAY + ".");
                 listOfAFKPlayers.add(p.getName());
-                ServerJoinPlayer.setAFKPlayerTabName(p);
                 return true;
             }
         }

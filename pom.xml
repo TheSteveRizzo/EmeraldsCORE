@@ -108,13 +108,6 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
-        <!-- MobArena -->
-        <dependency>
-            <groupId>com.github.garbagemule</groupId>
-            <artifactId>MobArena</artifactId>
-            <version>0.106</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Hikari -->
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -137,9 +130,9 @@
         </dependency>
         <!-- ProtocolLib -->
         <dependency>
-        <groupId>com.comphenix.protocol</groupId>
-        <artifactId>ProtocolLib</artifactId>
-        <version>4.8.0</version>
-    </dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.8.0</version>
+        </dependency>
     </dependencies>
 </project>
