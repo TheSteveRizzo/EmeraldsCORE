@@ -54,8 +54,6 @@ public class ServerJoinPlayer implements Listener {
 
         if (!e.getPlayer().hasPlayedBefore()) {
 
-            e.getPlayer().teleport(spawn);
-
             // Set money first time user
             EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
 
@@ -71,6 +69,8 @@ public class ServerJoinPlayer implements Listener {
                 addFireworkEffects(fwm);
                 fw.setFireworkMeta(fwm);
             }
+
+            e.getPlayer().teleport(spawn);
 
             // Play a sound to inform the users about a new user joining!
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {

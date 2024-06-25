@@ -7,19 +7,10 @@ import com.steve_rizzo.emeraldscore.commands.tokens.*;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
+import com.steve_rizzo.emeraldscore.features.jobs.JobHandler;
 import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
-import com.steve_rizzo.emeraldscore.jobs.JobAPI;
-import com.steve_rizzo.emeraldscore.jobs.JobCommands;
-import com.steve_rizzo.emeraldscore.jobs.JobMenu;
-import com.steve_rizzo.emeraldscore.jobs.JobTasks;
-import com.steve_rizzo.emeraldscore.jobs.explorer.ExplorerTaskListener;
-import com.steve_rizzo.emeraldscore.jobs.farmer.FarmerTaskListener;
-import com.steve_rizzo.emeraldscore.jobs.fisher.FisherTaskListener;
-import com.steve_rizzo.emeraldscore.jobs.gatherer.GathererTaskListener;
-import com.steve_rizzo.emeraldscore.jobs.hunter.HunterTaskListener;
-import com.steve_rizzo.emeraldscore.jobs.miner.MinerTaskListener;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -51,9 +42,7 @@ public class Main extends JavaPlugin {
     public static Permission perms = null;
     public static Economy economy = null;
     public EconomyImplement economyImplementer;
-
     public static ShapedRecipe pouchRecipe;
-
     private void instanceClasses() {
         economyImplementer = new EconomyImplement();
     }
@@ -72,7 +61,6 @@ public class Main extends JavaPlugin {
 
     }
 
-
     public static Chat chat = null;
     public static String
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
@@ -81,9 +69,11 @@ public class Main extends JavaPlugin {
     File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
     File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
+    public File jobDataYML = new File(getDataFolder() + "/jobData.yml");
     public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
     public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
+    public FileConfiguration jobDataConfig = YamlConfiguration.loadConfiguration(jobDataYML);
     public static ArrayList<String> WorldBlackList = new ArrayList<>();
 
     private HikariDataSource hikari;
@@ -106,14 +96,12 @@ public class Main extends JavaPlugin {
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
+        saveYML(jobDataConfig, jobDataYML);
 
         // Set up hooks
         setupPermissions();
         setupChat();
         setupEconomy();
-
-        // Call initialize method of JobAPI
-        JobAPI.initialize();
 
         // Database info
         hostEmeralds = emeraldsConfig.getString("db_host");
@@ -138,10 +126,14 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new TokenShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new WardenDeathEvent(), this);
 
         // Load Token Listener
         Bukkit.getServer().getPluginManager().registerEvents(new TokenHandler(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BuyTokensCommand(), this);
+
+        // Load Job Listener
+        Bukkit.getServer().getPluginManager().registerEvents(new JobHandler(), this);
 
         // Load MiningPouch Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPickupItem(), this);
@@ -203,18 +195,9 @@ public class Main extends JavaPlugin {
         this.getCommand("givetokens").setExecutor(new GiveTokensCommand());
         this.getCommand("tokenstop").setExecutor(new TokenstopCommand());
 
-        // Jobs Feature
-        this.getCommand("jobs").setExecutor(new JobCommands());
-        Bukkit.getServer().getPluginManager().registerEvents(new JobMenu(), this);
-
-        // Jobs Feature, Listeners
-        JobTasks jobTasks = new JobTasks();
-        Bukkit.getServer().getPluginManager().registerEvents(new ExplorerTaskListener(jobTasks), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new FarmerTaskListener(jobTasks), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new FisherTaskListener(jobTasks), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new HunterTaskListener(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new GathererTaskListener(jobTasks), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new MinerTaskListener(jobTasks), this);
+        // Job Commands
+        this.getCommand("job").setExecutor(new JobHandler());
+        this.getCommand("jobs").setExecutor(new JobHandler());
 
         // Database Connection
         hikari = new HikariDataSource();
@@ -243,8 +226,9 @@ public class Main extends JavaPlugin {
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
 
-        // Plugin startup success
-        System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " has SUCCESSFULLY LOADED!");
+        // Load Job Task Data
+        JobHandler.loadJobsFromConfig();
+
     }
 
     private boolean setupPermissions() {
@@ -299,6 +283,7 @@ public class Main extends JavaPlugin {
         saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
+        saveYML(jobDataConfig, jobDataYML);
 
         if (hikari != null) hikari.close();
 

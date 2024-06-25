@@ -16,7 +16,7 @@ public class ClearChatCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
           Player p = (Player) sender;
-          if (p.isOp()) {
+          if (p.hasPermission("emeraldsmc.clearchat")) {
               for (int i = 0 ; i <= 50 ; i++) {
                   Bukkit.getServer().broadcastMessage("                            ");
               }
