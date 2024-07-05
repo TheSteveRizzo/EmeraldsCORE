@@ -1,6 +1,7 @@
 package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,12 +21,12 @@ public class StaffChatCommand implements CommandExecutor {
         if (sender instanceof Player) {
 
             Player p = (Player) sender;
-            String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ChatColor.GOLD + p.getName() + ChatColor.GRAY + " >> ";
+            String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ServerJoinPlayer.getPlayerPrefixAndName(p) + ChatColor.GRAY + " >> ";
 
             if (p.hasPermission("emeraldsmc.staffchat")) {
                 for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
                     if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
-                        allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
+                        allstaffplayer.sendMessage(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message));
                     }
                 }
 
@@ -41,7 +42,7 @@ public class StaffChatCommand implements CommandExecutor {
 
             for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
                 if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
-                    allstaffplayer.sendMessage(staffPrefix + ChatColor.translateAlternateColorCodes('&', message));
+                    allstaffplayer.sendMessage(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message));
                 }
             }
 

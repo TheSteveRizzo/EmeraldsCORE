@@ -3,6 +3,10 @@ package com.steve_rizzo.emeraldscore.features.jobs;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.dependencies.jda.api.EmbedBuilder;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
+import github.scarsz.discordsrv.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,10 +44,13 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
         if (sender instanceof Player player) {
             if (command.getName().equalsIgnoreCase("job")) {
                 if (args.length == 0) {
-                    player.sendMessage(prefix + ChatColor.YELLOW + "Use: " + ChatColor.AQUA + "/job <list/delist/assign/complete> [price/id] [task info]");
+                    player.sendMessage(prefix + ChatColor.YELLOW + "Use: " + ChatColor.AQUA + "/job <list/delist/show/assign/complete> [price/id] [task info]");
                     return true;
                 } else {
                     switch (args[0].toLowerCase()) {
+                        case "show":
+                            listJobs(player);
+                            return true;
                         case "list":
                             if (args.length > 2) {
                                 try {
@@ -166,6 +173,7 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 completions.add("list");
                 completions.add("delist");
+                completions.add("show");
                 completions.add("assign");
                 completions.add("cancel");
                 completions.add("complete");
@@ -180,6 +188,46 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
         jobs.put(job.getId(), job);
         saveJobToConfig(job);
         player.sendMessage(prefix + ChatColor.GREEN + "Job listed with ID: " + job.getId());
+
+        String broadcastMessage =
+                ChatColor.GRAY + "======[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.GRAY + "]======\n" +
+                        ChatColor.YELLOW + "A new job has been listed by " + ServerJoinPlayer.getPlayerPrefixAndName(player) +
+                        ChatColor.AQUA + "\nTask: " + ChatColor.GRAY + taskInfo +
+                        ChatColor.AQUA + "\nPrice: " + ChatColor.GREEN + "$" + price +
+                        ChatColor.AQUA + "\nJob ID: " + ChatColor.YELLOW + job.getId() +
+                        "\n" +
+                        ChatColor.GRAY + "\nUse " + ChatColor.AQUA + "/jobs" + ChatColor.GRAY + " to assign this job!" +
+                        ChatColor.GRAY + "\n======[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.GRAY + "]======";
+        Bukkit.getServer().broadcastMessage(broadcastMessage);
+
+        // Truncate taskInfo if it's too long
+        String truncatedTaskInfo = taskInfo.length() > 50 ? taskInfo.substring(0, 50) + "..." : taskInfo;
+
+        // Create and send an embedded message to Discord
+        TextChannel channel = DiscordSRV.getPlugin().getMainGuild().getTextChannelById("1204459087778160711");
+        if (channel != null) {
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setTitle("Emeralds Jobs - New Listing")
+                    .setColor(0x00FF00) // Green color
+                    .addField("Listed By:", player.getName(), true)
+                    .addField("Task Info:", truncatedTaskInfo, true)
+                    .addField("Job Pay:", "$" + price, true)
+                    .addField("Job ID:", String.valueOf(job.getId()), true)
+                    .setFooter("Use /jobs in-game to assign this job!");
+
+            channel.sendMessageEmbeds(embedBuilder.build()).queue(
+                    success -> {
+                        System.out.println("[EmeraldsJobs]: Successfully posted job listing to Discord.");
+                    },
+                    failure -> {
+                        player.sendMessage(prefix + ChatColor.RED + "Failed to send job listing to Discord. Please report to admin. [ERR_CHAN_NF]");
+                        System.out.println("[EmeraldsJobs]: Failed to post job listing - " + failure.getMessage());
+                    }
+            );
+        } else {
+            player.sendMessage(prefix + ChatColor.RED + "Failed to send job listing to Discord. Please report to admin. [ERR_CHAN_NF]");
+            System.out.println("[EmeraldsJobs]: Failed to post job listing - Discord channel not found for ID: 1204459087778160711");
+        }
     }
 
     private void delistJob(Player player, int jobId) {
@@ -195,11 +243,14 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
 
     private void listJobs(Player player) {
         if (jobs.isEmpty()) {
-            player.sendMessage(prefix + ChatColor.YELLOW + "No jobs listed.");
+            player.sendMessage(prefix + ChatColor.YELLOW + "No jobs available.");
         } else {
-            player.sendMessage(prefix + ChatColor.GREEN + "Jobs:");
+            player.sendMessage(prefix + ChatColor.GREEN + "Listed Jobs:");
             for (Job job : jobs.values()) {
-                player.sendMessage(ChatColor.GOLD + "ID: " + job.getId() + ", Price: " + job.getPrice() + ", Task: " + job.getTaskInfo());
+                String assigned = ChatColor.GREEN + "AVAILABLE";
+                if (job.getAssignee() != null) assigned = ChatColor.RED + "ASSIGNED";
+                player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.AQUA + job.getId() + ChatColor.GRAY + ", Price: " + ChatColor.GREEN + job.getPrice()
+                        + ChatColor.GRAY + ", Task: " + ChatColor.YELLOW + job.getTaskInfo() + ChatColor.GRAY + ", Assigned: " + assigned);
             }
         }
     }
@@ -283,12 +334,12 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
                     // Notify both parties about the payment
                     if (lister != null && lister.isOnline()) {
                         assert assignee != null;
-                        lister.sendMessage(prefix + ChatColor.GREEN + "Job payment of " + amount + " emeralds processed to " + ServerJoinPlayer.getPlayerPrefixAndName(assignee.getName()));
+                        lister.sendMessage(prefix + ChatColor.YELLOW + "Job payment of " + ChatColor.GREEN + "$" + amount + ChatColor.YELLOW + " Emeralds Cash processed to " + ServerJoinPlayer.getPlayerPrefixAndName(assignee.getName()));
                     }
 
                     if (assignee != null && assignee.isOnline()) {
                         assert lister != null;
-                        assignee.sendMessage(prefix + ChatColor.GREEN + "You have received a payment of " + amount + " emeralds from " + ServerJoinPlayer.getPlayerPrefixAndName(lister.getName()));
+                        assignee.sendMessage(prefix + ChatColor.YELLOW + "You have received a payment of " + ChatColor.GREEN + "$" + amount + ChatColor.YELLOW + " Emeralds Cash from " + ServerJoinPlayer.getPlayerPrefixAndName(lister.getName()));
                     }
 
                     player.sendMessage(prefix + ChatColor.GREEN + "Job payment processed.");

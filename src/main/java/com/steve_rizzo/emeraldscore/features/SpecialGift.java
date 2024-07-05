@@ -39,8 +39,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:raw_iron 32",
             "give {user} minecraft:stone 32",
             "give {user} minecraft:deepslate 32",
-            "give {user} minecraft:red_stained_glass 32",
-            "give {user} minecraft:magma_block 16",
+            "give {user} minecraft:white_concrete 32",
+            "give {user} minecraft:black_concrete 16",
             "give {user} minecraft:sea_lantern 8",
             "givetokens {user} 1"
 
@@ -57,8 +57,8 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:raw_iron 64",
             "give {user} minecraft:stone 64",
             "give {user} minecraft:deepslate 64",
-            "give {user} minecraft:red_stained_glass 64",
-            "give {user} minecraft:magma_block 32",
+            "give {user} minecraft:white_concrete 64",
+            "give {user} minecraft:black_concrete 32",
             "givetokens {user} 1"
 
     );
@@ -73,7 +73,7 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:stone 256",
             "give {user} minecraft:deepslate 128",
             "give {user} minecraft:raw_gold 32",
-            "give {user} minecraft:magma_block 64",
+            "give {user} minecraft:black_concrete 64",
             "givetokens {user} 2"
 
     );
@@ -96,7 +96,7 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:deepslate 128",
             "give {user} minecraft:raw_iron 32",
             "give {user} minecraft:shroomlight 8",
-            "give {user} minecraft:magma_block 16",
+            "give {user} minecraft:black_concrete 16",
             "give {user} minecraft:wither_skeleton_skull 1",
             "givetokens {user} 2"
 
@@ -114,7 +114,7 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:deepslate 128",
             "give {user} minecraft:obsidian 64",
             "give {user} minecraft:sea_lantern 16",
-            "give {user} minecraft:magma_block 32",
+            "give {user} minecraft:black_concrete 32",
             "give {user} minecraft:beacon 1",
             "give {user} minecraft:wither_skeleton_skull 1",
             "givetokens {user} 3"
@@ -133,7 +133,7 @@ public class SpecialGift implements Listener {
             "give {user} minecraft:deepslate 128",
             "give {user} minecraft:glass 128",
             "give {user} minecraft:shroomlight 32",
-            "give {user} minecraft:magma_block 64",
+            "give {user} minecraft:black_concrete 64",
             "give {user} minecraft:heart_of_the_sea 1",
             "give {user} minecraft:golden_apple 2",
             "give {user} minecraft:enchanted_golden_apple 1",
@@ -145,19 +145,19 @@ public class SpecialGift implements Listener {
     @EventHandler
     public void onMagicLordClick(PlayerInteractEntityEvent e) {
 
-        Entity sunshineStar;
+        Entity uncleSam;
         Player p;
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("SunshineStar")) {
+        if (e.getRightClicked().getName().equalsIgnoreCase("UncleSam")) {
 
-            sunshineStar = e.getRightClicked();
+            uncleSam = e.getRightClicked();
             p = e.getPlayer();
             // Current date
             Date curDate = new Date();
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-            if ((year == 2024) && (month == 6)) {
+            if ((year == 2024) && (month == 7)) {
 
                 if (day >= 1 && day < 14) {
 
@@ -246,7 +246,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1GiftList).replace("{user}", player.getName()));
@@ -254,14 +254,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2GiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3GiftList).replace("{user}", player.getName()));
@@ -272,7 +272,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1DonorGiftList).replace("{user}", player.getName()));
@@ -280,14 +280,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2DonorGiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &e&lSunshine Star&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lUncle Sam&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3DonorGiftList).replace("{user}", player.getName()));

@@ -84,6 +84,16 @@
             <id>dmulloy2-repo</id>
             <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
+        <!-- DiscordSRV for Jobs -->
+        <repository>
+            <id>dv8tion</id>
+            <name>m2-dv8tion</name>
+            <url>https://m2.dv8tion.net/releases</url>
+        </repository>
+        <repository>
+            <id>Scarsz-Nexus</id>
+            <url>https://nexus.scarsz.me/content/groups/public/</url>
+        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -133,6 +143,13 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.8.0</version>
+        </dependency>
+        <!-- DiscordSRV for Jobs -->
+        <dependency>
+            <groupId>com.discordsrv</groupId>
+            <artifactId>discordsrv</artifactId>
+            <version>1.27.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
