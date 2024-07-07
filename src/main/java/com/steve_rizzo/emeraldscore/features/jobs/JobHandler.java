@@ -343,6 +343,39 @@ public class JobHandler implements Listener, CommandExecutor, TabCompleter {
                     }
 
                     player.sendMessage(prefix + ChatColor.GREEN + "Job payment processed.");
+
+
+                    String taskInfo = job.getTaskInfo();
+                    int price = job.getPrice();
+                    // Truncate taskInfo if it's too long
+                    String truncatedTaskInfo = taskInfo.length() > 50 ? taskInfo.substring(0, 50) + "..." : taskInfo;
+
+                    // Create and send an embedded message to Discord
+                    TextChannel channel = DiscordSRV.getPlugin().getMainGuild().getTextChannelById("1204459087778160711");
+                    if (channel != null) {
+                        EmbedBuilder embedBuilder = new EmbedBuilder();
+                        embedBuilder.setTitle("Emeralds Jobs - Job Completed")
+                                .setColor(0x00FF00) // Green color
+                                .addField("Listed By:", Bukkit.getOfflinePlayer(listerUUID).getName(), true)
+                                .addField("Completed By:", Bukkit.getOfflinePlayer(assigneeUUID).getName(), true)
+                                .addField("Task Info:", truncatedTaskInfo, true)
+                                .addField("Job Pay:", "$" + price, true)
+                                .addField("Job ID:", String.valueOf(job.getId()), true)
+                                .setFooter("Use /jobs in-game to see other available jobs!");
+
+                        channel.sendMessageEmbeds(embedBuilder.build()).queue(
+                                success -> {
+                                    System.out.println("[EmeraldsJobs]: Successfully posted job completion to Discord.");
+                                },
+                                failure -> {
+                                    System.out.println("[EmeraldsJobs]: Failed to post job completion - " + failure.getMessage());
+                                }
+                        );
+                    } else {
+                        player.sendMessage(prefix + ChatColor.RED + "Failed to send job listing to Discord. Please report to admin. [ERR_CHAN_NF]");
+                        System.out.println("[EmeraldsJobs]: Failed to post job listing - Discord channel not found for ID: 1204459087778160711");
+                    }
+
                 } else {
                     player.sendMessage(prefix + ChatColor.RED + "Lister does not have enough funds to complete the payment.");
                     if (job.getLister().equals(player.getUniqueId())) {

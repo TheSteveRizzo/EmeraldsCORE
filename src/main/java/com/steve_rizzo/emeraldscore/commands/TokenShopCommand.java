@@ -207,14 +207,14 @@ public class TokenShopCommand implements Listener, CommandExecutor {
 
             case SPAWNER:
 
-                // /silkspawners give <Player> <Type> [Amount]
+                // /spawners give <Player> <Type> [Amount]
 
                 if (purchasedItem.getItemMeta().hasDisplayName()) {
 
                     if (purchasedItem.getItemMeta().getDisplayName().contains("SKELETON SPAWNER")) {
 
                         getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "silkspawners give " + player.getName() + " skeleton 1");
+                                "spawners give " + player.getName() + " SKELETON 1");
 
                         getServer().broadcastMessage(Main.prefix
                                 + ServerJoinPlayer.getPlayerPrefixAndName(player)
@@ -230,7 +230,7 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                             (!purchasedItem.getItemMeta().getDisplayName().contains("CAVE SPIDER"))) {
 
                         getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "silkspawners give " + player.getName() + " spider 1");
+                                "spawners give " + player.getName() + " SPIDER 1");
 
                         getServer().broadcastMessage(Main.prefix
                                 + ServerJoinPlayer.getPlayerPrefixAndName(player)
@@ -245,7 +245,7 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                     } else if (purchasedItem.getItemMeta().getDisplayName().contains("ZOMBIE SPAWNER")) {
 
                         getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "silkspawners give " + player.getName() + " zombie 1");
+                                "spawners give " + player.getName() + " ZOMBIE 1");
 
                         getServer().broadcastMessage(Main.prefix
                                 + ServerJoinPlayer.getPlayerPrefixAndName(player)
@@ -261,7 +261,7 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                     } else if (purchasedItem.getItemMeta().getDisplayName().contains("CAVE SPIDER SPAWNER")) {
 
                         getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "silkspawners give " + player.getName() + " cave_spider 1");
+                                "spawners give " + player.getName() + " CAVE_SPIDER 1");
 
                         getServer().broadcastMessage(Main.prefix
                                 + ServerJoinPlayer.getPlayerPrefixAndName(player)
@@ -277,7 +277,7 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                     } else if (purchasedItem.getItemMeta().getDisplayName().contains("BLAZE SPAWNER")) {
 
                         getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "silkspawners give " + player.getName() + " blaze 1");
+                                "spawners give " + player.getName() + " BLAZE 1");
 
                         getServer().broadcastMessage(Main.prefix
                                 + ServerJoinPlayer.getPlayerPrefixAndName(player)
