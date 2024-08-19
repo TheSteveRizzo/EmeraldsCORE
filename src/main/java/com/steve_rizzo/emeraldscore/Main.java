@@ -39,6 +39,7 @@ import java.util.logging.Level;
 public class Main extends JavaPlugin {
 
     public static String prefix;
+    public static String serverIDName;
     public static Permission perms = null;
     public static Economy economy = null;
     public EconomyImplement economyImplementer;
@@ -66,14 +67,14 @@ public class Main extends JavaPlugin {
             hostEmeralds, portEmeralds, passwordEmeralds, usernameEmeralds, nameEmeralds;
     public static Main core;
     private static Main instance;
-    File spawnYML = new File(getDataFolder() + "/spawn.yml");
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
     File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
     public File jobDataYML = new File(getDataFolder() + "/jobData.yml");
-    public FileConfiguration spawnConfig = YamlConfiguration.loadConfiguration(spawnYML);
+    public File serverIDYML = new File(getDataFolder() + "/serverID.yml");
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
     public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
     public FileConfiguration jobDataConfig = YamlConfiguration.loadConfiguration(jobDataYML);
+    public FileConfiguration serverIDConfig = YamlConfiguration.loadConfiguration(serverIDYML);
     public static ArrayList<String> WorldBlackList = new ArrayList<>();
 
     private HikariDataSource hikari;
@@ -93,10 +94,13 @@ public class Main extends JavaPlugin {
         hook();
 
         // Save config files
-        saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
         saveYML(jobDataConfig, jobDataYML);
+        saveYML(serverIDConfig, serverIDYML);
+
+        // Load Server Identifier File
+        handleServerIDConfig();
 
         // Set up hooks
         setupPermissions();
@@ -147,7 +151,6 @@ public class Main extends JavaPlugin {
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("flyspeed").setExecutor(new FlyspeedCommand());
-        this.getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
         this.getCommand("spawn").setExecutor(new SpawnCommand());
         this.getCommand("bc").setExecutor(new BroadcastCommand());
         this.getCommand("broadcast").setExecutor(new BroadcastCommand());
@@ -159,7 +162,6 @@ public class Main extends JavaPlugin {
         this.getCommand("rules").setExecutor(new RulesCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
         this.getCommand("afk").setExecutor(new AFKCommand());
-        this.getCommand("casino").setExecutor(new CasinoCommand());
         this.getCommand("maintenance").setExecutor(new MaintenanceMode());
         this.getCommand("apply").setExecutor(new ApplyCommand());
         this.getCommand("rankshop").setExecutor(new RankShopCommand());
@@ -180,6 +182,7 @@ public class Main extends JavaPlugin {
         this.getCommand("claimfurnaces").setExecutor(new FurnaceClaimCommand());
         this.getCommand("buytokens").setExecutor(new BuyTokensCommand());
         this.getCommand("fireworks").setExecutor(new FireworksCommand());
+        this.getCommand("back").setExecutor(new BackCommand());
 
         // Currency Commands
         this.getCommand("balance").setExecutor(new BalanceCommand());
@@ -231,6 +234,30 @@ public class Main extends JavaPlugin {
 
     }
 
+    private void handleServerIDConfig() {
+        // Check if "serverID" exists in the config
+        if (serverIDConfig.contains("serverID")) {
+            // Retrieve and assign the existing serverID value to serverIDName
+            serverIDName = serverIDConfig.getString("serverID");
+        } else {
+            // Default value if "serverID" does not exist
+            serverIDName = "defaultServerName"; // Replace with your desired default value
+
+            // Set the default value in the config
+            serverIDConfig.set("serverID", serverIDName);
+
+            // Save the changes to the config file
+            try {
+                serverIDConfig.save(serverIDYML);
+            } catch (IOException e) {
+                e.printStackTrace(); // Handle the exception appropriately
+            }
+        }
+
+        // Optionally, log the serverIDName to ensure it's set correctly
+        getLogger().info("Server ID Name: " + serverIDName);
+    }
+
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> permissionProvider = getServer()
                 .getServicesManager().getRegistration(
@@ -260,11 +287,15 @@ public class Main extends JavaPlugin {
     }
 
     private void setPVPRegions() {
-        if (getServer().getWorld("world") != null) Objects.requireNonNull(getServer().getWorld("world")).setPVP(false);
-        if (getServer().getWorld("farmworld") != null)
-            Objects.requireNonNull(getServer().getWorld("farmworld")).setPVP(false);
-        if (getServer().getWorld("lootworld") != null)
-            Objects.requireNonNull(getServer().getWorld("lootworld")).setPVP(true);
+        if (Main.serverIDName.equalsIgnoreCase("smp")) {
+            if (getServer().getWorld("world") != null)
+                Objects.requireNonNull(getServer().getWorld("world")).setPVP(false);
+            if (getServer().getWorld("farmworld") != null)
+                Objects.requireNonNull(getServer().getWorld("farmworld")).setPVP(false);
+        } else if (Main.serverIDName.equalsIgnoreCase("factions")) {
+            if (getServer().getWorld("world") != null)
+                Objects.requireNonNull(getServer().getWorld("world")).setPVP(true);
+        }
     }
 
     public void saveYML(FileConfiguration ymlConfig, File ymlFile) {
@@ -280,7 +311,6 @@ public class Main extends JavaPlugin {
 
         unhook();
 
-        saveYML(spawnConfig, spawnYML);
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
         saveYML(jobDataConfig, jobDataYML);
@@ -294,6 +324,9 @@ public class Main extends JavaPlugin {
         // Save Villager worlds
         SaveWorldBlackList();
         LogInfo("VillagerSaver disabled!");
+
+        // CLear death locations
+        BackCommand.deathLocations.clear();
 
         Bukkit.getServer().getPluginManager().disablePlugin(this);
         System.out.println(Color.RED + ChatColor.stripColor(prefix) + " has SUCCESSFULLY UNLOADED!");

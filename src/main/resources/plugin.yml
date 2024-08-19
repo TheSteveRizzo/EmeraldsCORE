@@ -13,8 +13,6 @@ commands:
     description: Set a user's ability to fly.
   flyspeed:
     description: Set user flight speed.
-  setspawn:
-    description: Set the spawn of the world.
   spawn:
     description: Go to the world's spawn-point.
   bc:
@@ -77,9 +75,6 @@ commands:
   apply:
     aliases: [ member ]
     description: Apply to become a member!
-  casino:
-    aliases: [ roulette ]
-    description: Go to the Emeralds Casino!
   rankshop:
     description: Opens the Emeralds Rank Shop.
   tokenshop:
@@ -133,3 +128,5 @@ commands:
     description: List, de-list, or mark a job as completed.
   jobs:
     description: Open the job menu to view available tasks.
+  back:
+    description: Teleport to your death location.

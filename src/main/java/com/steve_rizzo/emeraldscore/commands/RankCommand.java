@@ -89,6 +89,8 @@ public class RankCommand implements CommandExecutor {
 
                         case "youtuber":
 
+                        case "builder":
+
                         case "elite":
 
                         case "donor4":

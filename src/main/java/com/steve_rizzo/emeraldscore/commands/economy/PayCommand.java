@@ -66,6 +66,7 @@ public class PayCommand implements CommandExecutor {
 
                                 EmeraldsCashAPI.deductFunds(p, amount);
                                 EmeraldsCashAPI.addFundsToUUID(offlinePlayers.getUniqueId().toString(), amount);
+                                p.sendMessage(Main.prefix + ChatColor.GRAY + "You just sent " + ChatColor.AQUA + tarPlayerName + ChatColor.GRAY + " $" + ChatColor.AQUA + amount + ChatColor.GRAY + " Emeralds Cash.");
                                 return true;
 
                             }

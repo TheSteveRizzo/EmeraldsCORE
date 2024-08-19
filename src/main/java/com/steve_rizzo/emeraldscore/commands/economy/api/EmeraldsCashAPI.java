@@ -4,7 +4,6 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;

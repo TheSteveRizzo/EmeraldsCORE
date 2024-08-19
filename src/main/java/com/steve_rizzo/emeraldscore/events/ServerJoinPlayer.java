@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class ServerJoinPlayer implements Listener {
 
@@ -50,43 +51,51 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
-        Location spawn = Bukkit.getWorld("Hub").getSpawnLocation();
+        Location spawn = e.getPlayer().getWorld().getSpawnLocation();
+
+        // Spawn 5 fireworks
+        for (int i = 0; i < 5; i++) {
+            Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            FireworkMeta fwm = fw.getFireworkMeta();
+            fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
+            addFireworkEffects(fwm);
+            fw.setFireworkMeta(fwm);
+        }
+
 
         if (!e.getPlayer().hasPlayedBefore()) {
 
-            // Set money first time user
-            EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
-
-
             e.setJoinMessage(ChatColor.LIGHT_PURPLE + e.getPlayer().getName() + " has joined The Emeralds for the first time!");
-            ranks.loadFirstTimePlayer(e.getPlayer());
 
-            // Spawn 5 fireworks
-            for (int i = 0; i < 5; i++) {
-                Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
-                FireworkMeta fwm = fw.getFireworkMeta();
-                fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
-                addFireworkEffects(fwm);
-                fw.setFireworkMeta(fwm);
-            }
+            EmeraldsCashAPI.doesAccountExist(e.getPlayer().getUniqueId().toString()).thenAccept(doesUserAccountExist -> {
+                if (!doesUserAccountExist) {
+                    // Set money for first-time user
+                    EmeraldsCashAPI.setBalance(e.getPlayer(), 500);
 
-            e.getPlayer().teleport(spawn);
+                    ranks.loadFirstTimePlayer(e.getPlayer());
 
-            // Play a sound to inform the users about a new user joining!
-            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
-            }
+                    e.getPlayer().teleport(spawn);
 
-            e.getPlayer().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.AQUA + "" + ChatColor.BOLD +  "=====\n" +
-                    ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "! Make sure to:\n" +
-                    ChatColor.AQUA + "> Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
-                    ChatColor.AQUA + "> Apply for Member using " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
-                    ChatColor.AQUA + "> Join our Discord using " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
-                    ChatColor.AQUA + "> Visit our PVP World using " + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
-                    ChatColor.AQUA + "> Go back to Survival using " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
-                    ChatColor.AQUA + ChatColor.BOLD + "===== ===== ====="
-            );
+                    // Play a sound to inform the users about a new user joining!
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
+                    }
+                }
 
+                e.getPlayer().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.AQUA + "" + ChatColor.BOLD + "=====\n" +
+                        ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "! Make sure to:\n" +
+                        ChatColor.AQUA + "> Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
+                        ChatColor.AQUA + "> Apply for Member using " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
+                        ChatColor.AQUA + "> Join our Discord using " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
+                        ChatColor.AQUA + "> Visit our PVP World using " + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
+                        ChatColor.AQUA + "> Go back to Survival using " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                        ChatColor.AQUA + ChatColor.BOLD + "===== ===== ====="
+                );
+            }).exceptionally(ex -> {
+                // Handle any exceptions
+                ex.printStackTrace();
+                return null;
+            });
         } else {
 
             // Display player join message

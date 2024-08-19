@@ -16,10 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class LaunchDonorDrop implements CommandExecutor {
 
@@ -98,12 +95,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             // Collect info.
             String playerName = args[0];
 
-            FileConfiguration spawnyml = Main.core.spawnConfig;
-            String locSerialized = spawnyml.getString(Bukkit.getWorld("world").getName() + ".Location");
-            String[] locString = locSerialized.split(",");
-
-            Location spawnLoc = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]),
-                    Double.parseDouble(locString[2]) + 5, Double.parseDouble(locString[3]) - 4);
+            Location spawnLoc = Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation();
 
             // Set regions to drop from in list.
             if (listOfDropLocations.isEmpty()) setRadiusListLocations(spawnLoc);

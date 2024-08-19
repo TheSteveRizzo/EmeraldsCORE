@@ -21,39 +21,14 @@ public class SpawnCommand implements CommandExecutor {
         if (sender instanceof Player) {
 
             String prefix = Main.prefix;
-            spawnyml = Main.core.spawnConfig;
 
             Player p = (Player) sender;
 
             if (args.length == 0) {
-                String worldName = p.getWorld().getName();
-                if (spawnyml.contains(worldName + ".Location")) {
-                    String locSerialized = spawnyml.getString(worldName + ".Location");
-                    String[] locString = locSerialized.split(",");
-                    double x = Double.parseDouble(locString[1]);
-                    double y = Double.parseDouble(locString[2]);
-                    double z = Double.parseDouble(locString[3]);
-                    float yaw = Float.parseFloat(locString[4]);
-                    float pitch = Float.parseFloat(locString[5]);
 
-                    // Get the world instance
-                    Location spawnLoc = new Location(Bukkit.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+                p.performCommand("mvspawn");
+                return true;
 
-                    // Teleport the player and set their direction
-                    p.teleport(spawnLoc, PlayerTeleportEvent.TeleportCause.COMMAND);
-
-                    // You need to update the player's location after teleporting
-                    p.getLocation().setYaw(yaw);
-                    p.getLocation().setPitch(pitch);
-
-                    p.sendMessage(prefix + ChatColor.GREEN + "Teleported back to " + ChatColor.AQUA + spawnLoc.getWorld().getName()
-                            + ChatColor.GREEN + "'s spawn!");
-
-                    return true;
-                } else {
-                    p.sendMessage(prefix + ChatColor.RED + "No spawn-point set for this world!");
-                    return true;
-                }
             } else {
                 p.sendMessage(prefix + ChatColor.RED + "Usage: /spawn");
                 return true;
