@@ -21,7 +21,7 @@ public class PlayerDeath implements Listener {
         Player p = e.getEntity();
         e.setDeathMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
 
-        Location deathLoc = e.getEntity().getLastDeathLocation();
+        Location deathLoc = e.getEntity().getLocation();
         String uuid = p.getUniqueId().toString();
         BackCommand.deathLocations.put(uuid, deathLoc);
 

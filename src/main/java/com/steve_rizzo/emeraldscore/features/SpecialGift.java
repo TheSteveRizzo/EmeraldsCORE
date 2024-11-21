@@ -30,7 +30,7 @@ public class SpecialGift implements Listener {
 
     ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM AUG 01 TO AUG 07
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 01 TO OCT 07
     private List<String> week1GiftList = Arrays.asList(
             "givebal {user} 2500",                  // ND Cash amount
             "give {user} minecraft:emerald 2",       // ND Emerald Amount
@@ -49,7 +49,7 @@ public class SpecialGift implements Listener {
 
     );
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM AUG 07 TO AUG 14
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 07 TO OCT 14
     private List<String> week2GiftList = Arrays.asList(
             "givebal {user} 5000",                  // ND Cash amount
             "give {user} minecraft:emerald 4",       // ND Emerald Amount
@@ -69,7 +69,7 @@ public class SpecialGift implements Listener {
 
     );
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM AUG 21+
+    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 21+
     private List<String> week3GiftList = Arrays.asList(
             "givebal {user} 7500",                  // ND Cash amount
             "give {user} minecraft:emerald 8",       // ND Emerald Amount
@@ -93,7 +93,7 @@ public class SpecialGift implements Listener {
 
 
 
-    // GIFT LIST FOR (DONOR USERS), FROM AUG 01 TO AUG 07 (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 01 TO OCT 07 (Same as before)
     private List<String> week1DonorGiftList = Arrays.asList(
             "givebal {user} 7500",                  // D Cash amount
             "give {user} minecraft:emerald 8",       // D Emerald Amount
@@ -109,7 +109,7 @@ public class SpecialGift implements Listener {
 
     );
 
-    // GIFT LIST FOR (DONOR USERS), FROM AUG 07 TO AUG 14 (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 07 TO OCT 14 (Same as before)
     private List<String> week2DonorGiftList = Arrays.asList(
             "givebal {user} 10000",                  // D Cash amount
             "give {user} minecraft:emerald 12",       // D Emerald Amount
@@ -129,7 +129,7 @@ public class SpecialGift implements Listener {
 
     );
 
-    // GIFT LIST FOR (DONOR USERS), FROM AUG 21+ (Same as before)
+    // GIFT LIST FOR (DONOR USERS), FROM OCT 21+ (Same as before)
     private List<String> week3DonorGiftList = Arrays.asList(
             "givebal {user} 12500",                  // D Cash amount
             "give {user} minecraft:emerald 16",       // D Emerald Amount
@@ -153,7 +153,7 @@ public class SpecialGift implements Listener {
     @EventHandler
     public void onMagicLordClick(PlayerInteractEntityEvent e) {
 
-        Entity emeraldKing;
+        Entity santaClaus;
         Player p = e.getPlayer();
 
         if (e.getRightClicked().getName().equalsIgnoreCase("vote")) {
@@ -174,15 +174,15 @@ public class SpecialGift implements Listener {
             p.performCommand("rtp");
         }
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("EmeraldKing")) {
+        if (e.getRightClicked().getName().equalsIgnoreCase("SantaClaus")) {
 
-            emeraldKing = e.getRightClicked();
+            santaClaus = e.getRightClicked();
             // Current date
             Date curDate = new Date();
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-            if ((year == 2024) && (month == 8)) {
+            if ((year == 2024) && (month == 11)) {
 
                 if (day >= 1 && day < 14) {
 
@@ -271,7 +271,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1GiftList).replace("{user}", player.getName()));
@@ -279,14 +279,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2GiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3GiftList).replace("{user}", player.getName()));
@@ -297,7 +297,7 @@ public class SpecialGift implements Listener {
 
         if (weekNum == 1) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week1DonorGiftList).replace("{user}", player.getName()));
@@ -305,14 +305,14 @@ public class SpecialGift implements Listener {
         } else if (weekNum == 2) {
 
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week2DonorGiftList).replace("{user}", player.getName()));
 
         } else if (weekNum == 3) {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmerald King&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+                    "&efrom &b&lSanta Claus&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
 
             Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
                     commandToRun(week3DonorGiftList).replace("{user}", player.getName()));

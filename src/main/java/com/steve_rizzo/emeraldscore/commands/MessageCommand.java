@@ -59,10 +59,9 @@ public class MessageCommand implements CommandExecutor {
             // Send the message to the target player
             target.sendMessage(message.toString());
 
-            // Record the last message sender
+            // Record the last message sender for both players
             lastMessageSender.put(target.getUniqueId(), player.getUniqueId());
             lastMessageSender.put(player.getUniqueId(), target.getUniqueId());
-
 
             // Inform the sender that the message was sent
             player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
@@ -105,9 +104,6 @@ public class MessageCommand implements CommandExecutor {
 
                     // Print to console
                     System.out.println(reply);
-
-                    // Clear the entry for p.getUniqueId()
-                    lastMessageSender.remove(p.getUniqueId());
 
                 } else {
                     p.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");

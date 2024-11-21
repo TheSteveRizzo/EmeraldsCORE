@@ -39,15 +39,19 @@ public class BuyTokensCommand implements CommandExecutor, Listener {
         Inventory inventory = Bukkit.createInventory(null, 9, title);
 
         // Add token options to the inventory
-        ItemStack oneToken = createTokenItem("1 Token", Material.EMERALD, 75000, 1);
-        ItemStack twoTokens = createTokenItem("2 Tokens", Material.EMERALD, 150000, 2);
-        ItemStack fourTokens = createTokenItem("4 Tokens", Material.EMERALD, 300000, 4);
-        ItemStack fiveTokens = createTokenItem("5 Tokens", Material.EMERALD_BLOCK, 350000, 5);
+        ItemStack oneToken = createTokenItem("1 Token", Material.EMERALD, 125000, 1);
+        ItemStack twoTokens = createTokenItem("2 Tokens", Material.EMERALD, 250000, 2);
+        ItemStack fourTokens = createTokenItem("4 Tokens", Material.EMERALD, 500000, 4);
+        ItemStack fiveTokens = createTokenItem("5 Tokens", Material.DIAMOND_BLOCK, 625000, 5);
+        ItemStack tenTokens = createTokenItem("10 Tokens", Material.EMERALD_BLOCK, 1250000, 10);
+        ItemStack twentyTokens = createTokenItem("20 Tokens", Material.NETHERITE_BLOCK, 2500000, 20);
 
         inventory.setItem(0, oneToken);
         inventory.setItem(1, twoTokens);
         inventory.setItem(2, fourTokens);
         inventory.setItem(3, fiveTokens);
+        inventory.setItem(4, tenTokens);
+        inventory.setItem(5, twentyTokens);
 
         player.openInventory(inventory);
     }
