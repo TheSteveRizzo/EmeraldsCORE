@@ -62,6 +62,9 @@ public class ServerJoinPlayer implements Listener {
             fw.setFireworkMeta(fwm);
         }
 
+        if (Main.serverIDName.equalsIgnoreCase("hub")) {
+            e.getPlayer().teleport(spawn);
+        }
 
         if (!e.getPlayer().hasPlayedBefore()) {
 
