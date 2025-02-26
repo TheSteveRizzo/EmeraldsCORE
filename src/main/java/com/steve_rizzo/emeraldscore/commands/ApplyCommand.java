@@ -16,7 +16,7 @@ public class ApplyCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            p.sendMessage(Main.prefix + ChatColor.YELLOW + "Apply to become a Member: " + ChatColor.GREEN + "EmeraldsMC.com/apply");
+            p.sendMessage(Main.prefix + ChatColor.YELLOW + "Become a Member by joining our Discord: " + ChatColor.GREEN + "https://discord.gg/vBdfrdjZgJ");
 
             return true;
 

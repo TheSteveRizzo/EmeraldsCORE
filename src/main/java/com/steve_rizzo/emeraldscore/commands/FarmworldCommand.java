@@ -3,6 +3,7 @@ package com.steve_rizzo.emeraldscore.commands;
 import com.steve_rizzo.emeraldscore.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,10 @@ public class FarmworldCommand implements CommandExecutor {
 
             if (Bukkit.getWorld("farmworld") != null) {
 
-                p.teleport(Bukkit.getWorld("farmworld").getSpawnLocation());
+                Location spawn = Bukkit.getWorld("farmworld").getSpawnLocation();
+                spawn.setPitch(spawn.getPitch());
+                spawn.setYaw(spawn.getYaw());
+                p.teleport(spawn);
 
                 p.sendMessage(Main.prefix + ChatColor.AQUA + "Success!");
 

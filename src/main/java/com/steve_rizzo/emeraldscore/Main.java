@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.chat.PrefixSender;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
 import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
+import com.steve_rizzo.emeraldscore.commands.plotshop.IssuePlot;
 import com.steve_rizzo.emeraldscore.commands.tokens.*;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.events.skyblock.ScubaSuit;
@@ -13,6 +14,8 @@ import com.steve_rizzo.emeraldscore.features.jobs.JobHandler;
 import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
+import com.steve_rizzo.emeraldscore.pets.CatCommand;
+import com.steve_rizzo.emeraldscore.pets.DogCommand;
 import com.zaxxer.hikari.HikariDataSource;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -213,6 +216,13 @@ public class Main extends JavaPlugin {
         // Job Commands
         this.getCommand("job").setExecutor(new JobHandler());
         this.getCommand("jobs").setExecutor(new JobHandler());
+
+        // Plot Handler Command
+        this.getCommand("issueplot").setExecutor(new IssuePlot());
+
+        // Emeralds Simple Pet Handler
+        this.getCommand("cat").setExecutor(new CatCommand());
+        this.getCommand("dog").setExecutor(new DogCommand());
 
         // Database Connection
         hikari = new HikariDataSource();

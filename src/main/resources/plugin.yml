@@ -130,3 +130,9 @@ commands:
     description: Open the job menu to view available tasks.
   back:
     description: Teleport to your death location.
+  issueplot:
+    description: Attempt to issue a market plot to a user.
+  cat:
+    description: Spawns the user a pet cat.
+  dog:
+    description: Spawns the user a pet dog.
