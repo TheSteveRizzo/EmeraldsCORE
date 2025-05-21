@@ -38,13 +38,13 @@ public class ServerJoinPlayer implements Listener {
         if (player != null) {
             String playerGroup = perms.getPrimaryGroup(player);
             String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
-            return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
+            return prefix + playerName;
         } else {
             // If the player is offline, use OfflinePlayer to get the data
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
             String playerGroup = perms.getPrimaryGroup(null, offlinePlayer);
             String prefix = chat.getGroupPrefix("world", playerGroup);
-            return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
+            return prefix + playerName;
         }
     }
 
@@ -102,7 +102,8 @@ public class ServerJoinPlayer implements Listener {
         } else {
 
             // Display player join message
-            e.setJoinMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has joined The Emeralds.");
+            e.setJoinMessage("");
+            Bukkit.broadcastMessage(getPlayerPrefixAndName(e.getPlayer()) + ChatColor.YELLOW + " has joined The Emeralds.");
             // Update and save player rank data
             ranks.updateAndSaveData(e.getPlayer());
 

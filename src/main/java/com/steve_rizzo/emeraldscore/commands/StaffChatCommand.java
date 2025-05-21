@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,28 +25,19 @@ public class StaffChatCommand implements CommandExecutor {
             String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ServerJoinPlayer.getPlayerPrefixAndName(p) + ChatColor.GRAY + " >> ";
 
             if (p.hasPermission("emeraldsmc.staffchat")) {
-                for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
-                    if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
-                        allstaffplayer.sendMessage(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message));
-                    }
-                }
-
+                Bukkit.broadcast(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message), "emeraldsmc.staffchat");
                 return true;
 
             } else {
                 p.sendMessage(Main.prefix + ChatColor.RED + "No permission!");
                 return true;
             }
+
         } else {
 
             String staffPrefix = ChatColor.GRAY + "[" + ChatColor.AQUA + "STAFF" + ChatColor.GRAY + "] " + ChatColor.GOLD + "CONSOLE" + ChatColor.GRAY + " >> ";
 
-            for (Player allstaffplayer : Main.core.getServer().getOnlinePlayers()) {
-                if (allstaffplayer.hasPermission("emeraldsmc.staffchat")) {
-                    allstaffplayer.sendMessage(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message));
-                }
-            }
-
+            Bukkit.broadcast(staffPrefix + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message), "emeraldsmc.staffchat");
             return true;
         }
     }

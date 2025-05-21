@@ -4,6 +4,7 @@ import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.BackCommand;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,7 +20,9 @@ public class PlayerDeath implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        e.setDeathMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
+        Bukkit.broadcastMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
+
+        e.setDeathMessage("");
 
         Location deathLoc = e.getEntity().getLocation();
         String uuid = p.getUniqueId().toString();
