@@ -19,8 +19,11 @@ public class PlayerDeath implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
+
         Player p = e.getEntity();
         Bukkit.broadcastMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
+
+        if (Main.serverIDName.equalsIgnoreCase("bed")) return;
 
         e.setDeathMessage("");
 

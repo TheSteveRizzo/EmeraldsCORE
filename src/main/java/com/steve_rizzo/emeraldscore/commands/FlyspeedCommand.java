@@ -19,6 +19,8 @@ public class FlyspeedCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
 
+            if (Main.serverIDName.equalsIgnoreCase("bed")) return true;
+
             Player p = (Player) sender;
 
             if (p.hasPermission("emeralds.flyspeed")) {

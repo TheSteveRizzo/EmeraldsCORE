@@ -21,6 +21,9 @@ public class FlyCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
+            if ((Main.serverIDName.equalsIgnoreCase("bed")) &&
+            (!p.getWorld().getName().equalsIgnoreCase("world"))) return true;
+
             if (p.hasPermission("emeralds.setflight.self") || (p.hasPermission("emeralds.setflight.other"))) {
 
                 if (args.length == 0) {

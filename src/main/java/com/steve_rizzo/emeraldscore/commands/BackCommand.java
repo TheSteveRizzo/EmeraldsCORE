@@ -26,6 +26,8 @@ public class BackCommand implements Listener, CommandExecutor {
 
         if (sender instanceof Player) {
 
+            if (Main.serverIDName.equalsIgnoreCase("bed")) return true;
+
             Player p = (Player) sender;
 
             String playerUUID = p.getUniqueId().toString();

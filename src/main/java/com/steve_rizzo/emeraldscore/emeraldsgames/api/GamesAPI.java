@@ -33,11 +33,13 @@ public class GamesAPI {
                         (perms.getPrimaryGroup(player).equalsIgnoreCase("mod") ||
                                 (perms.getPrimaryGroup(player).equalsIgnoreCase("helper") ||
                                         (perms.getPrimaryGroup(player).equalsIgnoreCase("youtube") ||
-                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("elite") ||
-                                                        (perms.getPrimaryGroup(player).equalsIgnoreCase("donor4") ||
-                                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("donor3") ||
-                                                                        (perms.getPrimaryGroup(player).equalsIgnoreCase("donor2") ||
-                                                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("donor1"))))))))))) {
+                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("builder") ||
+                                                        (perms.getPrimaryGroup(player).equalsIgnoreCase("platinum") ||
+                                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("elite") ||
+                                                                        (perms.getPrimaryGroup(player).equalsIgnoreCase("donor4") ||
+                                                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("donor3") ||
+                                                                                        (perms.getPrimaryGroup(player).equalsIgnoreCase("donor2") ||
+                                                                                                (perms.getPrimaryGroup(player).equalsIgnoreCase("donor1"))))))))))))) {
             return true;
         }
 

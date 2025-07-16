@@ -182,7 +182,7 @@ public class SpecialGift implements Listener {
             LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
             int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-            if ((year == 2025) && (month == 2 || month == 3)) {
+            if ((year == 2025) && (month == 6 || month == 7 || month == 8)) {
 
                 if (day >= 1 && day < 14) {
 

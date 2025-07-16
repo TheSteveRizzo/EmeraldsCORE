@@ -26,6 +26,15 @@ public class SpawnCommand implements CommandExecutor {
 
             if (args.length == 0) {
 
+                if (Main.serverIDName.equalsIgnoreCase("sky")) {
+                    if (p.getWorld().getName().contains("SkyBlock")) {
+                        Location mainSkyWorldSpawn = new Location(Bukkit.getWorld("world"), 11.500, 75.000, -48.500, (float) 139.70, (float) 0.7);
+                        p.teleport(mainSkyWorldSpawn);
+
+                        return true;
+                    }
+                }
+
                 p.performCommand("mvspawn");
                 return true;
 

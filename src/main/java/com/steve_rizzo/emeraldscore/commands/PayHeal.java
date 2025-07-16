@@ -18,6 +18,8 @@ public class PayHeal implements CommandExecutor {
 
         if (sender instanceof Player) {
 
+            if (Main.serverIDName.equalsIgnoreCase("bed")) return true;
+
             String prefix = Main.prefix;
             Player p = (Player) sender;
 

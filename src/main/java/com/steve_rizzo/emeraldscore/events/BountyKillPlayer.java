@@ -15,6 +15,8 @@ public class BountyKillPlayer implements Listener {
     public void onBountyDeath(PlayerDeathEvent e) {
         Player died = e.getEntity();
 
+        if (Main.serverIDName.equalsIgnoreCase("bed")) return;
+
         if (e.getEntity().getKiller() != null) {
             Player killer = e.getEntity().getKiller();
 
