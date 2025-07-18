@@ -118,7 +118,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "emeraldscore:chat");
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "emeraldscore:chat", new PrefixSender());
 
-
         // Database info
         hostEmeralds = emeraldsConfig.getString("db_host");
         portEmeralds = emeraldsConfig.getString("db_port");

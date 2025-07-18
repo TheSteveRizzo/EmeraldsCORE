@@ -46,7 +46,7 @@ public class PrefixSender implements Listener, PluginMessageListener {
         String formattedMessage = String.format("chat|%s|%s|%s|%s", serverID, prefix, playerName, message);
 
         // Send the formatted message to other servers via plugin messaging channel
-        Bukkit.getServer().sendPluginMessage(core, "emeraldscore:chat", formattedMessage.getBytes(StandardCharsets.UTF_8));
+        player.sendPluginMessage(core, "emeraldscore:chat", formattedMessage.getBytes(StandardCharsets.UTF_8));
 
         // Optionally: Broadcast the message locally
         String localFormattedMessage = String.format("&7[&b%s&7] %s%s&f: %s", serverID.toUpperCase(), prefix, playerName, message);
