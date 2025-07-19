@@ -15,8 +15,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class ScubaSuit implements Listener {
 
-    private final String serverID = Main.serverIDName;
-
     // NamespacedKey for identifying the scuba suit pieces
     private static final NamespacedKey scubaKey = new NamespacedKey(Main.getInstance(), "scuba_suit");
 
@@ -73,12 +71,6 @@ public class ScubaSuit implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-
-        // Check if the server ID is "sky" (Skyblock server)
-        if (!serverID.equalsIgnoreCase("sky")) {
-            return;
-        }
-
         // Check if the player is in a boat
         if (player.isInsideVehicle() && player.getVehicle() instanceof Vehicle) {
             Vehicle vehicle = (Vehicle) player.getVehicle();

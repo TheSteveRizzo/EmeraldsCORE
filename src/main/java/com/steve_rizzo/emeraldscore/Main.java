@@ -158,8 +158,8 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPreCraft(), this);
         loadMiningPouchRecipe();;
 
-        // Load Skyblock Scuba Listener
-        Bukkit.getServer().getPluginManager().registerEvents(new ScubaSuit(), this);
+        // Load Skyblock Scuba Listener (SKY ONLY)
+        if (serverIDName.equalsIgnoreCase("sky")) Bukkit.getServer().getPluginManager().registerEvents(new ScubaSuit(), this);
 
         // Load Core Commands
         this.getCommand("rank").setExecutor(new RankCommand(this));

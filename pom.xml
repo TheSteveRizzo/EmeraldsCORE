@@ -7,38 +7,44 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>5.0</version>
+    <version>5.1</version>
     <properties>
         <maven.compiler.target>16</maven.compiler.target>
         <maven.compiler.source>16</maven.compiler.source>
     </properties>
     <build>
         <plugins>
-            <!-- MAVEN COMPILE PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
-            <!-- MAVEN JAR PLUGIN -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.2</version>
-            </plugin>
-            <!-- SHADE IN DEPENDENCY JARS -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
-                <configuration>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <!-- Exclude plugins already on the server -->
+                                    <exclude>org.spigotmc:spigot-api</exclude>
+                                    <exclude>com.github.MilkBowl:VaultAPI</exclude>
+                                    <exclude>de.myzelyam:SuperVanish</exclude>
+                                    <exclude>com.discordsrv:discordsrv</exclude>
+                                    <exclude>com.comphenix.protocol:ProtocolLib</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -94,16 +100,13 @@
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>bs-repo-releases</id>
+            <url>https://repo.bsdevelopment.org/releases</url>
+        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
-        <!-- MAVEN COMPILER -->
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
-            <type>maven-plugin</type>
-        </dependency>
         <!-- Spigot -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -143,6 +146,7 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.8.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- DiscordSRV for Jobs -->
         <dependency>
