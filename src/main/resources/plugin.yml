@@ -136,3 +136,6 @@ commands:
     description: Spawns the user a pet cat.
   dog:
     description: Spawns the user a pet dog.
+  applybedwarstokens:
+    description: Applies Bed Wars tokens to a user based on award type.
+    aliases: [ apbt ]

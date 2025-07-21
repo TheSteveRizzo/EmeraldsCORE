@@ -1,5 +1,6 @@
 package com.steve_rizzo.emeraldscore;
 
+import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
 import com.steve_rizzo.emeraldscore.chat.PrefixSender;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
@@ -222,6 +223,10 @@ public class Main extends JavaPlugin {
         // Emeralds Simple Pet Handler
         this.getCommand("cat").setExecutor(new CatCommand());
         this.getCommand("dog").setExecutor(new DogCommand());
+
+        // Emeralds Bed Wars Commands
+        this.getCommand("applybedwarstokens").setExecutor(new ApplyBedWarsTokens());
+
 
         // Database Connection
         hikari = new HikariDataSource();
