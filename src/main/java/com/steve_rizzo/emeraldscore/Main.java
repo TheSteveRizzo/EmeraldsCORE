@@ -1,5 +1,6 @@
 package com.steve_rizzo.emeraldscore;
 
+import com.andrei1058.bedwars.api.BedWars;
 import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
 import com.steve_rizzo.emeraldscore.chat.PrefixSender;
 import com.steve_rizzo.emeraldscore.commands.*;
@@ -55,6 +56,8 @@ public class Main extends JavaPlugin {
     }
 
     private Economy provider;
+
+    public static BedWars bwAPI;
 
     public void hook() {
         provider = economyImplementer;
@@ -258,6 +261,10 @@ public class Main extends JavaPlugin {
         // Load Job Task Data
         JobHandler.loadJobsFromConfig();
 
+        // Load Bed Wars API (if Bed Wars server ONLY)
+        if (serverIDName.equalsIgnoreCase("bed")) {
+            bwAPI = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
+        }
     }
 
     private void handleServerIDConfig() {

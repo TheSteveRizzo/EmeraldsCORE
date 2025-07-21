@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ApplyBedWarsTokens implements CommandExecutor {
 
@@ -70,7 +71,9 @@ public class ApplyBedWarsTokens implements CommandExecutor {
         int tokensAwarded = baseTokens.get(awardType) + multiplier;
 
         TokensAPI.addTokens(target, tokensAwarded);
-        sender.sendMessage(Main.prefix + ChatColor.GREEN + "Awarded " + tokensAwarded + " tokens to " + playerName + " for " + awardType + ".");
+        Bukkit.getLogger().log(Level.INFO, "Awarded " + tokensAwarded + " tokens to " + target.getName() +
+                " (Group: " + group + ", Multiplier: " + multiplier + ", AwardType: " + awardType + ")");
+        target.sendMessage(Main.prefix + ChatColor.GRAY + "The amount of " + ChatColor.GREEN + tokensAwarded + ChatColor.GRAY + " TOKENS were added to your balance.");
         return true;
     }
 

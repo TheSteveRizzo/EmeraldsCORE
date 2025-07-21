@@ -50,6 +50,10 @@ public class PrefixSender implements Listener, PluginMessageListener {
 
         // Optionally: Broadcast the message locally
         String localFormattedMessage = String.format("&7[&b%s&7] %s%s&f: %s", serverID.toUpperCase(), prefix, playerName, message);
+        if (serverID.equalsIgnoreCase("bed")) {
+            int xpLevel = Main.bwAPI.getLevelsUtil().getPlayerLevel(player);
+            localFormattedMessage = String.format("&7[&b%s&7] &7[&b%d&e✦&7] %s%s&f: %s", serverID.toUpperCase(), xpLevel, prefix, playerName, message);
+        }
         Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', localFormattedMessage));
 
         // Send message through Discord SRV
