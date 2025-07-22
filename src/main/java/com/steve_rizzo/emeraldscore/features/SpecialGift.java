@@ -226,11 +226,10 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
                 + ChatColor.YELLOW + " just claimed a "
                 + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + "" + ChatColor.BOLD + "Emeralds "
-                + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Queen"
+                + ChatColor.GREEN + ChatColor.BOLD + "Emeralds Queen"
                 + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
         Bukkit.broadcastMessage(message);
@@ -246,12 +245,11 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
                 + ChatColor.YELLOW + " just claimed a "
                 + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " "
                 + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + "" + ChatColor.BOLD + "Emeralds "
-                + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Queen"
+                + ChatColor.GREEN + ChatColor.BOLD + "Emeralds Queen"
                 + ChatColor.YELLOW + "! Donors receive extra rewards!";
 
         Bukkit.broadcastMessage(message);
@@ -267,11 +265,10 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
                 + ChatColor.YELLOW + " just claimed a "
                 + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + "" + ChatColor.BOLD + "War "
-                + ChatColor.AQUA + "" + ChatColor.BOLD + "Leader"
+                + ChatColor.AQUA + ChatColor.BOLD + "War Leader"
                 + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
         Bukkit.broadcastMessage(message);
@@ -287,12 +284,11 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
                 + ChatColor.YELLOW + " just claimed a "
                 + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " "
                 + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + "" + ChatColor.BOLD + "War "
-                + ChatColor.AQUA + "" + ChatColor.BOLD + "Leader"
+                + ChatColor.AQUA + ChatColor.BOLD + "War Leader"
                 + ChatColor.YELLOW + "! Donors receive extra rewards!";
 
         Bukkit.broadcastMessage(message);
