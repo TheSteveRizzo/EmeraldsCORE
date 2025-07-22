@@ -133,93 +133,14 @@ public class TokenShopCommand implements Listener, CommandExecutor {
             addTokenShopItem(41, tokenShop, SLIME_BLOCK, itemThirtyName, 1);
             addTokenShopItem(42, tokenShop, HONEY_BLOCK, itemThirtyOneName, 1);
 
-        } else if (Main.serverIDName.equalsIgnoreCase("fac")) {
+        } else if (Main.serverIDName.equalsIgnoreCase("bed")) {
 
+            String warCrateKeyName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
+                    + ChatColor.AQUA + "WAR CRATE KEY").replace("%COST%", "15 TOKENS");
 
-
-            ItemStack pouch = new ItemStack(ENDER_CHEST);
-            ItemStack trap = new ItemStack(BARREL);
-
-
-            String itemTwoName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                            + ChatColor.GREEN + "SKELETON SPAWNER")
-                    .replace("%COST%", "10 TOKENS"),
-                    itemThreeName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "SPIDER SPAWNER")
-                            .replace("%COST%", "10 TOKENS"),
-                    itemFourName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "ZOMBIE SPAWNER")
-                            .replace("%COST%", "10 TOKENS"),
-                    itemFiveName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "CAVE SPIDER SPAWNER")
-                            .replace("%COST%", "10 TOKENS"),
-                    itemSixName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "BLAZE SPAWNER")
-                            .replace("%COST%", "10 TOKENS"),
-
-                    itemTwelveName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Regular Ground Buster")
-                            .replace("%COST%", "5 TOKENS"),
-
-                    itemThirteenName = "",
-
-                    itemFourteenName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Large Ground Buster")
-                            .replace("%COST%", "10 TOKENS"),
-
-                    itemTwentyOneName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "MINING POUCH")
-                            .replace("%COST%", "10 TOKENS"),
-
-                    itemTwentyTwoName = "",
-
-
-                    itemTwentyThreeName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "MOB TRAP")
-                            .replace("%COST%", "15 TOKENS"),
-
-                    itemTwentySevenName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Emerald Crate Key")
-                            .replace("%COST%", "2 Tokens"),
-
-                    itemTwentyEightName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Tools Crate Key")
-                            .replace("%COST%", "2 Tokens"),
-
-                    itemTwentyNineName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Factions Crate Key")
-                            .replace("%COST%", "2 Tokens"),
-
-                    itemThirtyName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Egg Crate Key")
-                            .replace("%COST%", "2 Tokens"),
-
-                    itemThirtyOneName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
-                                    + ChatColor.GREEN + "Decor Crate Key")
-                            .replace("%COST%", "1 Token");
-
-            addTokenShopItem(11, tokenShop, SPAWNER, itemTwoName, 10);
-            addTokenShopItem(12, tokenShop, SPAWNER, itemThreeName, 10);
-            addTokenShopItem(13, tokenShop, SPAWNER, itemFourName, 10);
-            addTokenShopItem(14, tokenShop, SPAWNER, itemFiveName, 10);
-            addTokenShopItem(15, tokenShop, SPAWNER, itemSixName, 10);
-
-            addTokenShopItem(21, tokenShop, OBSIDIAN, itemTwelveName, 5);
-            //addTokenShopItem(13, tokenShop, AIR, itemThirteenName, 0);
-            addTokenShopItem(23, tokenShop, CRYING_OBSIDIAN, itemFourteenName, 10);
-
-            addTokenShopItem(30, tokenShop, pouch.getType(), itemTwentyOneName, 10);
-            //addTokenShopItem(31, tokenShop, COOKED_BEEF, itemTwentyTwoName, 1);
-            addTokenShopItem(32, tokenShop, trap.getType(), itemTwentyThreeName, 15);
-
-            addTokenShopItem(38, tokenShop, OCHRE_FROGLIGHT, itemTwentySevenName, 2);
-            addTokenShopItem(39, tokenShop, VERDANT_FROGLIGHT, itemTwentyEightName, 2);
-            addTokenShopItem(40, tokenShop, PEARLESCENT_FROGLIGHT, itemTwentyNineName, 2);
-            addTokenShopItem(41, tokenShop, SLIME_BLOCK, itemThirtyName, 1);
-            addTokenShopItem(42, tokenShop, HONEY_BLOCK, itemThirtyOneName, 1);
+            addTokenShopItem(2, tokenShop, TRIPWIRE_HOOK, warCrateKeyName, 15);
 
         } else if (Main.serverIDName.equalsIgnoreCase("sky")) {
-
 
             String itemTwoName = itemFormat.replace("%ENTER%", ChatColor.RED + "1x "
                             + ChatColor.GREEN + "SKELETON SPAWNER")
@@ -387,18 +308,10 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                 default:
                     return 0;
             }
-        } else if (Main.serverIDName.equalsIgnoreCase("fac")) {
+        } else if (Main.serverIDName.equalsIgnoreCase("bed")) {
             switch (item.getType()) {
-                case SPAWNER, ENDER_CHEST, CRYING_OBSIDIAN:
-                    return 10;
-                case BARREL:
+                case TRIPWIRE_HOOK:
                     return 15;
-                case OBSIDIAN:
-                    return 5;
-                case OCHRE_FROGLIGHT, VERDANT_FROGLIGHT, PEARLESCENT_FROGLIGHT:
-                    return 2;
-                case SLIME_BLOCK, HONEY_BLOCK:
-                    return 1;
                 default:
                     return 0;
             }
@@ -690,228 +603,29 @@ public class TokenShopCommand implements Listener, CommandExecutor {
                 default:
                     return;
             }
-        } else if (Main.serverIDName.equalsIgnoreCase("fac")) {
+        } else if (Main.serverIDName.equalsIgnoreCase("bed")) {
             switch (purchasedItem.getType()) {
 
-                case SPAWNER:
-
-                    // /spawners give <Player> <Type> [Amount]
-
+                case TRIPWIRE_HOOK:
                     if (purchasedItem.getItemMeta().hasDisplayName()) {
 
-                        if (purchasedItem.getItemMeta().getDisplayName().contains("SKELETON SPAWNER")) {
+                        if (purchasedItem.getItemMeta().getDisplayName().contains("WAR CRATE KEY")) {
 
                             getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "spawners give " + player.getName() + " SKELETON 1");
+                                    "ecrates key give " + player.getName() + " warcrate 1");
 
                             getServer().broadcastMessage(Main.prefix
                                     + ServerJoinPlayer.getPlayerPrefixAndName(player)
                                     + ChatColor.LIGHT_PURPLE + " just purchased "
-                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x SKELETON SPAWNER"
+                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x " + ChatColor.AQUA + "WARCRATE KEY"
                                     + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
                                     + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
                             );
 
                             return;
-
-                        } else if (purchasedItem.getItemMeta().getDisplayName().contains("SPIDER SPAWNER") &&
-                                (!purchasedItem.getItemMeta().getDisplayName().contains("CAVE SPIDER"))) {
-
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "spawners give " + player.getName() + " SPIDER 1");
-
-                            getServer().broadcastMessage(Main.prefix
-                                    + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                                    + ChatColor.LIGHT_PURPLE + " just purchased "
-                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x SPIDER SPAWNER"
-                                    + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                                    + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                            );
-
-                            return;
-
-                        } else if (purchasedItem.getItemMeta().getDisplayName().contains("ZOMBIE SPAWNER")) {
-
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "spawners give " + player.getName() + " ZOMBIE 1");
-
-                            getServer().broadcastMessage(Main.prefix
-                                    + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                                    + ChatColor.LIGHT_PURPLE + " just purchased "
-                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x ZOMBIE SPAWNER"
-                                    + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                                    + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                            );
-
-                            return;
-
-
-                        } else if (purchasedItem.getItemMeta().getDisplayName().contains("CAVE SPIDER SPAWNER")) {
-
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "spawners give " + player.getName() + " CAVE_SPIDER 1");
-
-                            getServer().broadcastMessage(Main.prefix
-                                    + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                                    + ChatColor.LIGHT_PURPLE + " just purchased "
-                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x CAVE SPIDER SPAWNER"
-                                    + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                                    + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                            );
-
-                            return;
-
-
-                        } else if (purchasedItem.getItemMeta().getDisplayName().contains("BLAZE SPAWNER")) {
-
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "spawners give " + player.getName() + " BLAZE 1");
-
-                            getServer().broadcastMessage(Main.prefix
-                                    + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                                    + ChatColor.LIGHT_PURPLE + " just purchased "
-                                    + ChatColor.GRAY + "(" + ChatColor.RED + "1x BLAZE SPAWNER"
-                                    + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                                    + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                            );
-
-                            return;
-
 
                         }
                     }
-
-                    return;
-
-                // Give Mining Pouch
-                case ENDER_CHEST:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x MINING POUCH"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    Pouch pouch = new Pouch(); // Create an empty pouch
-                    player.getInventory().addItem(pouch.getPouch()); // The pouch already has the correct metadata
-
-                    return;
-
-                // Give NEKO Trap
-                case BARREL:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x MOB TRAP"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "nekotraps give " + player.getName());
-
-                    return;
-
-
-                // Give Emerald Crate key
-                case OCHRE_FROGLIGHT:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x Emerald Crate key"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "ecrates key give " + player.getName() + " emerald 1");
-
-                    return;
-
-                // Give Tools Crate key
-                case VERDANT_FROGLIGHT:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x Tool Crate key"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "ecrates key give " + player.getName() + " tool 1");
-                    return;
-
-                // Give Factions Crate key
-                case PEARLESCENT_FROGLIGHT:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x Factions Crate key"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "ecrates key give " + player.getName() + " factions 1");
-                    return;
-
-                // Give Egg Crate key
-                case SLIME_BLOCK:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x Egg Crate key"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "ecrates key give " + player.getName() + " egg 1");
-                    return;
-
-                // Give Decor Crate key
-                case HONEY_BLOCK:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x Decor Crate key"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "ecrates key give " + player.getName() + " decor 1");
-                    return;
-
-                // Give SMALL Ground Buster
-                case OBSIDIAN:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x SMALL Ground Buster"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "buster give " + player.getName() + " regular_buster 1");
-                    return;
-
-                // Give LARGE Ground Buster
-                case CRYING_OBSIDIAN:
-                    getServer().broadcastMessage(Main.prefix
-                            + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                            + ChatColor.LIGHT_PURPLE + " just purchased "
-                            + ChatColor.GRAY + "(" + ChatColor.RED + "1x LARGE Ground Buster"
-                            + ChatColor.GRAY + ")" + ChatColor.LIGHT_PURPLE + " from the "
-                            + ChatColor.GREEN + "Token Shop" + ChatColor.LIGHT_PURPLE + "!"
-                    );
-
-                    getServer().dispatchCommand(getServer().getConsoleSender(),
-                            "buster give " + player.getName() + " large_buster 1");
-                    return;
                 default:
                     return;
             }

@@ -3,6 +3,7 @@ package com.steve_rizzo.emeraldscore.features;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.emeraldsgames.api.GamesAPI;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import net.minecraft.server.v1_16_R3.CommandSaveOn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,298 +26,279 @@ import static org.bukkit.Bukkit.getServer;
 // Class for "Special Gift" promotions, which provides users with a gift for each day specified!
 public class SpecialGift implements Listener {
 
+    public class GiftOption {
+        public String command;
+        public int weight;
+        public GiftType type;
+        public String displayName;  // <-- Add this field
+
+        public GiftOption(String command, int weight, GiftType type, String displayName) {
+            this.command = command;
+            this.weight = weight;
+            this.type = type;
+            this.displayName = displayName;
+        }
+    }
+
+    public enum GiftType {
+        COMMON("COMMON", ChatColor.GRAY),
+        UNCOMMON("UNCOMMON", ChatColor.GREEN),
+        RARE("RARE", ChatColor.BLUE),
+        LEGENDARY("LEGENDARY", ChatColor.YELLOW),
+        EXCLUSIVE("EXCLUSIVE", ChatColor.DARK_PURPLE);
+
+        public final String name;
+        public final ChatColor color;
+
+        GiftType(String name, ChatColor color) {
+            this.name = name;
+            this.color = color;
+        }
+    }
+
+
     FileConfiguration config = Main.core.cooldownConfig;
 
-
-    ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
-
-    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 01 TO OCT 07
-    private List<String> week1GiftList = Arrays.asList(
-            "givebal {user} 2500",                  // ND Cash amount
-            "give {user} minecraft:emerald 2",       // ND Emerald Amount
-            "give {user} minecraft:diamond 6",       // ND Diamond Amount
-            "give {user} minecraft:cooked_beef 16",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:bookshelf 32",
-            "give {user} minecraft:raw_iron 32",
-            "give {user} minecraft:stone 32",
-            "give {user} minecraft:deepslate 32",
-            "give {user} minecraft:white_concrete 32",
-            "give {user} minecraft:black_concrete 32",
-            "give {user} minecraft:sea_lantern 8",
-            "givetokens {user} 2",
-            "voucher give {user} LotteryVoucher 2"
-
+    private List<GiftOption> regularGiftList = Arrays.asList(
+            new GiftOption("givebal {user} 2500", 8, GiftType.COMMON, "$2,500 Emeralds Cash"),
+            new GiftOption("givebal {user} 5000", 6, GiftType.UNCOMMON, "$5,000 Emeralds Cash"),
+            new GiftOption("givebal {user} 7500", 4, GiftType.RARE, "$7,500 Emeralds Cash"),
+            new GiftOption("givebal {user} 10000", 2, GiftType.LEGENDARY, "$10,000 Emeralds Cash"),
+            new GiftOption("givebal {user} 12500", 1, GiftType.EXCLUSIVE, "$12,500 Emeralds Cash"),
+            new GiftOption("give {user} minecraft:emerald 2", 6, GiftType.UNCOMMON, "2x Emeralds"),
+            new GiftOption("give {user} minecraft:emerald 4", 4, GiftType.RARE, "4x Emeralds"),
+            new GiftOption("give {user} minecraft:emerald 8", 2, GiftType.LEGENDARY, "8x Emeralds"),
+            new GiftOption("give {user} minecraft:diamond 6", 8, GiftType.COMMON, "6x Diamonds"),
+            new GiftOption("give {user} minecraft:diamond 8", 6, GiftType.UNCOMMON, "8x Diamonds"),
+            new GiftOption("give {user} minecraft:diamond 12", 4, GiftType.RARE, "12x Diamonds"),
+            new GiftOption("give {user} minecraft:cooked_beef 16", 10, GiftType.COMMON, "16x Cooked Beef"),
+            new GiftOption("give {user} minecraft:cooked_beef 32", 8, GiftType.COMMON, "32x Cooked Beef"),
+            new GiftOption("give {user} minecraft:cooked_beef 48", 6, GiftType.UNCOMMON, "48x Cooked Beef"),
+            new GiftOption("give {user} minecraft:white_wool 64", 6, GiftType.UNCOMMON, "64x White Wool"),
+            new GiftOption("give {user} minecraft:bookshelf 32", 6, GiftType.UNCOMMON, "32x Bookshelf"),
+            new GiftOption("give {user} minecraft:pumpkin_pie 16", 6, GiftType.UNCOMMON, "16x Pumpkin Pie"),
+            new GiftOption("give {user} minecraft:cake 8", 6, GiftType.UNCOMMON, "8x Cake"),
+            new GiftOption("give {user} minecraft:raw_iron 32", 10, GiftType.COMMON, "32x Raw Iron"),
+            new GiftOption("give {user} minecraft:raw_iron 64", 6, GiftType.UNCOMMON, "64x Raw Iron"),
+            new GiftOption("give {user} minecraft:raw_iron 128", 4, GiftType.RARE, "128x Raw Iron"),
+            new GiftOption("give {user} minecraft:stone 32", 10, GiftType.COMMON, "32x Stone"),
+            new GiftOption("give {user} minecraft:stone 64", 8, GiftType.COMMON, "64x Stone"),
+            new GiftOption("give {user} minecraft:stone 256", 6, GiftType.UNCOMMON, "256x Stone"),
+            new GiftOption("give {user} minecraft:deepslate 32", 10, GiftType.COMMON, "32x Deepslate"),
+            new GiftOption("give {user} minecraft:deepslate 64", 8, GiftType.COMMON, "64x Deepslate"),
+            new GiftOption("give {user} minecraft:deepslate 128", 6, GiftType.UNCOMMON, "128x Deepslate"),
+            new GiftOption("give {user} minecraft:white_concrete 32", 10, GiftType.COMMON, "32x White Concrete"),
+            new GiftOption("give {user} minecraft:white_concrete 64", 8, GiftType.COMMON, "64x White Concrete"),
+            new GiftOption("give {user} minecraft:black_concrete 32", 6, GiftType.UNCOMMON, "32x Black Concrete"),
+            new GiftOption("give {user} minecraft:black_concrete 64", 4, GiftType.RARE, "64x Black Concrete"),
+            new GiftOption("give {user} minecraft:raw_gold 32", 6, GiftType.UNCOMMON, "32x Raw Gold"),
+            new GiftOption("give {user} minecraft:sea_lantern 8", 4, GiftType.RARE, "8x Sea Lantern"),
+            new GiftOption("givetokens {user} 2", 2, GiftType.LEGENDARY, "2x Emeralds Tokens"),
+            new GiftOption("givetokens {user} 4", 1, GiftType.EXCLUSIVE, "4x Emeralds Tokens"),
+            new GiftOption("voucher give {user} LotteryVoucher 2", 2, GiftType.LEGENDARY, "2x Lottery Vouchers"),
+            new GiftOption("voucher give {user} LotteryVoucher 4", 1, GiftType.EXCLUSIVE, "4x Lottery Vouchers")
     );
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 07 TO OCT 14
-    private List<String> week2GiftList = Arrays.asList(
-            "givebal {user} 5000",                  // ND Cash amount
-            "give {user} minecraft:emerald 4",       // ND Emerald Amount
-            "give {user} minecraft:diamond 8",       // ND Diamond Amount
-            "give {user} minecraft:cooked_beef 32",
-            "give {user} minecraft:bookshelf 32",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:pumpkin_pie 16",
-            "give {user} minecraft:cake 8",
-            "give {user} minecraft:raw_iron 64",
-            "give {user} minecraft:stone 64",
-            "give {user} minecraft:deepslate 64",
-            "give {user} minecraft:white_concrete 64",
-            "give {user} minecraft:black_concrete 32",
-            "givetokens {user} 2",
-            "voucher give {user} LotteryVoucher 2"
-
+    private List<GiftOption> donorGiftList = Arrays.asList(
+            new GiftOption("givebal {user} 7500", 8, GiftType.COMMON, "$7,500 Emeralds Cash"),
+            new GiftOption("givebal {user} 10000", 6, GiftType.UNCOMMON, "$10,000 Emeralds Cash"),
+            new GiftOption("givebal {user} 12500", 4, GiftType.RARE, "$12,500 Emeralds Cash"),
+            new GiftOption("give {user} minecraft:emerald 8", 6, GiftType.UNCOMMON, "8x Emeralds"),
+            new GiftOption("give {user} minecraft:emerald 12", 4, GiftType.RARE, "12x Emeralds"),
+            new GiftOption("give {user} minecraft:emerald 16", 2, GiftType.LEGENDARY, "16x Emeralds"),
+            new GiftOption("give {user} minecraft:diamond 12", 6, GiftType.UNCOMMON, "12x Diamonds"),
+            new GiftOption("give {user} minecraft:diamond 16", 4, GiftType.RARE, "16x Diamonds"),
+            new GiftOption("give {user} minecraft:diamond 32", 4, GiftType.RARE, "32x Diamonds"),
+            new GiftOption("give {user} minecraft:cooked_beef 48", 8, GiftType.COMMON, "48x Cooked Beef"),
+            new GiftOption("give {user} minecraft:cooked_beef 64", 8, GiftType.COMMON, "64x Cooked Beef"),
+            new GiftOption("give {user} minecraft:bookshelf 64", 6, GiftType.UNCOMMON, "64x Bookshelf"),
+            new GiftOption("give {user} minecraft:white_wool 64", 6, GiftType.UNCOMMON, "64x White Wool"),
+            new GiftOption("give {user} minecraft:netherite_ingot 2", 4, GiftType.RARE, "2x Netherite Ingots"),
+            new GiftOption("give {user} minecraft:netherite_ingot 4", 2, GiftType.LEGENDARY, "4x Netherite Ingots"),
+            new GiftOption("give {user} minecraft:netherite_ingot 6", 1, GiftType.EXCLUSIVE, "6x Netherite Ingots"),
+            new GiftOption("give {user} minecraft:raw_iron 128", 6, GiftType.UNCOMMON, "128x Raw Iron"),
+            new GiftOption("give {user} minecraft:raw_iron 256", 4, GiftType.RARE, "256x Raw Iron"),
+            new GiftOption("give {user} minecraft:obsidian 64", 4, GiftType.RARE, "64x Obsidian"),
+            new GiftOption("give {user} minecraft:glass 128", 6, GiftType.UNCOMMON, "128x Glass"),
+            new GiftOption("give {user} minecraft:sea_lantern 16", 4, GiftType.RARE, "16x Sea Lantern"),
+            new GiftOption("give {user} minecraft:black_concrete 16", 6, GiftType.UNCOMMON, "16x Black Concrete"),
+            new GiftOption("give {user} minecraft:black_concrete 64", 4, GiftType.RARE, "64x Black Concrete"),
+            new GiftOption("give {user} minecraft:beacon 1", 1, GiftType.EXCLUSIVE, "1x Beacon"),
+            new GiftOption("give {user} minecraft:wither_skeleton_skull 1", 1, GiftType.EXCLUSIVE, "1x Wither Skeleton Skull"),
+            new GiftOption("give {user} minecraft:heart_of_the_sea 1", 2, GiftType.LEGENDARY, "1x Heart of the Sea"),
+            new GiftOption("give {user} minecraft:golden_apple 2", 2, GiftType.LEGENDARY, "2x Golden Apple"),
+            new GiftOption("give {user} minecraft:enchanted_golden_apple 1", 2, GiftType.LEGENDARY, "1x Enchanted Golden Apple"),
+            new GiftOption("givetokens {user} 3", 4, GiftType.RARE, "3x Emeralds Tokens"),
+            new GiftOption("givetokens {user} 4", 2, GiftType.LEGENDARY, "4x Emeralds Tokens"),
+            new GiftOption("givetokens {user} 5", 1, GiftType.EXCLUSIVE, "5x Emeralds Tokens"),
+            new GiftOption("voucher give {user} LotteryVoucher 4", 2, GiftType.LEGENDARY, "4x Lottery Vouchers"),
+            new GiftOption("voucher give {user} LotteryVoucher 6", 1, GiftType.EXCLUSIVE, "6x Lottery Vouchers")
     );
 
-    // GIFT LIST FOR (NON-DONOR USERS), FROM OCT 21+
-    private List<String> week3GiftList = Arrays.asList(
-            "givebal {user} 7500",                  // ND Cash amount
-            "give {user} minecraft:emerald 8",       // ND Emerald Amount
-            "give {user} minecraft:diamond 12",       // ND Diamond Amount
-            "give {user} minecraft:cooked_beef 48",
-            "give {user} minecraft:bookshelf 32",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:raw_iron 128",
-            "give {user} minecraft:stone 256",
-            "give {user} minecraft:deepslate 128",
-            "give {user} minecraft:raw_gold 32",
-            "give {user} minecraft:black_concrete 64",
-            "givetokens {user} 4",
-            "voucher give {user} LotteryVoucher 3"
-
+    private List<GiftOption> bedWarsGiftList = Arrays.asList(
+            new GiftOption("bw level giveXp {user} 500", 16, GiftType.COMMON, "500 BedWars XP"),
+            new GiftOption("givebal {user} 1000", 16, GiftType.COMMON, "$1,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 750", 16, GiftType.COMMON, "750 BedWars XP"),
+            new GiftOption("givebal {user} 5000", 16, GiftType.COMMON, "$5,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 1000", 16, GiftType.COMMON, "1,000 BedWars XP"),
+            new GiftOption("givetokens {user} 5", 3, GiftType.UNCOMMON, "5x Emeralds Tokens"),
+            new GiftOption("givebal {user} 10000", 3, GiftType.UNCOMMON, "$10,000 Emeralds Cash"),
+            new GiftOption("givetokens {user} 10", 3, GiftType.UNCOMMON, "10x Emeralds Tokens"),
+            new GiftOption("givebal {user} 20000", 3, GiftType.UNCOMMON, "$20,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 2000", 3, GiftType.UNCOMMON, "2,000 BedWars XP"),
+            new GiftOption("ecrates key give {user} warcrate 1", 1, GiftType.RARE, "1x Warcrate Key"),
+            new GiftOption("givebal {user} 30000", 1, GiftType.RARE, "$30,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 5000", 1, GiftType.RARE, "5,000 BedWars XP"),
+            new GiftOption("givetokens {user} 15", 1, GiftType.RARE, "15x Emeralds Tokens"),
+            new GiftOption("ecrates key give {user} warcrate 2", 1, GiftType.EXCLUSIVE, "2x Warcrate Keys")
     );
 
-
-
-    ////// INTENTIONAL SEPARATION BETWEEN NON-DONOR & DONOR GIFTS
-
-
-
-    // GIFT LIST FOR (DONOR USERS), FROM OCT 01 TO OCT 07 (Same as before)
-    private List<String> week1DonorGiftList = Arrays.asList(
-            "givebal {user} 7500",                  // D Cash amount
-            "give {user} minecraft:emerald 8",       // D Emerald Amount
-            "give {user} minecraft:diamond 12",       // D Diamond Amount
-            "give {user} minecraft:cooked_beef 48",
-            "give {user} minecraft:bookshelf 64",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:netherite_ingot 2",
-            "give {user} minecraft:black_concrete 16",
-            "give {user} minecraft:wither_skeleton_skull 1",
-            "givetokens {user} 3",
-            "voucher give {user} LotteryVoucher 4"
-
+    private List<GiftOption> bedWarsDonorGiftList = Arrays.asList(
+            new GiftOption("givebal {user} 2000", 20, GiftType.COMMON, "$2,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 1250", 20, GiftType.COMMON, "1,250 BedWars XP"),
+            new GiftOption("givebal {user} 3000", 17, GiftType.UNCOMMON, "$3,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 2000", 17, GiftType.UNCOMMON, "2,000 BedWars XP"),
+            new GiftOption("givebal {user} 5000", 4, GiftType.RARE, "$5,000 Emeralds Cash"),
+            new GiftOption("givebal {user} 10000", 4, GiftType.RARE, "$10,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 5000", 4, GiftType.RARE, "5,000 BedWars XP"),
+            new GiftOption("givebal {user} 20000", 4, GiftType.RARE, "$20,000 Emeralds Cash"),
+            new GiftOption("givetokens {user} 10", 4, GiftType.RARE, "10x Emeralds Tokens"),
+            new GiftOption("bw level giveXp {user} 8000", 4, GiftType.RARE, "8,000 BedWars XP"),
+            new GiftOption("givebal {user} 40000", 4, GiftType.RARE, "$40,000 Emeralds Cash"),
+            new GiftOption("givetokens {user} 20", 2, GiftType.LEGENDARY, "20x Emeralds Tokens"),
+            new GiftOption("givebal {user} 50000", 2, GiftType.LEGENDARY, "$50,000 Emeralds Cash"),
+            new GiftOption("bw level giveXp {user} 9000", 2, GiftType.LEGENDARY, "9,000 BedWars XP"),
+            new GiftOption("ecrates key give {user} warcrate 5", 1, GiftType.EXCLUSIVE, "5x Warcrate Keys")
     );
 
-    // GIFT LIST FOR (DONOR USERS), FROM OCT 07 TO OCT 14 (Same as before)
-    private List<String> week2DonorGiftList = Arrays.asList(
-            "givebal {user} 10000",                  // D Cash amount
-            "give {user} minecraft:emerald 12",       // D Emerald Amount
-            "give {user} minecraft:diamond 16",       // D Diamond Amount
-            "give {user} minecraft:cooked_beef 64",
-            "give {user} minecraft:bookshelf 64",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:netherite_ingot 4",
-            "give {user} minecraft:raw_iron 128",
-            "give {user} minecraft:obsidian 64",
-            "give {user} minecraft:sea_lantern 16",
-            "give {user} minecraft:black_concrete 64",
-            "give {user} minecraft:beacon 1",
-            "give {user} minecraft:wither_skeleton_skull 1",
-            "givetokens {user} 4",
-            "voucher give {user} LotteryVoucher 4"
-
-    );
-
-    // GIFT LIST FOR (DONOR USERS), FROM OCT 21+ (Same as before)
-    private List<String> week3DonorGiftList = Arrays.asList(
-            "givebal {user} 12500",                  // D Cash amount
-            "give {user} minecraft:emerald 16",       // D Emerald Amount
-            "give {user} minecraft:diamond 32",       // D Diamond Amount
-            "give {user} minecraft:cooked_beef 64",
-            "give {user} minecraft:bookshelf 64",
-            "give {user} minecraft:white_wool 64",
-            "give {user} minecraft:netherite_ingot 6",
-            "give {user} minecraft:raw_iron 256",
-            "give {user} minecraft:glass 128",
-            "give {user} minecraft:black_concrete 64",
-            "give {user} minecraft:heart_of_the_sea 1",
-            "give {user} minecraft:golden_apple 2",
-            "give {user} minecraft:enchanted_golden_apple 1",
-            "give {user} minecraft:wither_skeleton_skull 1",
-            "givetokens {user} 5",
-            "voucher give {user} LotteryVoucher 6"
-
-    );
 
     @EventHandler
-    public void onMagicLordClick(PlayerInteractEntityEvent e) {
-
-        Entity emeraldsQueen;
+    public void onClickGiftNPC(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
+        String clickedName = e.getRightClicked().getName();
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("vote")) {
-            p.performCommand("vote");
-        }
+        if (clickedName.equalsIgnoreCase("vote")) p.performCommand("vote");
+        if (clickedName.equalsIgnoreCase("kits")) p.performCommand("kits");
+        if (clickedName.equalsIgnoreCase("bounty") || clickedName.equalsIgnoreCase("bounty2")) p.performCommand("bounty");
+        if (clickedName.equalsIgnoreCase("rtp") || clickedName.equalsIgnoreCase("rtp2")) p.performCommand("rtp");
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("kits")) {
-            p.performCommand("kits");
-        }
+        Date curDate = new Date();
+        LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
+        int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-        if (e.getRightClicked().getName().equalsIgnoreCase("bounty") ||
-                (e.getRightClicked().getName().equalsIgnoreCase("bounty2"))) {
-            p.performCommand("bounty");
-        }
-
-        if (e.getRightClicked().getName().equalsIgnoreCase("rtp") ||
-                (e.getRightClicked().getName().equalsIgnoreCase("rtp2"))) {
-            p.performCommand("rtp");
-        }
-
-        if (e.getRightClicked().getName().equalsIgnoreCase("EmeraldsQueen")) {
-
-            emeraldsQueen = e.getRightClicked();
-            // Current date
-            Date curDate = new Date();
-            LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
-            int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
-
-            if ((year == 2025) && (month == 6 || month == 7 || month == 8)) {
-
-                if (day >= 1 && day < 14) {
-
-                    // Run the WEEK 1 commands (DONOR)
+        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("WarLeader")) {
+            if (year == 2025 && month == 7) {
+                if (isInCooldown(p)) {
                     if (isDonor(p)) {
-
-                        if (isInCooldown(p)) {
-
-                            giveDonorGift(p, 1);
-                            addToCooldown(p);
-                        } else {
-
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
-
-                        // Run the WEEK 1 commands (NON-DONOR)
+                        giveBedWarsGiftDonor(p);
                     } else {
-
-                        if (isInCooldown(p)) {
-                            giveRegularGift(p, 1);
-                            addToCooldown(p);
-                        } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
+                        giveBedWarsGiftReg(p);
                     }
+                    addToCooldown(p);
+                } else {
+                    p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a Bed Wars gift today. You may receive your next gift in: " +
+                            ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
+                }
+            }
+        }
 
-                } else if (day >= 14 && day < 21) {
-
-                    // Run the WEEK 2 commands (DONOR)
+        if (clickedName.equalsIgnoreCase("EmeraldsQueen")) {
+            if (year == 2025 && month == 7) {
+                if (isInCooldown(p)) {
                     if (isDonor(p)) {
-
-                        if (isInCooldown(p)) {
-
-                            giveDonorGift(p, 2);
-                            addToCooldown(p);
-                        } else {
-
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
-
-                        // Run the WEEK 2 commands (NON-DONOR)
+                        giveDonorGift(p);
                     } else {
-
-                        if (isInCooldown(p)) {
-                            giveRegularGift(p, 2);
-                            addToCooldown(p);
-                        } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
+                        giveRegularGift(p);
                     }
-
-                } else if (day >= 21) {
-
-                    // Run the WEEK 3 commands (DONOR)
-                    if (isDonor(p)) {
-
-                        if (isInCooldown(p)) {
-                            giveDonorGift(p, 3);
-                            addToCooldown(p);
-                        } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
-
-                        // Run the WEEK 3 commands (NON-DONOR)
-                    } else {
-
-                        if (isInCooldown(p)) {
-                            giveRegularGift(p, 3);
-                            addToCooldown(p);
-                        } else {
-                            p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
-                                    ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                        }
-                    }
+                    addToCooldown(p);
+                } else {
+                    p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a gift today. You may receive your next gift in: " +
+                            ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
                 }
             }
         }
     }
 
-    private void giveRegularGift(Player player, int weekNum) {
+    private void giveRegularGift(Player player) {
+        GiftOption chosen = chooseGift(regularGiftList);
 
-        if (weekNum == 1) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
+                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
+                + ChatColor.YELLOW + " just claimed a "
+                + chosen.type.color + chosen.type.name
+                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.YELLOW + " gift "
+                + ChatColor.YELLOW + "from the "
+                + ChatColor.GREEN + "" + ChatColor.BOLD + "Emeralds "
+                + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Queen"
+                + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week1GiftList).replace("{user}", player.getName()));
+        Bukkit.broadcastMessage(message);
 
-        } else if (weekNum == 2) {
-
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
-
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week2GiftList).replace("{user}", player.getName()));
-
-        } else if (weekNum == 3) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a REGULAR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
-
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week3GiftList).replace("{user}", player.getName()));
-        }
+        Bukkit.dispatchCommand(getServer().getConsoleSender(),
+                chosen.command.replace("{user}", player.getName()));
     }
 
-    private void giveDonorGift(Player player, int weekNum) {
+    private void giveDonorGift(Player player) {
+        GiftOption chosen = chooseGift(donorGiftList);
 
-        if (weekNum == 1) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
+                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
+                + ChatColor.YELLOW + " just claimed a "
+                + chosen.type.color + chosen.type.name
+                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.YELLOW + " "
+                + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
+                + ChatColor.YELLOW + "from the "
+                + ChatColor.GREEN + "" + ChatColor.BOLD + "Emeralds "
+                + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Queen"
+                + ChatColor.YELLOW + "! Donors receive extra rewards!";
 
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week1DonorGiftList).replace("{user}", player.getName()));
+        Bukkit.broadcastMessage(message);
 
-        } else if (weekNum == 2) {
+        Bukkit.dispatchCommand(getServer().getConsoleSender(),
+                chosen.command.replace("{user}", player.getName()));
+    }
 
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+    private void giveBedWarsGiftReg(Player player) {
+        GiftOption chosen = chooseGift(bedWarsGiftList);
 
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week2DonorGiftList).replace("{user}", player.getName()));
+        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
+                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
+                + ChatColor.YELLOW + " just claimed a "
+                + chosen.type.color + chosen.type.name
+                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.YELLOW + " gift "
+                + ChatColor.YELLOW + "from the "
+                + ChatColor.GREEN + "" + ChatColor.BOLD + "War "
+                + ChatColor.AQUA + "" + ChatColor.BOLD + "Leader"
+                + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
-        } else if (weekNum == 3) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&l&7[&aEmeraldsMC&7]: {user} &ejust claimed a &dDONOR gift " +
-                    "&efrom the &a&lEmeralds &d&lQueen&r&e! Go claim your daily prize at /spawn!").replace("{user}", ServerJoinPlayer.getPlayerPrefixAndName(player)));
+        Bukkit.broadcastMessage(message);
 
-            Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(),
-                    commandToRun(week3DonorGiftList).replace("{user}", player.getName()));
-        }
+        Bukkit.dispatchCommand(getServer().getConsoleSender(),
+                chosen.command.replace("{user}", player.getName()));
+    }
+
+    private void giveBedWarsGiftDonor(Player player) {
+        GiftOption chosen = chooseGift(bedWarsDonorGiftList);
+
+        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
+                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
+                + ChatColor.YELLOW + " just claimed a "
+                + chosen.type.color + chosen.type.name
+                + ChatColor.GRAY + "(" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
+                + ChatColor.YELLOW + " "
+                + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
+                + ChatColor.YELLOW + "from the "
+                + ChatColor.GREEN + "" + ChatColor.BOLD + "War "
+                + ChatColor.AQUA + "" + ChatColor.BOLD + "Leader"
+                + ChatColor.YELLOW + "! Donors receive extra rewards!";
+
+        Bukkit.broadcastMessage(message);
+
+        Bukkit.dispatchCommand(getServer().getConsoleSender(),
+                chosen.command.replace("{user}", player.getName()));
     }
 
     private void addToCooldown(Player player) {
@@ -344,13 +326,19 @@ public class SpecialGift implements Listener {
         return true;
     }
 
-    private String commandToRun(List givenList) {
-        Random rand = new Random();
-        return (String) givenList.get(rand.nextInt(givenList.size()));
-    }
+    private GiftOption chooseGift(List<GiftOption> giftList) {
+        double totalWeight = giftList.stream().mapToDouble(g -> g.weight).sum();
+        double random = Math.random() * totalWeight;
+        double cumulativeWeight = 0.0;
 
-    private boolean isDonor(Player player) {
-        return GamesAPI.isDonorOrHigher(player);
+        for (GiftOption gift : giftList) {
+            cumulativeWeight += gift.weight;
+            if (random < cumulativeWeight) {
+                return gift;
+            }
+        }
+
+        return giftList.get(giftList.size() - 1);
     }
 
     private String getRemainingTime(Player player) {
@@ -364,5 +352,9 @@ public class SpecialGift implements Listener {
         long hours = minutes / 60;
 
         return hours % 24 + " hours " + minutes % 60 + " minutes " + seconds % 60 + " seconds";
+    }
+
+    private boolean isDonor(Player player) {
+        return GamesAPI.isDonorOrHigher(player);
     }
 }
