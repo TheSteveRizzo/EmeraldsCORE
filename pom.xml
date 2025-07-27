@@ -7,7 +7,7 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>5.3</version>
+    <version>5.5</version>
     <properties>
         <maven.compiler.target>16</maven.compiler.target>
         <maven.compiler.source>16</maven.compiler.source>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>com.andrei1058.bedwars</groupId>
             <artifactId>bedwars-api</artifactId>
-            <version>23.12</version>
+            <version>25.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -9,7 +9,6 @@ import com.steve_rizzo.emeraldscore.commands.economy.vault.EconomyImplement;
 import com.steve_rizzo.emeraldscore.commands.plotshop.IssuePlot;
 import com.steve_rizzo.emeraldscore.commands.tokens.*;
 import com.steve_rizzo.emeraldscore.events.*;
-import com.steve_rizzo.emeraldscore.events.skyblock.ScubaSuit;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
 import com.steve_rizzo.emeraldscore.features.jobs.JobHandler;
@@ -162,9 +161,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPreCraft(), this);
         loadMiningPouchRecipe();;
 
-        // Load Skyblock Scuba Listener (SKY ONLY)
-        if (serverIDName.equalsIgnoreCase("sky")) Bukkit.getServer().getPluginManager().registerEvents(new ScubaSuit(), this);
-
         // Load Core Commands
         this.getCommand("rank").setExecutor(new RankCommand(this));
         this.getCommand("fly").setExecutor(new FlyCommand());
@@ -187,7 +183,6 @@ public class Main extends JavaPlugin {
         this.getCommand("message").setExecutor(new MessageCommand());
         this.getCommand("reply").setExecutor(new MessageCommand());
         this.getCommand("payheal").setExecutor(new PayHeal());
-        this.getCommand("pvp").setExecutor(new PVPCommand());
         this.getCommand("survival").setExecutor(new SurvivalCommand());
         this.getCommand("list").setExecutor(new ListCommand());
         this.getCommand("help").setExecutor(new HelpCommand());
@@ -321,13 +316,10 @@ public class Main extends JavaPlugin {
 
     private void setPVPRegions() {
         if (Main.serverIDName.equalsIgnoreCase("smp")) {
-            if (getServer().getWorld("world") != null)
-                Objects.requireNonNull(getServer().getWorld("world")).setPVP(false);
+            if (getServer().getWorld("EmeraldsKingdom") != null)
+                Objects.requireNonNull(getServer().getWorld("EmeraldsKingdom")).setPVP(true);
             if (getServer().getWorld("farmworld") != null)
                 Objects.requireNonNull(getServer().getWorld("farmworld")).setPVP(false);
-        } else if (Main.serverIDName.equalsIgnoreCase("fac")) {
-            if (getServer().getWorld("world") != null)
-                Objects.requireNonNull(getServer().getWorld("world")).setPVP(true);
         }
     }
 

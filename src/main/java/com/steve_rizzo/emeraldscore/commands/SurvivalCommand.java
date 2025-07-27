@@ -20,9 +20,9 @@ public class SurvivalCommand implements CommandExecutor {
             p.sendMessage(Main.prefix + ChatColor.GRAY + "Sending you to the... " +
                     ChatColor.AQUA + "Survival World" + ChatColor.GRAY + "!");
 
-            if (Bukkit.getWorld("world") != null) {
+            if (Bukkit.getWorld("EmeraldsKingdom") != null) {
 
-                p.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                p.teleport(Bukkit.getWorld("EmeraldsKingdom").getSpawnLocation());
 
                 p.sendMessage(Main.prefix + ChatColor.AQUA + "Success!");
 

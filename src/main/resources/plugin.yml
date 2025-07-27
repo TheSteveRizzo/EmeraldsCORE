@@ -88,9 +88,6 @@ commands:
   payheal:
     description: Pay for a heal!
     aliases: [ pheal ]
-  pvp:
-    description: Travel to the PVP world!
-    aliases: [ pvpworld ]
   survival:
     description: Travel to the Survival world!
     aliases: [ mainworld ]

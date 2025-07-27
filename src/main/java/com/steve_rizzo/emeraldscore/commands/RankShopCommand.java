@@ -2,8 +2,6 @@ package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.commands.economy.api.EmeraldsCashAPI;
-import com.steve_rizzo.emeraldscore.commands.tokens.TokensAPI;
-import com.steve_rizzo.emeraldscore.utils.Ranks;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,7 +23,7 @@ import static org.bukkit.Material.*;
 public class RankShopCommand implements Listener, CommandExecutor {
 
     public static Permission perms = Main.perms;
-    String title = ChatColor.AQUA + "EmeraldsMC" + ChatColor.GRAY + " - " + ChatColor.GREEN + "Rank Shop";
+    String title = ChatColor.BOLD + "" + ChatColor.AQUA + "EmeraldsMC" + ChatColor.GRAY + " - " + ChatColor.GREEN + "Rank Shop";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -46,22 +44,22 @@ public class RankShopCommand implements Listener, CommandExecutor {
         String donorRankOneName = donorRankFormat.replace("%ENTER%", "$")
                 .replace("%COST%", "$1,000,000"),
                 donorRankTwoName = donorRankFormat.replace("%ENTER%", "$$")
-                        .replace("%COST%", "$2,000,000"),
+                        .replace("%COST%", "$2,500,000"),
                 donorRankThreeName = donorRankFormat.replace("%ENTER%", "$$$")
-                        .replace("%COST%", "$3,000,000"),
-                donorRankFourName = donorRankFormat.replace("%ENTER%", ChatColor.LIGHT_PURPLE + "<3" + ChatColor.GREEN + "$$$")
                         .replace("%COST%", "$4,000,000"),
+                donorRankFourName = donorRankFormat.replace("%ENTER%", ChatColor.LIGHT_PURPLE + "<3" + ChatColor.GREEN + "$$$")
+                        .replace("%COST%", "$5,500,000"),
                 donorRankEliteName = donorRankFormat.replace("%ENTER%", "ELITE")
-                        .replace("%COST%", "$5,000,000"),
+                        .replace("%COST%", "$7,000,000"),
                 donorRankPlatinumName = donorRankFormat.replace("%ENTER%", ChatColor.DARK_AQUA + "PLATINUM")
-                        .replace("%COST%", "500 EMERALD TOKENS");
+                        .replace("%COST%", "$10,000,000");
 
-        addRankItem(rankShop, COAL_BLOCK, donorRankOneName, 1000000);
-        addRankItem(rankShop, IRON_BLOCK, donorRankTwoName, 2000000);
-        addRankItem(rankShop, GOLD_BLOCK, donorRankThreeName, 3000000);
-        addRankItem(rankShop, Material.DIAMOND_BLOCK, donorRankFourName, 4000000);
-        addRankItem(rankShop, Material.EMERALD_BLOCK, donorRankEliteName, 5000000);
-        addRankItem(rankShop, NETHER_STAR, donorRankPlatinumName, 500);
+        addRankItem(rankShop, COAL_BLOCK, donorRankOneName, 1_000_000);
+        addRankItem(rankShop, IRON_BLOCK, donorRankTwoName, 2_500_000);
+        addRankItem(rankShop, GOLD_BLOCK, donorRankThreeName, 4_000_000);
+        addRankItem(rankShop, DIAMOND_BLOCK, donorRankFourName, 5_500_000);
+        addRankItem(rankShop, EMERALD_BLOCK, donorRankEliteName, 7_000_000);
+        addRankItem(rankShop, NETHER_STAR, donorRankPlatinumName, 10_000_000);
 
         player.openInventory(rankShop);
 
@@ -86,32 +84,6 @@ public class RankShopCommand implements Listener, CommandExecutor {
             ItemStack clickedItem = event.getCurrentItem();
 
             if (clickedItem != null && clickedItem.getType() != Material.AIR) {
-
-                if (clickedItem.getType().equals(NETHER_STAR)) {
-
-                    int tokens = getPrice(clickedItem);
-
-                    // Check user token bal >= cost of rank
-                    if (TokensAPI.returnUUIDBTokensalance(player.getUniqueId().toString()) >= tokens) {
-
-                        // Check if user is ELITE (required for PLAT upgrade)
-                        if (hasPreviousRank(player, clickedItem)) {
-
-                            // Take the tokens
-                            TokensAPI.deductTokensUUID(player.getUniqueId().toString(), tokens);
-
-                            // Upgrade user rank
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "lp user " + player.getName() + " parent set " + "platinum");
-
-                            // Display message to user, close inv
-                            player.sendMessage(Main.prefix + ChatColor.GREEN + "Congratulations on your new rank!");
-                            player.closeInventory();
-
-                            return;
-                        }
-                    }
-                }
 
                 int price = getPrice(clickedItem);
 
@@ -146,17 +118,17 @@ public class RankShopCommand implements Listener, CommandExecutor {
     private int getPrice(ItemStack item) {
         switch (item.getType()) {
             case COAL_BLOCK:
-                return 1000000;
+                return 1_000_000;
             case IRON_BLOCK:
-                return 2000000;
+                return 2_500_000;
             case GOLD_BLOCK:
-                return 3000000;
+                return 4_000_000;
             case DIAMOND_BLOCK:
-                return 4000000;
+                return 5_500_000;
             case EMERALD_BLOCK:
-                return 5000000;
+                return 7_000_000;
             case NETHER_STAR:
-                return 500;
+                return 10_000_000;
             default:
                 return 0;
         }
@@ -200,29 +172,28 @@ public class RankShopCommand implements Listener, CommandExecutor {
 
         switch (rankItem.getType()) {
             case COAL_BLOCK:
-                // Purchasing $ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "lp user " + player.getName() + " parent set " + "donor1");
+                        "lp user " + player.getName() + " parent set donor1");
                 break;
             case IRON_BLOCK:
-                // Purchasing $$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "lp user " + player.getName() + " parent set " + "donor2");
+                        "lp user " + player.getName() + " parent set donor2");
                 break;
             case GOLD_BLOCK:
-                // Attempting $$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "lp user " + player.getName() + " parent set " + "donor3");
+                        "lp user " + player.getName() + " parent set donor3");
                 break;
             case DIAMOND_BLOCK:
-                // Attempting <3$$$ rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "lp user " + player.getName() + " parent set " + "donor4");
+                        "lp user " + player.getName() + " parent set donor4");
                 break;
             case EMERALD_BLOCK:
-                // Attempting ELITE rank
                 getServer().dispatchCommand(getServer().getConsoleSender(),
-                        "lp user " + player.getName() + " parent set " + "elite");
+                        "lp user " + player.getName() + " parent set elite");
+                break;
+            case NETHER_STAR:
+                getServer().dispatchCommand(getServer().getConsoleSender(),
+                        "lp user " + player.getName() + " parent set platinum");
                 break;
         }
     }

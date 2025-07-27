@@ -20,8 +20,9 @@ public class HelpCommand implements CommandExecutor {
                     ChatColor.YELLOW + "> " + ChatColor.AQUA + "View commands " + sep + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "/commands\n" +
                     ChatColor.YELLOW + "> " + ChatColor.AQUA + "Apply for Member " + sep + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
                     ChatColor.YELLOW + "> " + ChatColor.AQUA + "Join our Discord " + sep + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
-                    ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit the PVP World " + sep + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
                     ChatColor.YELLOW + "> " + ChatColor.AQUA + "Go back to Survival " + sep + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                    ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit the Hub " + sep + ChatColor.DARK_AQUA + ChatColor.BOLD + "/hub\n" +
+                    ChatColor.YELLOW + "> " + ChatColor.AQUA + "Play Bed Wars " + sep + ChatColor.DARK_AQUA + ChatColor.BOLD + "/bed\n" +
                     ChatColor.YELLOW + "> " + ChatColor.AQUA + "Vote & Earn Cash " + sep + ChatColor.YELLOW + ChatColor.BOLD + "/vote\n" +
                     ChatColor.YELLOW + ChatColor.BOLD + "===== ===== =====");
 

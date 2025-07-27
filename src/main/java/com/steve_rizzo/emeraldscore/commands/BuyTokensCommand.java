@@ -22,7 +22,7 @@ import java.util.List;
 
 public class BuyTokensCommand implements CommandExecutor, Listener {
 
-    String title = ChatColor.GREEN + "" + ChatColor.BOLD + "Buy Tokens";
+    String title = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Buy Tokens";
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -39,19 +39,15 @@ public class BuyTokensCommand implements CommandExecutor, Listener {
         Inventory inventory = Bukkit.createInventory(null, 9, title);
 
         // Add token options to the inventory
-        ItemStack oneToken = createTokenItem("1 Token", Material.EMERALD, 125000, 1);
-        ItemStack twoTokens = createTokenItem("2 Tokens", Material.EMERALD, 250000, 2);
-        ItemStack fourTokens = createTokenItem("4 Tokens", Material.EMERALD, 500000, 4);
-        ItemStack fiveTokens = createTokenItem("5 Tokens", Material.DIAMOND_BLOCK, 625000, 5);
-        ItemStack tenTokens = createTokenItem("10 Tokens", Material.EMERALD_BLOCK, 1250000, 10);
-        ItemStack twentyTokens = createTokenItem("20 Tokens", Material.NETHERITE_BLOCK, 2500000, 20);
-
-        inventory.setItem(0, oneToken);
-        inventory.setItem(1, twoTokens);
-        inventory.setItem(2, fourTokens);
-        inventory.setItem(3, fiveTokens);
-        inventory.setItem(4, tenTokens);
-        inventory.setItem(5, twentyTokens);
+        inventory.setItem(0, createTokenItem("1 Token", Material.EMERALD, 50000, 1));
+        inventory.setItem(1, createTokenItem("2 Tokens", Material.EMERALD, 100000, 2));
+        inventory.setItem(2, createTokenItem("3 Tokens", Material.EMERALD, 150000, 3));
+        inventory.setItem(3, createTokenItem("4 Tokens", Material.EMERALD, 200000, 4));
+        inventory.setItem(4, createTokenItem("5 Tokens", Material.DIAMOND_BLOCK, 250000, 5));
+        inventory.setItem(5, createTokenItem("10 Tokens", Material.EMERALD_BLOCK, 500000, 10));
+        inventory.setItem(6, createTokenItem("15 Tokens", Material.DIAMOND, 750000, 15));
+        inventory.setItem(7, createTokenItem("20 Tokens", Material.NETHERITE_BLOCK, 1000000, 20));
+        inventory.setItem(8, createTokenItem("25 Tokens", Material.NETHERITE_BLOCK, 1250000, 25));
 
         player.openInventory(inventory);
     }
@@ -61,11 +57,12 @@ public class BuyTokensCommand implements CommandExecutor, Listener {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
-        lore.add("Cost: $" + cost);
+        lore.add("Cost: $" + String.format("%,d", cost)); // Format with commas
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -103,7 +100,7 @@ public class BuyTokensCommand implements CommandExecutor, Listener {
         if (lore == null || lore.isEmpty()) return 0;
 
         String lastLine = lore.get(lore.size() - 1);
-        String costString = lastLine.replace("Cost: $", "");
+        String costString = lastLine.replace("Cost: $", "").replace(",", ""); // Remove commas
         try {
             return Integer.parseInt(costString);
         } catch (NumberFormatException e) {
@@ -121,9 +118,6 @@ public class BuyTokensCommand implements CommandExecutor, Listener {
     }
 
     private boolean hasEnoughFunds(Player player, int cost) {
-        if (EmeraldsCashAPI.returnBalance(player) >= cost) {
-            return true;
-        }
-        return false;
+        return EmeraldsCashAPI.returnBalance(player) >= cost;
     }
 }

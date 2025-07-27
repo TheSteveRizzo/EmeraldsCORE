@@ -95,7 +95,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             // Collect info.
             String playerName = args[0];
 
-            Location spawnLoc = Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation();
+            Location spawnLoc = Objects.requireNonNull(Bukkit.getWorld("EmeraldsKingdom")).getSpawnLocation();
 
             // Set regions to drop from in list.
             if (listOfDropLocations.isEmpty()) setRadiusListLocations(spawnLoc);
@@ -131,7 +131,7 @@ public class LaunchDonorDrop implements CommandExecutor {
     private void randomChooseItemAndSpawn() {
 
         // Get main world as object.
-        World world = Bukkit.getWorld("world");
+        World world = Bukkit.getWorld("EmeraldsKingdom");
 
         // Notify players
         Bukkit.broadcastMessage(Main.prefix + ChatColor.GRAY + "A jackpot item was dropped at spawn!");

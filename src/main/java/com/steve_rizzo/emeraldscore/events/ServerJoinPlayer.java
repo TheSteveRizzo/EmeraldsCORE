@@ -29,7 +29,7 @@ public class ServerJoinPlayer implements Listener {
     public static String getPlayerPrefixAndName(Player player) {
         String playerGroup = perms.getPrimaryGroup(player);
         String playerName = player.getName();
-        String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
+        String prefix = chat.getGroupPrefix("EmeraldsKingdom", playerGroup);
         return ChatColor.translateAlternateColorCodes('&', prefix + playerName);
     }
 
@@ -39,12 +39,12 @@ public class ServerJoinPlayer implements Listener {
 
         if (player != null) {
             String playerGroup = perms.getPrimaryGroup(player);
-            String prefix = chat.getGroupPrefix(player.getWorld(), playerGroup);
+            String prefix = chat.getGroupPrefix("EmeraldsKingdom", playerGroup);
             coloredPrefix = ChatColor.translateAlternateColorCodes('&', prefix);
         } else {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
             String playerGroup = perms.getPrimaryGroup(null, offlinePlayer);
-            String prefix = chat.getGroupPrefix("world", playerGroup);
+            String prefix = chat.getGroupPrefix("EmeraldsKingdom", playerGroup);
             coloredPrefix = ChatColor.translateAlternateColorCodes('&', prefix);
         }
 
@@ -54,11 +54,11 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
-        Location spawn = e.getPlayer().getWorld().getSpawnLocation();
+        Location spawn = Bukkit.getServer().getWorld("EmeraldsKingdom").getSpawnLocation();
 
         // Spawn 5 fireworks
         for (int i = 0; i < 5; i++) {
-            Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld("EmeraldsKingdom").spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);
@@ -84,7 +84,7 @@ public class ServerJoinPlayer implements Listener {
 
                     // Play a sound to inform the users about a new user joining!
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
+                        Bukkit.getServer().getWorld("EmeraldsKingdom").playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
                     }
                 }
 
@@ -111,7 +111,7 @@ public class ServerJoinPlayer implements Listener {
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
-            Firework fw = (Firework) e.getPlayer().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld("EmeraldsKingdom").spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);

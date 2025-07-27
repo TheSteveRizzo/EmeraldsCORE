@@ -1,6 +1,8 @@
 package com.steve_rizzo.emeraldscore.commands;
 
 import com.steve_rizzo.emeraldscore.Main;
+import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,13 +12,14 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import static org.bukkit.Bukkit.getServer;
 
 public class MessageCommand implements CommandExecutor {
 
     String prefix = Main.prefix;
-    private final Map<UUID, UUID> lastMessageSender = new HashMap<>();
+    private static final Map<UUID, UUID> lastMessageSender = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -50,7 +53,7 @@ public class MessageCommand implements CommandExecutor {
             // Construct the message with the prefix
             StringBuilder message = new StringBuilder();
             message.append(ChatColor.GRAY).append("[").append(ChatColor.GREEN).append("EmeraldsMC").append(ChatColor.GRAY).append("]: (");
-            message.append(ChatColor.YELLOW).append(player.getName()).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
+            message.append(ChatColor.YELLOW).append(ServerJoinPlayer.getPlayerPrefixAndName(player.getName())).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
             for (int i = 1; i < args.length; i++) {
                 message.append(args[i]).append(" ");
                 messageArgs.append(args[i]).append(" ");
@@ -64,7 +67,7 @@ public class MessageCommand implements CommandExecutor {
             lastMessageSender.put(player.getUniqueId(), target.getUniqueId());
 
             // Inform the sender that the message was sent
-            player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
+            player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(target.getName()) + ChatColor.GRAY + "): " + messageArgs);
 
             // Print to console
             System.out.println(message);
@@ -78,6 +81,11 @@ public class MessageCommand implements CommandExecutor {
             }
 
             Player p = (Player) sender;
+
+            if (args.length == 0) {
+                p.sendMessage(prefix + ChatColor.RED + "Usage: /r <message>");
+                return true;
+            }
 
             UUID replyTargetUUID = lastMessageSender.get(p.getUniqueId());
 
@@ -97,13 +105,13 @@ public class MessageCommand implements CommandExecutor {
                     }
 
                     // Send the reply message to the target player
-                    target.sendMessage(reply.toString());
+                    target.sendMessage(reply.toString().toString().trim());
 
                     // Inform the sender that the reply was sent
-                    p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs);
+                    p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs.toString().trim());
 
                     // Print to console
-                    System.out.println(reply);
+                    Bukkit.getServer().getLogger().log(Level.INFO, reply.toString().trim());
 
                 } else {
                     p.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");

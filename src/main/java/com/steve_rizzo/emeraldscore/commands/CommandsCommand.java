@@ -17,7 +17,7 @@ public class CommandsCommand implements CommandExecutor {
 
             Player p = (Player) sender;
 
-            p.sendMessage(Main.prefix + ChatColor.GRAY + "Access available commands at: " + ChatColor.GREEN + "https://discord.gg/vBdfrdjZgJ");
+            p.sendMessage(Main.prefix + ChatColor.GRAY + "View our command guide at: " + ChatColor.GREEN + "https://emeraldsmc.com/commands/");
 
             return true;
 
