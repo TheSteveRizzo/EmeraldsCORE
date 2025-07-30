@@ -109,8 +109,6 @@ commands:
   plugins:
     description: Show available plugins.
     aliases: [ pl ]
-  hub:
-    description: Teleport to the Hub world.
   boost:
     description: BOOST yourself into the air!
   claimfurnaces:
@@ -136,3 +134,6 @@ commands:
   applybedwarstokens:
     description: Applies Bed Wars tokens to a user based on award type.
     aliases: [ apbt ]
+  accept:
+    description: Accepts a player's application and promotes them to member rank
+    aliases: [ promote ]

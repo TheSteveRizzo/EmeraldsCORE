@@ -49,29 +49,29 @@ public class MessageCommand implements CommandExecutor {
                 return true;
             }
 
+            String senderName = ServerJoinPlayer.getPlayerPrefixAndName(player.getName());
+            String targetName = ServerJoinPlayer.getPlayerPrefixAndName(target.getName());
+
             StringBuilder messageArgs = new StringBuilder();
-            // Construct the message with the prefix
-            StringBuilder message = new StringBuilder();
-            message.append(ChatColor.GRAY).append("[").append(ChatColor.GREEN).append("EmeraldsMC").append(ChatColor.GRAY).append("]: (");
-            message.append(ChatColor.YELLOW).append(ServerJoinPlayer.getPlayerPrefixAndName(player.getName())).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
             for (int i = 1; i < args.length; i++) {
-                message.append(args[i]).append(" ");
                 messageArgs.append(args[i]).append(" ");
             }
 
-            // Send the message to the target player
-            target.sendMessage(message.toString());
+            String msgToTarget = ChatColor.GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.GRAY + "]: ("
+                    + ChatColor.YELLOW + senderName + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): "
+                    + messageArgs.toString().trim();
 
-            // Record the last message sender for both players
+            String msgToSender = prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> ("
+                    + ChatColor.YELLOW + targetName + ChatColor.GRAY + "): "
+                    + messageArgs.toString().trim();
+
+            target.sendMessage(msgToTarget);
+            player.sendMessage(msgToSender);
+
             lastMessageSender.put(target.getUniqueId(), player.getUniqueId());
             lastMessageSender.put(player.getUniqueId(), target.getUniqueId());
 
-            // Inform the sender that the message was sent
-            player.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(target.getName()) + ChatColor.GRAY + "): " + messageArgs);
-
-            // Print to console
-            System.out.println(message);
-
+            System.out.println(msgToTarget);
             return true;
 
         } else if (command.getName().equalsIgnoreCase("reply")) {
@@ -80,49 +80,49 @@ public class MessageCommand implements CommandExecutor {
                 return true;
             }
 
-            Player p = (Player) sender;
+            Player player = (Player) sender;
 
             if (args.length == 0) {
-                p.sendMessage(prefix + ChatColor.RED + "Usage: /r <message>");
+                player.sendMessage(prefix + ChatColor.RED + "Usage: /r <message>");
                 return true;
             }
 
-            UUID replyTargetUUID = lastMessageSender.get(p.getUniqueId());
+            UUID replyTargetUUID = lastMessageSender.get(player.getUniqueId());
 
-            if (replyTargetUUID != null) {
-                Player target = getServer().getPlayer(replyTargetUUID);
-
-                if (target != null && target.isOnline()) {
-                    StringBuilder messageArgs = new StringBuilder();
-                    // Construct the reply message with the prefix
-                    StringBuilder reply = new StringBuilder();
-                    reply.append(ChatColor.GRAY).append("[").append(ChatColor.GREEN).append("EmeraldsMC").append(ChatColor.GRAY).append("]: (");
-                    reply.append(ChatColor.YELLOW).append(p.getName()).append(ChatColor.GRAY).append(") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): ");
-
-                    for (String arg : args) {
-                        reply.append(arg).append(" ");
-                        messageArgs.append(arg).append(" ");
-                    }
-
-                    // Send the reply message to the target player
-                    target.sendMessage(reply.toString().toString().trim());
-
-                    // Inform the sender that the reply was sent
-                    p.sendMessage(prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + "): " + messageArgs.toString().trim());
-
-                    // Print to console
-                    Bukkit.getServer().getLogger().log(Level.INFO, reply.toString().trim());
-
-                } else {
-                    p.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");
-                }
-
-                return true;
-            } else {
-                p.sendMessage(prefix + ChatColor.RED + "Cannot find a message to reply to.");
+            if (replyTargetUUID == null) {
+                player.sendMessage(prefix + ChatColor.RED + "Cannot find a message to reply to.");
                 return true;
             }
+
+            Player target = getServer().getPlayer(replyTargetUUID);
+            if (target == null || !target.isOnline()) {
+                player.sendMessage(prefix + ChatColor.RED + "The player you want to reply to is no longer online.");
+                return true;
+            }
+
+            String senderName = ServerJoinPlayer.getPlayerPrefixAndName(player.getName());
+            String targetName = ServerJoinPlayer.getPlayerPrefixAndName(target.getName());
+
+            StringBuilder messageArgs = new StringBuilder();
+            for (String arg : args) {
+                messageArgs.append(arg).append(" ");
+            }
+
+            String msgToTarget = ChatColor.GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.GRAY + "]: ("
+                    + ChatColor.YELLOW + senderName + ChatColor.GRAY + ") -> (" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + "): "
+                    + messageArgs.toString().trim();
+
+            String msgToSender = prefix + ChatColor.GRAY + "(" + ChatColor.YELLOW + "YOU" + ChatColor.GRAY + ") -> ("
+                    + ChatColor.YELLOW + targetName + ChatColor.GRAY + "): "
+                    + messageArgs.toString().trim();
+
+            target.sendMessage(msgToTarget);
+            player.sendMessage(msgToSender);
+
+            Bukkit.getServer().getLogger().log(Level.INFO, msgToTarget);
+            return true;
         }
+
         return true;
     }
 }

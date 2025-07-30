@@ -162,7 +162,8 @@ public class Main extends JavaPlugin {
         loadMiningPouchRecipe();;
 
         // Load Core Commands
-        this.getCommand("rank").setExecutor(new RankCommand(this));
+        this.getCommand("rank").setExecutor(new RankCommand());
+        this.getCommand("accept").setExecutor(new AcceptCommand());
         this.getCommand("fly").setExecutor(new FlyCommand());
         this.getCommand("flyspeed").setExecutor(new FlyspeedCommand());
         this.getCommand("spawn").setExecutor(new SpawnCommand());
@@ -190,7 +191,6 @@ public class Main extends JavaPlugin {
         this.getCommand("clearchat").setExecutor(new ClearChatCommand());
         this.getCommand("commands").setExecutor(new CommandsCommand());
         this.getCommand("plugins").setExecutor(new PluginsCommand());
-        this.getCommand("hub").setExecutor(new HubCommand());
         this.getCommand("boost").setExecutor(new BoostCommand());
         this.getCommand("claimfurnaces").setExecutor(new FurnaceClaimCommand());
         this.getCommand("buytokens").setExecutor(new BuyTokensCommand());

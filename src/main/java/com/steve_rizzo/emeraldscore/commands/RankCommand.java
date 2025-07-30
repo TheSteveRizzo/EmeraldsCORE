@@ -3,6 +3,7 @@ package com.steve_rizzo.emeraldscore.commands;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,16 +12,12 @@ import org.bukkit.entity.Player;
 
 public class RankCommand implements CommandExecutor {
     public static Permission perms = null;
-    private final Main serverEssentials;
     String prefix = Main.prefix;
-
-    public RankCommand(Main serverEssentials) {
-        this.serverEssentials = serverEssentials;
-        perms = Main.perms;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        perms = Main.perms;
 
         if (sender instanceof Player) {
 
@@ -170,7 +167,7 @@ public class RankCommand implements CommandExecutor {
     //Update rank
     private void setRankPlayer(Player p, String target, String rank) {
         // Update player rank in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
                 "lp user " + target + " parent set " + rank);
 
         // Send message to command issuer and print to Console
@@ -183,15 +180,15 @@ public class RankCommand implements CommandExecutor {
         // If target player is online, tell them that their rank has been updated
         Player targetPlayer = null;
         try {
-            targetPlayer = serverEssentials.getServer().getPlayer(target);
+            targetPlayer = Bukkit.getServer().getPlayer(target);
             assert targetPlayer != null;
             if (targetPlayer.isOnline()) {
                 // Notify player that their rank has been updated
                 targetPlayer.sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
                 // Set rank of player in tab
-                Player tp = serverEssentials.getServer().getPlayer(target);
-                ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
+                Player tp = Bukkit.getServer().getPlayer(target);
+                ServerJoinPlayer.ranks.updateAndSaveData(Bukkit.getServer().getPlayer(target));
             }
         } catch (NullPointerException ex) {
             System.out.println("[EmeraldsCore] Player doesn't exist for ranking.");
@@ -202,7 +199,7 @@ public class RankCommand implements CommandExecutor {
     private void setRankConsole(String target, String rank) {
 
         // Update player rank in console
-        serverEssentials.getServer().dispatchCommand(serverEssentials.getServer().getConsoleSender(),
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
                 "lp user " + target + " parent set " + rank);
 
         // Send message to Console
@@ -210,11 +207,11 @@ public class RankCommand implements CommandExecutor {
                 + rank.toUpperCase() + "!");
 
         // If target player is online, tell them that their rank has been updated
-        if ((serverEssentials.getServer().getPlayer(target) != null)) {
-            if (serverEssentials.getServer().getPlayer(target).isOnline()) {
-                serverEssentials.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
+        if ((Bukkit.getServer().getPlayer(target) != null)) {
+            if (Bukkit.getServer().getPlayer(target).isOnline()) {
+                Bukkit.getServer().getPlayer(target).sendMessage(prefix + "your group has been updated to group "
                         + ChatColor.AQUA + rank.toUpperCase() + ChatColor.GRAY + "!");
-                ServerJoinPlayer.ranks.updateAndSaveData(serverEssentials.getServer().getPlayer(target));
+                ServerJoinPlayer.ranks.updateAndSaveData(Bukkit.getServer().getPlayer(target));
             }
         }
     }

@@ -54,25 +54,27 @@ public class ServerJoinPlayer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
-        Location spawn = Bukkit.getServer().getWorld("EmeraldsKingdom").getSpawnLocation();
+        Player p = e.getPlayer();
+
+        String worldName = "world";
+        if (Main.serverIDName.equalsIgnoreCase("hub")) worldName = "Hub";
+        if (Main.serverIDName.equalsIgnoreCase("smp")) worldName = "EmeraldsKingdom";
+        if (Main.serverIDName.equalsIgnoreCase("bed")) worldName = "world";
 
         // Spawn 5 fireworks
         for (int i = 0; i < 5; i++) {
-            Firework fw = (Firework) Bukkit.getServer().getWorld("EmeraldsKingdom").spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);
             fw.setFireworkMeta(fwm);
         }
 
-        if (Main.serverIDName.equalsIgnoreCase("hub")) {
-            e.getPlayer().teleport(spawn);
-        }
-
         if (!e.getPlayer().hasPlayedBefore()) {
 
             e.setJoinMessage(ChatColor.LIGHT_PURPLE + e.getPlayer().getName() + " has joined The Emeralds for the first time!");
 
+            String finalWorldName = worldName;
             EmeraldsCashAPI.doesAccountExist(e.getPlayer().getUniqueId().toString()).thenAccept(doesUserAccountExist -> {
                 if (!doesUserAccountExist) {
                     // Set money for first-time user
@@ -80,23 +82,42 @@ public class ServerJoinPlayer implements Listener {
 
                     ranks.loadFirstTimePlayer(e.getPlayer());
 
-                    e.getPlayer().teleport(spawn);
+                    World userWorld = Bukkit.getWorld(finalWorldName);
+                    if (userWorld != null) {
+                        Location userSpawnLoc = userWorld.getSpawnLocation();
+                        float yaw = userSpawnLoc.getYaw();
+                        float pitch = userSpawnLoc.getPitch();
+
+                        Location locWithRotation = new Location(
+                                userWorld,
+                                userSpawnLoc.getX(),
+                                userSpawnLoc.getY(),
+                                userSpawnLoc.getZ(),
+                                yaw,
+                                pitch
+                        );
+                        p.teleport(locWithRotation);
+
+                    }
 
                     // Play a sound to inform the users about a new user joining!
-                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        Bukkit.getServer().getWorld("EmeraldsKingdom").playSound(e.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
+                    for (Player players : Bukkit.getServer().getOnlinePlayers()) {
+                        Bukkit.getServer().getWorld("EmeraldsKingdom").playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
                     }
                 }
 
-                e.getPlayer().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.AQUA + "" + ChatColor.BOLD + "=====\n" +
-                        ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "! Make sure to:\n" +
-                        ChatColor.AQUA + "> Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
-                        ChatColor.AQUA + "> Apply for Member using " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
-                        ChatColor.AQUA + "> Join our Discord using " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
-                        ChatColor.AQUA + "> Visit our PVP World using " + ChatColor.RED + ChatColor.BOLD + "/pvp\n" +
-                        ChatColor.AQUA + "> Go back to Survival using " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
-                        ChatColor.AQUA + ChatColor.BOLD + "===== ===== ====="
-                );
+                e.getPlayer().sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "=====" + ChatColor.GRAY + "[" + ChatColor.GREEN + ChatColor.BOLD + "EmeraldsMC" + ChatColor.GRAY + "]" + ChatColor.YELLOW + "" + ChatColor.BOLD + "=====\n" +
+                        ChatColor.GRAY + "Welcome to " + ChatColor.GREEN + "play.emeraldsmc.com" + ChatColor.GRAY + "!\nMake sure to:\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Read the " + ChatColor.RED + ChatColor.BOLD + "/rules\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "View commands " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "/commands\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Apply for Member " + ChatColor.GREEN + ChatColor.BOLD + "/apply\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Join our Discord " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Go back to Survival " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit the Hub " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/hub\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Play Bed Wars " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/bed\n" +
+                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Vote & Earn Cash " + ChatColor.YELLOW + ChatColor.BOLD + "/vote\n" +
+                        ChatColor.YELLOW + ChatColor.BOLD + "===== ===== =====");
+
             }).exceptionally(ex -> {
                 // Handle any exceptions
                 ex.printStackTrace();
