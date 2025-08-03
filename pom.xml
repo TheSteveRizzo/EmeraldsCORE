@@ -7,7 +7,7 @@
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>5.6</version>
+    <version>5.8</version>
     <properties>
         <maven.compiler.target>16</maven.compiler.target>
         <maven.compiler.source>16</maven.compiler.source>
@@ -112,6 +112,10 @@
             <id>andrei1058-releases</id>
             <url>https://repo.andrei1058.dev/releases</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
     <!-- MAVEN DEPENDENCIES -->
     <dependencies>
@@ -173,6 +177,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

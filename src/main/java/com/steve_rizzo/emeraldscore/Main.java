@@ -11,7 +11,6 @@ import com.steve_rizzo.emeraldscore.commands.tokens.*;
 import com.steve_rizzo.emeraldscore.events.*;
 import com.steve_rizzo.emeraldscore.features.LaunchDonorDrop;
 import com.steve_rizzo.emeraldscore.features.SpecialGift;
-import com.steve_rizzo.emeraldscore.features.jobs.JobHandler;
 import com.steve_rizzo.emeraldscore.features.miningpouch.*;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverCommands;
 import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
@@ -77,11 +76,9 @@ public class Main extends JavaPlugin {
     private static Main instance;
     File emeraldsYML = new File(getDataFolder() + "/emeralds.yml");
     File cooldownNPCYML = new File(getDataFolder() + "/cooldownNPC.yml");
-    public File jobDataYML = new File(getDataFolder() + "/jobData.yml");
     public File serverIDYML = new File(getDataFolder() + "/serverID.yml");
     public FileConfiguration emeraldsConfig = YamlConfiguration.loadConfiguration(emeraldsYML);
     public FileConfiguration cooldownConfig = YamlConfiguration.loadConfiguration(cooldownNPCYML);
-    public FileConfiguration jobDataConfig = YamlConfiguration.loadConfiguration(jobDataYML);
     public FileConfiguration serverIDConfig = YamlConfiguration.loadConfiguration(serverIDYML);
     public static ArrayList<String> WorldBlackList = new ArrayList<>();
 
@@ -104,7 +101,6 @@ public class Main extends JavaPlugin {
         // Save config files
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
-        saveYML(jobDataConfig, jobDataYML);
         saveYML(serverIDConfig, serverIDYML);
 
         // Load Server Identifier File
@@ -149,9 +145,6 @@ public class Main extends JavaPlugin {
         // Load Token Listener
         Bukkit.getServer().getPluginManager().registerEvents(new TokenHandler(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BuyTokensCommand(), this);
-
-        // Load Job Listener
-        Bukkit.getServer().getPluginManager().registerEvents(new JobHandler(), this);
 
         // Load MiningPouch Listeners
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPickupItem(), this);
@@ -211,10 +204,6 @@ public class Main extends JavaPlugin {
         this.getCommand("givetokens").setExecutor(new GiveTokensCommand());
         this.getCommand("tokenstop").setExecutor(new TokenstopCommand());
 
-        // Job Commands
-        this.getCommand("job").setExecutor(new JobHandler());
-        this.getCommand("jobs").setExecutor(new JobHandler());
-
         // Plot Handler Command
         this.getCommand("issueplot").setExecutor(new IssuePlot());
 
@@ -252,9 +241,6 @@ public class Main extends JavaPlugin {
         // Start TimedXP Timer Function
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
-
-        // Load Job Task Data
-        JobHandler.loadJobsFromConfig();
 
         // Load Bed Wars API (if Bed Wars server ONLY)
         if (serverIDName.equalsIgnoreCase("bed")) {
@@ -338,7 +324,6 @@ public class Main extends JavaPlugin {
 
         saveYML(emeraldsConfig, emeraldsYML);
         saveYML(cooldownConfig, cooldownNPCYML);
-        saveYML(jobDataConfig, jobDataYML);
 
         if (hikari != null) hikari.close();
 

@@ -5,7 +5,7 @@ description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
 depend: [Vault]
-soft-depend: [SuperVanish, DiscordSRV]
+soft-depend: [PlaceholderAPI, DiscordSRV]
 commands:
   rank:
     description: Set a user's rank.
@@ -119,10 +119,6 @@ commands:
     aliases: [ buytoken, tokenbuy ]
   fireworks:
     description: Turn on/off the fireworks at spawn.
-  job:
-    description: List, de-list, or mark a job as completed.
-  jobs:
-    description: Open the job menu to view available tasks.
   back:
     description: Teleport to your death location.
   issueplot:

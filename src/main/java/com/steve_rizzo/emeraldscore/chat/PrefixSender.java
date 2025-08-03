@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore.chat;
 
 import com.steve_rizzo.emeraldscore.Main;
 import github.scarsz.discordsrv.DiscordSRV;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,6 +54,11 @@ public class PrefixSender implements Listener, PluginMessageListener {
         if (serverID.equalsIgnoreCase("bed")) {
             int xpLevel = Main.bwAPI.getLevelsUtil().getPlayerLevel(player);
             localFormattedMessage = String.format("&7[&b%s&7] &7[&b%d&e✦&7] %s%s&f: %s", serverID.toUpperCase(), xpLevel, prefix, playerName, message);
+        }
+        if (serverID.equalsIgnoreCase("smp")) {
+            String jobLevel = PlaceholderAPI.setPlaceholders(player, "%advancedjobs_top_points_value_me%");
+            localFormattedMessage = String.format("&7[&b%s&7] &7[&b%s&e✦&7] %s%s&f: %s",
+                    serverID.toUpperCase(), jobLevel, prefix, playerName, message);
         }
         Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', localFormattedMessage));
 
