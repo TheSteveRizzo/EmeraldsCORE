@@ -85,7 +85,7 @@ public class RandomBlockReward implements Listener {
 
         /*
         Ranks chances:
-        OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
+        OWNER, ADMIN, MOD, HELPER, YOUTUBE, PLATINUM, ELITE
             EMERALD: 1/1000
         DONOR4:
             EMERALD: 1/1500
@@ -103,7 +103,8 @@ public class RandomBlockReward implements Listener {
 
         if (groupName.equalsIgnoreCase("owner") || (groupName.equalsIgnoreCase("admin")) ||
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
-                (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
+                (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("platinum")) ||
+                (groupName.equalsIgnoreCase("elite"))) {
 
             return (double) (1.0 / 1000.0);
 
@@ -137,7 +138,7 @@ public class RandomBlockReward implements Listener {
 
         /*
         Ranks chances:
-        OWNER, ADMIN, MOD, HELPER, YOUTUBE, ELITE
+        OWNER, ADMIN, MOD, HELPER, YOUTUBE, PLATINUM, ELITE
             DIAMOND: 1/600
         DONOR4:
             DIAMOND: 1/800
@@ -156,7 +157,8 @@ public class RandomBlockReward implements Listener {
 
         if (groupName.equalsIgnoreCase("owner") || (groupName.equalsIgnoreCase("admin")) ||
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
-                (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("elite"))) {
+                (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("platinum")) ||
+                (groupName.equalsIgnoreCase("elite"))) {
 
             return (double) (1.0 / 600.0);
 

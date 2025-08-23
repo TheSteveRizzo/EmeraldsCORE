@@ -39,7 +39,6 @@
                                     <!-- Exclude plugins already on the server -->
                                     <exclude>org.spigotmc:spigot-api</exclude>
                                     <exclude>com.github.MilkBowl:VaultAPI</exclude>
-                                    <exclude>de.myzelyam:SuperVanish</exclude>
                                     <exclude>com.discordsrv:discordsrv</exclude>
                                     <exclude>com.comphenix.protocol:ProtocolLib</exclude>
                                 </excludes>
@@ -79,11 +78,6 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <!-- SuperVanish Repo -->
-        <repository>
-            <id>cubekrowd-repo</id>
-            <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
         <!-- ProtocolLIB Repo -->
         <repository>
@@ -145,13 +139,6 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.0-alpha7</version>
             <scope>compile</scope>
-        </dependency>
-        <!-- SuperVanish -->
-        <dependency>
-            <groupId>de.myzelyam</groupId>
-            <artifactId>SuperVanish</artifactId>
-            <version>6.0.4</version>
-            <scope>provided</scope>
         </dependency>
         <!-- ProtocolLib -->
         <dependency>
