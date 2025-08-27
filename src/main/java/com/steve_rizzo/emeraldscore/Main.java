@@ -2,6 +2,8 @@ package com.steve_rizzo.emeraldscore;
 
 import com.andrei1058.bedwars.api.BedWars;
 import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
+import com.steve_rizzo.emeraldscore.casino.CollectCommand;
+import com.steve_rizzo.emeraldscore.casino.blackjack.BlackjackCommand;
 import com.steve_rizzo.emeraldscore.chat.PrefixSender;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
@@ -213,6 +215,12 @@ public class Main extends JavaPlugin {
         // Emeralds Bed Wars Commands
         this.getCommand("applybedwarstokens").setExecutor(new ApplyBedWarsTokens());
 
+        // Casino Commands
+        BlackjackCommand blackjackCommand = new BlackjackCommand();
+        this.getCommand("blackjack").setExecutor(blackjackCommand);
+        this.getCommand("hit").setExecutor(blackjackCommand);
+        this.getCommand("stand").setExecutor(blackjackCommand);
+        this.getCommand("collect").setExecutor(new CollectCommand());
 
         // Database Connection
         hikari = new HikariDataSource();

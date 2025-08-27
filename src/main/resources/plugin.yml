@@ -133,3 +133,11 @@ commands:
   accept:
     description: Accepts a player's application and promotes them to member rank
     aliases: [ promote ]
+  blackjack:
+    description: Start a blackjack game.
+  hit:
+    description: Hit in blackjack.
+  stand:
+    description: Stand in blackjack.
+  collect:
+    description: Collect your rank income.
