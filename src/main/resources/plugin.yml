@@ -135,6 +135,8 @@ commands:
     aliases: [ promote ]
   blackjack:
     description: Start a blackjack game.
+  roulette:
+    description: Start a roulette game.
   hit:
     description: Hit in blackjack.
   stand:

@@ -4,6 +4,8 @@ import com.andrei1058.bedwars.api.BedWars;
 import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
 import com.steve_rizzo.emeraldscore.casino.CollectCommand;
 import com.steve_rizzo.emeraldscore.casino.blackjack.BlackjackCommand;
+import com.steve_rizzo.emeraldscore.casino.roulette.RouletteCommand;
+import com.steve_rizzo.emeraldscore.casino.roulette.RouletteGame;
 import com.steve_rizzo.emeraldscore.chat.PrefixSender;
 import com.steve_rizzo.emeraldscore.commands.*;
 import com.steve_rizzo.emeraldscore.commands.economy.*;
@@ -19,6 +21,7 @@ import com.steve_rizzo.emeraldscore.features.villagersave.VillagerSaverListener;
 import com.steve_rizzo.emeraldscore.pets.CatCommand;
 import com.steve_rizzo.emeraldscore.pets.DogCommand;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -51,6 +54,7 @@ public class Main extends JavaPlugin {
     public static Economy economy = null;
     public EconomyImplement economyImplementer;
     public static ShapedRecipe pouchRecipe;
+
     private void instanceClasses() {
         economyImplementer = new EconomyImplement();
     }
@@ -58,6 +62,9 @@ public class Main extends JavaPlugin {
     private Economy provider;
 
     public static BedWars bwAPI;
+
+    // Access existing Roulette Game across classes
+    private RouletteGame rouletteGame;
 
     public void hook() {
         provider = economyImplementer;
@@ -119,6 +126,9 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "emeraldscore:chat");
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "emeraldscore:chat", new PrefixSender());
 
+        // Create RouletteGame instance
+        rouletteGame = new RouletteGame();
+
         // Database info
         hostEmeralds = emeraldsConfig.getString("db_host");
         portEmeralds = emeraldsConfig.getString("db_port");
@@ -153,7 +163,8 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PouchInteract(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPlayerMove(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPreCraft(), this);
-        loadMiningPouchRecipe();;
+        loadMiningPouchRecipe();
+        ;
 
         // Load Core Commands
         this.getCommand("rank").setExecutor(new RankCommand());
@@ -221,6 +232,7 @@ public class Main extends JavaPlugin {
         this.getCommand("hit").setExecutor(blackjackCommand);
         this.getCommand("stand").setExecutor(blackjackCommand);
         this.getCommand("collect").setExecutor(new CollectCommand());
+        this.getCommand("roulette").setExecutor(new RouletteCommand());
 
         // Database Connection
         hikari = new HikariDataSource();
@@ -453,5 +465,9 @@ public class Main extends JavaPlugin {
         pouchRecipe.setIngredient('Y', Material.CHEST);
         pouchRecipe.setIngredient('Z', Material.NETHERITE_PICKAXE);
         getServer().addRecipe((Recipe) pouchRecipe);
+    }
+
+    public RouletteGame getRouletteGame() {
+        return rouletteGame;
     }
 }
