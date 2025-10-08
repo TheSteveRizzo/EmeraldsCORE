@@ -103,8 +103,9 @@ public class RandomBlockReward implements Listener {
 
         if (groupName.equalsIgnoreCase("owner") || (groupName.equalsIgnoreCase("admin")) ||
                 (groupName.equalsIgnoreCase("mod")) || (groupName.equalsIgnoreCase("helper")) ||
+                (groupName.equalsIgnoreCase("builder2") || (groupName.equalsIgnoreCase("builder")) ||
                 (groupName.equalsIgnoreCase("youtuber")) || (groupName.equalsIgnoreCase("platinum")) ||
-                (groupName.equalsIgnoreCase("elite"))) {
+                (groupName.equalsIgnoreCase("elite")))) {
 
             return (double) (1.0 / 1000.0);
 

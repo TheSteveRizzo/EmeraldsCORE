@@ -56,9 +56,9 @@ public class PrefixSender implements Listener, PluginMessageListener {
             localFormattedMessage = String.format("&7[&b%s&7] &7[&b%d&e✦&7] %s%s&f: %s", serverID.toUpperCase(), xpLevel, prefix, playerName, message);
         }
         if (serverID.equalsIgnoreCase("smp")) {
-            String jobLevel = PlaceholderAPI.setPlaceholders(player, "%advancedjobs_top_points_value_me%");
+            String battlePassLevel = PlaceholderAPI.setPlaceholders(player, "%battlepass_level%");
             localFormattedMessage = String.format("&7[&b%s&7] &7[&b%s&e✦&7] %s%s&f: %s",
-                    serverID.toUpperCase(), jobLevel, prefix, playerName, message);
+                    serverID.toUpperCase(), battlePassLevel, prefix, playerName, message);
         }
         Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', localFormattedMessage));
 

@@ -186,8 +186,8 @@ public class SpecialGift implements Listener {
         LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
         int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("WarLeader")) {
-            if (year == 2025 && month == 8) {
+        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("EmeraldsGhost")) {
+            if (year == 2025 && month == 10) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
                         giveBedWarsGiftDonor(p);
@@ -202,8 +202,8 @@ public class SpecialGift implements Listener {
             }
         }
 
-        if (clickedName.equalsIgnoreCase("EmeraldsQueen")) {
-            if (year == 2025 && month == 8) {
+        if (clickedName.equalsIgnoreCase("EmeraldsGhost")) {
+            if (year == 2025 && month == 10) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
                         giveDonorGift(p);
