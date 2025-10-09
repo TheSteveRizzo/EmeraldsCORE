@@ -57,7 +57,7 @@ public class ServerJoinPlayer implements Listener {
         Player p = e.getPlayer();
 
         String worldName = "world";
-        if (Main.serverIDName.equalsIgnoreCase("hub")) worldName = "Hub";
+        if (Main.serverIDName.equalsIgnoreCase("hub")) worldName = "world";
         if (Main.serverIDName.equalsIgnoreCase("smp")) worldName = "EmeraldsKingdom";
         if (Main.serverIDName.equalsIgnoreCase("bed")) worldName = "world";
 
