@@ -5,7 +5,7 @@ description: EmeraldsCore Plugin
 author: TSR
 main: com.steve_rizzo.emeraldscore.Main
 depend: [Vault]
-soft-depend: [PlaceholderAPI, DiscordSRV]
+soft-depend: [PlaceholderAPI, DiscordSRV, WorldGuard]
 commands:
   rank:
     description: Set a user's rank.

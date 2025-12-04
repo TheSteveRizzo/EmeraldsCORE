@@ -24,6 +24,7 @@ public class PlayerDeath implements Listener {
         //Bukkit.broadcastMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
 
         if (Main.serverIDName.equalsIgnoreCase("bed")) return;
+        if (!p.hasPermission("back.use")) return;
 
         e.setDeathMessage(prefix + ChatColor.DARK_AQUA + e.getDeathMessage().replace(p.getName(), ServerJoinPlayer.getPlayerPrefixAndName(p)));
 

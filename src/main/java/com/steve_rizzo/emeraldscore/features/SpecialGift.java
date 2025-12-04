@@ -187,7 +187,7 @@ public class SpecialGift implements Listener {
         int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
         if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("EmeraldsGhost")) {
-            if (year == 2025 && month == 10) {
+            if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
                         giveBedWarsGiftDonor(p);
@@ -203,7 +203,7 @@ public class SpecialGift implements Listener {
         }
 
         if (clickedName.equalsIgnoreCase("EmeraldsGhost")) {
-            if (year == 2025 && month == 10) {
+            if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
                         giveDonorGift(p);

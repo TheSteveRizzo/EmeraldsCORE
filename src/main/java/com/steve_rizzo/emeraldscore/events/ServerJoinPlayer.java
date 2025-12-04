@@ -102,7 +102,7 @@ public class ServerJoinPlayer implements Listener {
 
                     // Play a sound to inform the users about a new user joining!
                     for (Player players : Bukkit.getServer().getOnlinePlayers()) {
-                        Bukkit.getServer().getWorld("EmeraldsKingdom").playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
+                        Bukkit.getServer().getWorld(finalWorldName).playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 10F, 1F);
                     }
                 }
 
@@ -132,7 +132,7 @@ public class ServerJoinPlayer implements Listener {
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
-            Firework fw = (Firework) Bukkit.getServer().getWorld("EmeraldsKingdom").spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);

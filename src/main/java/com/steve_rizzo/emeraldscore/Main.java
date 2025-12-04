@@ -152,7 +152,7 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new WardenDeathEvent(), this);
-
+        
         // Load Token Listener
         Bukkit.getServer().getPluginManager().registerEvents(new TokenHandler(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new BuyTokensCommand(), this);
@@ -164,7 +164,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPlayerMove(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PouchPreCraft(), this);
         loadMiningPouchRecipe();
-        ;
 
         // Load Core Commands
         this.getCommand("rank").setExecutor(new RankCommand());
