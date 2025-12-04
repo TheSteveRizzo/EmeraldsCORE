@@ -127,7 +127,7 @@ public class SpecialGift implements Listener {
             new GiftOption("give {user} minecraft:wither_skeleton_skull 1", 1, GiftType.EXCLUSIVE, "1x Wither Skeleton Skull"),
             new GiftOption("give {user} minecraft:heart_of_the_sea 1", 2, GiftType.LEGENDARY, "1x Heart of the Sea"),
             new GiftOption("give {user} minecraft:golden_apple 2", 2, GiftType.LEGENDARY, "2x Golden Apple"),
-            new GiftOption("give {user} minecraft:enchanted_golden_apple 1", 2, GiftType.LEGENDARY, "1x Enchanted Golden Apple"),
+            new GiftOption("giv {user} minecraft:enchanted_golden_apple 1", 2, GiftType.LEGENDARY, "1x Enchanted Golden Apple"),
             new GiftOption("givetokens {user} 3", 4, GiftType.RARE, "3x Emeralds Tokens"),
             new GiftOption("givetokens {user} 4", 2, GiftType.LEGENDARY, "4x Emeralds Tokens"),
             new GiftOption("givetokens {user} 5", 1, GiftType.EXCLUSIVE, "5x Emeralds Tokens"),
@@ -186,7 +186,7 @@ public class SpecialGift implements Listener {
         LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
         int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("EmeraldsGhost")) {
+        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("EmeraldsSanta")) {
             if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
@@ -202,7 +202,7 @@ public class SpecialGift implements Listener {
             }
         }
 
-        if (clickedName.equalsIgnoreCase("EmeraldsGhost")) {
+        if (clickedName.equalsIgnoreCase("EmeraldsSanta")) {
             if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
@@ -229,7 +229,7 @@ public class SpecialGift implements Listener {
                 + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + ChatColor.BOLD + "Emeralds Queen"
+                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Santa"
                 + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
         Bukkit.broadcastMessage(message);
@@ -249,7 +249,7 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + " "
                 + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.GREEN + ChatColor.BOLD + "Emeralds Queen"
+                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Santa"
                 + ChatColor.YELLOW + "! Donors receive extra rewards!";
 
         Bukkit.broadcastMessage(message);
