@@ -58,8 +58,8 @@ public class ServerJoinPlayer implements Listener {
 
         String worldName = "world";
         if (Main.serverIDName.equalsIgnoreCase("hub")) worldName = "world";
-        if (Main.serverIDName.equalsIgnoreCase("smp")) worldName = "EmeraldsKingdom";
-        if (Main.serverIDName.equalsIgnoreCase("bed")) worldName = "world";
+        if (Main.serverIDName.equalsIgnoreCase("smp")) worldName = "world";
+        if (Main.serverIDName.equalsIgnoreCase("sky")) worldName = "world";
 
         // Spawn 5 fireworks
         for (int i = 0; i < 5; i++) {
@@ -84,7 +84,7 @@ public class ServerJoinPlayer implements Listener {
 
                     World userWorld = Bukkit.getWorld(finalWorldName);
                     if (userWorld != null) {
-                        Location userSpawnLoc = userWorld.getSpawnLocation();
+                        Location userSpawnLoc = Bukkit.getWorld(finalWorldName).getSpawnLocation();
                         float yaw = userSpawnLoc.getYaw();
                         float pitch = userSpawnLoc.getPitch();
 
@@ -114,7 +114,6 @@ public class ServerJoinPlayer implements Listener {
                         ChatColor.YELLOW + "> " + ChatColor.AQUA + "Join our Discord " + ChatColor.GOLD + ChatColor.BOLD + "/discord\n" +
                         ChatColor.YELLOW + "> " + ChatColor.AQUA + "Go back to Survival " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/survival\n" +
                         ChatColor.YELLOW + "> " + ChatColor.AQUA + "Visit the Hub " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/hub\n" +
-                        ChatColor.YELLOW + "> " + ChatColor.AQUA + "Play Bed Wars " + ChatColor.DARK_AQUA + ChatColor.BOLD + "/bed\n" +
                         ChatColor.YELLOW + "> " + ChatColor.AQUA + "Vote & Earn Cash " + ChatColor.YELLOW + ChatColor.BOLD + "/vote\n" +
                         ChatColor.YELLOW + ChatColor.BOLD + "===== ===== =====");
 
