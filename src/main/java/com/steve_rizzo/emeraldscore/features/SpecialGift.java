@@ -3,11 +3,9 @@ package com.steve_rizzo.emeraldscore.features;
 import com.steve_rizzo.emeraldscore.Main;
 import com.steve_rizzo.emeraldscore.emeraldsgames.api.GamesAPI;
 import com.steve_rizzo.emeraldscore.events.ServerJoinPlayer;
-import net.minecraft.server.v1_16_R3.CommandSaveOn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +16,6 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static org.bukkit.Bukkit.getServer;
@@ -153,25 +150,6 @@ public class SpecialGift implements Listener {
             new GiftOption("ecrates key give {user} warcrate 2", 1, GiftType.EXCLUSIVE, "2x Warcrate Keys")
     );
 
-    private List<GiftOption> bedWarsDonorGiftList = Arrays.asList(
-            new GiftOption("givebal {user} 2000", 20, GiftType.COMMON, "$2,000 Emeralds Cash"),
-            new GiftOption("bw level giveXp {user} 1250", 20, GiftType.COMMON, "1,250 BedWars XP"),
-            new GiftOption("givebal {user} 3000", 17, GiftType.UNCOMMON, "$3,000 Emeralds Cash"),
-            new GiftOption("bw level giveXp {user} 2000", 17, GiftType.UNCOMMON, "2,000 BedWars XP"),
-            new GiftOption("givebal {user} 5000", 4, GiftType.RARE, "$5,000 Emeralds Cash"),
-            new GiftOption("givebal {user} 10000", 4, GiftType.RARE, "$10,000 Emeralds Cash"),
-            new GiftOption("bw level giveXp {user} 5000", 4, GiftType.RARE, "5,000 BedWars XP"),
-            new GiftOption("givebal {user} 20000", 4, GiftType.RARE, "$20,000 Emeralds Cash"),
-            new GiftOption("givetokens {user} 10", 4, GiftType.RARE, "10x Emeralds Tokens"),
-            new GiftOption("bw level giveXp {user} 8000", 4, GiftType.RARE, "8,000 BedWars XP"),
-            new GiftOption("givebal {user} 40000", 4, GiftType.RARE, "$40,000 Emeralds Cash"),
-            new GiftOption("givetokens {user} 20", 2, GiftType.LEGENDARY, "20x Emeralds Tokens"),
-            new GiftOption("givebal {user} 50000", 2, GiftType.LEGENDARY, "$50,000 Emeralds Cash"),
-            new GiftOption("bw level giveXp {user} 9000", 2, GiftType.LEGENDARY, "9,000 BedWars XP"),
-            new GiftOption("ecrates key give {user} warcrate 5", 1, GiftType.EXCLUSIVE, "5x Warcrate Keys")
-    );
-
-
     @EventHandler
     public void onClickGiftNPC(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
@@ -186,24 +164,8 @@ public class SpecialGift implements Listener {
         LocalDate localDate = curDate.toInstant().atZone(ZoneId.of("America/New_York")).toLocalDate();
         int year = localDate.getYear(), month = localDate.getMonthValue(), day = localDate.getDayOfMonth();
 
-        if (Main.serverIDName.equalsIgnoreCase("bed") && clickedName.equalsIgnoreCase("EmeraldsSanta")) {
-            if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
-                if (isInCooldown(p)) {
-                    if (isDonor(p)) {
-                        giveBedWarsGiftDonor(p);
-                    } else {
-                        giveBedWarsGiftReg(p);
-                    }
-                    addToCooldown(p);
-                } else {
-                    p.sendMessage(Main.prefix + ChatColor.RED + "You have already received a Bed Wars gift today. You may receive your next gift in: " +
-                            ChatColor.AQUA + getRemainingTime(p) + ChatColor.RED + "!");
-                }
-            }
-        }
-
-        if (clickedName.equalsIgnoreCase("EmeraldsSanta")) {
-            if ((year == 2025 && month == 12) || (year == 2026 && month == 1)) {
+        if (clickedName.equalsIgnoreCase("EmeraldsGifter")) {
+            if (year == 2026 && month >= 3) {
                 if (isInCooldown(p)) {
                     if (isDonor(p)) {
                         giveDonorGift(p);
@@ -229,7 +191,7 @@ public class SpecialGift implements Listener {
                 + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
                 + ChatColor.YELLOW + " gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Santa"
+                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Gifter"
                 + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
 
         Bukkit.broadcastMessage(message);
@@ -249,46 +211,7 @@ public class SpecialGift implements Listener {
                 + ChatColor.YELLOW + " "
                 + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
                 + ChatColor.YELLOW + "from the "
-                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Santa"
-                + ChatColor.YELLOW + "! Donors receive extra rewards!";
-
-        Bukkit.broadcastMessage(message);
-
-        Bukkit.dispatchCommand(getServer().getConsoleSender(),
-                chosen.command.replace("{user}", player.getName()));
-    }
-
-    private void giveBedWarsGiftReg(Player player) {
-        GiftOption chosen = chooseGift(bedWarsGiftList);
-
-        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
-                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                + ChatColor.YELLOW + " just claimed a "
-                + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
-                + ChatColor.YELLOW + " gift "
-                + ChatColor.YELLOW + "from the "
-                + ChatColor.AQUA + ChatColor.BOLD + "War Leader"
-                + ChatColor.YELLOW + "! Go claim your daily prize at /spawn!";
-
-        Bukkit.broadcastMessage(message);
-
-        Bukkit.dispatchCommand(getServer().getConsoleSender(),
-                chosen.command.replace("{user}", player.getName()));
-    }
-
-    private void giveBedWarsGiftDonor(Player player) {
-        GiftOption chosen = chooseGift(bedWarsDonorGiftList);
-
-        String message = ChatColor.BOLD + "" + ChatColor.DARK_GRAY + "[" + ChatColor.GREEN + "EmeraldsMC" + ChatColor.DARK_GRAY + "]: "
-                + ChatColor.YELLOW + ServerJoinPlayer.getPlayerPrefixAndName(player)
-                + ChatColor.YELLOW + " just claimed a "
-                + chosen.type.color + chosen.type.name
-                + ChatColor.GRAY + " (" + chosen.type.color + chosen.displayName + ChatColor.GRAY + ")"
-                + ChatColor.YELLOW + " "
-                + ChatColor.DARK_PURPLE + ChatColor.BOLD + "DONOR Gift "
-                + ChatColor.YELLOW + "from the "
-                + ChatColor.AQUA + ChatColor.BOLD + "War Leader"
+                + ChatColor.AQUA + ChatColor.BOLD + "Emeralds Gifter"
                 + ChatColor.YELLOW + "! Donors receive extra rewards!";
 
         Bukkit.broadcastMessage(message);
@@ -307,7 +230,6 @@ public class SpecialGift implements Listener {
         return (Long) config.get(player.getUniqueId().toString());
     }
 
-    // TODO
     private boolean isInCooldown(Player player) {
 
         Long time = getCooldownTime(player);

@@ -95,7 +95,7 @@ public class LaunchDonorDrop implements CommandExecutor {
             // Collect info.
             String playerName = args[0];
 
-            Location spawnLoc = Objects.requireNonNull(Bukkit.getWorld("EmeraldsKingdom")).getSpawnLocation();
+            Location spawnLoc = Objects.requireNonNull(Bukkit.getWorld("world")).getSpawnLocation();
 
             // Set regions to drop from in list.
             if (listOfDropLocations.isEmpty()) setRadiusListLocations(spawnLoc);
