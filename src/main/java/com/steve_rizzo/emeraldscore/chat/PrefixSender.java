@@ -52,12 +52,8 @@ public class PrefixSender implements Listener, PluginMessageListener {
         // Optionally: Broadcast the message locally
         String localFormattedMessage = String.format("&7[&b%s&7] %s%s&f: %s", serverID.toUpperCase(), prefix, playerName, message);
         if (serverID.equalsIgnoreCase("smp")) {
-            String battlePassLevel = PlaceholderAPI.setPlaceholders(player, "%battlepass_level%");
-            localFormattedMessage = String.format("&7[&b%s&7] &7[&b%s&e✦&7] %s%s&f: %s",
-                    serverID.toUpperCase(), battlePassLevel, prefix, playerName, message);
-        }
-        if (serverID.equals("sky")) {
-            // TODO add SkyBlock Island Ranking
+            localFormattedMessage = String.format("&7[&b%s&e✦&7] %s%s&f: %s",
+                    serverID.toUpperCase(), prefix, playerName, message);
         }
         Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', localFormattedMessage));
 

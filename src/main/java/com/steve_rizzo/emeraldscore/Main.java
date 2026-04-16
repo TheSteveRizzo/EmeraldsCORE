@@ -1,6 +1,5 @@
 package com.steve_rizzo.emeraldscore;
 
-import com.andrei1058.bedwars.api.BedWars;
 import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
 import com.steve_rizzo.emeraldscore.casino.CollectCommand;
 import com.steve_rizzo.emeraldscore.casino.blackjack.BlackjackCommand;
@@ -28,8 +27,10 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -60,8 +61,6 @@ public class Main extends JavaPlugin {
     }
 
     private Economy provider;
-
-    public static BedWars bwAPI;
 
     // Access existing Roulette Game across classes
     private RouletteGame rouletteGame;
@@ -259,11 +258,6 @@ public class Main extends JavaPlugin {
         // Start TimedXP Timer Function
         System.out.println(Color.GREEN + ChatColor.stripColor(prefix) + " started TimedXP Timer function!");
         TimedXP.startTask();
-
-        // Load Bed Wars API (if Bed Wars server ONLY)
-        if (serverIDName.equalsIgnoreCase("bed")) {
-            bwAPI = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        }
     }
 
     private void handleServerIDConfig() {
@@ -458,12 +452,22 @@ public class Main extends JavaPlugin {
 
     private void loadMiningPouchRecipe() {
         LogInfo("MINING POUCH RECIPE ENABLED");
-        pouchRecipe = new ShapedRecipe((new Pouch(null)).getPouch());
-        pouchRecipe.shape(new String[]{"XYX", "XZX", "XYX"});
-        pouchRecipe.setIngredient('X', Material.LEATHER);
-        pouchRecipe.setIngredient('Y', Material.CHEST);
-        pouchRecipe.setIngredient('Z', Material.NETHERITE_PICKAXE);
-        getServer().addRecipe((Recipe) pouchRecipe);
+
+        NamespacedKey key = new NamespacedKey(this, "mining_pouch");
+
+        getServer().removeRecipe(key);
+
+        ItemStack result = new Pouch(null).getPouch();
+
+        ShapedRecipe recipe = new ShapedRecipe(key, result);
+        recipe.shape("XYX", "XZX", "XYX");
+        recipe.setIngredient('X', Material.LEATHER);
+        recipe.setIngredient('Y', Material.CHEST);
+        recipe.setIngredient('Z', Material.NETHERITE_PICKAXE);
+
+        getServer().addRecipe(recipe);
+
+        pouchRecipe = recipe;
     }
 
     public RouletteGame getRouletteGame() {
