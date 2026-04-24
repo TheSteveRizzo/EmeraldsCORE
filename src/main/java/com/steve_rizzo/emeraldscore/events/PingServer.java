@@ -18,8 +18,8 @@ public class PingServer implements Listener {
         // §b§l» §b§lWelcome to §a§lEmeraldsMC\! §b§l«      §b§l» §e§lSERVER\! §b§l «
         switch (Main.serverIDName.toLowerCase()) {
             case "smp":
-                motd = "          §m――――§r §b💎 §a§lEmeraldsMC §b💎 §7[§c1.21.4§7] §r§m――――§r§r\n" +
-                        "     §bLands, Pets, Gifts, Custom Enchants, + More";
+                motd = "          §m――――§r §b💎 §a§lEmeraldsMC §b💎 §7[§c1.21.11§7] §r§m――――§r§r\n" +
+                        "     §bMining Pouch, Daily Gifts, Custom Enchants, + More";
                 break;
             default:
                 motd = "§b§l» §b§lWelcome to §a§lEmeraldsMC! §b§l« §b§l» §e§lHUB! §b§l«";

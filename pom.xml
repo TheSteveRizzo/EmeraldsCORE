@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://www.m
+aven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.steve_rizzo</groupId>
     <artifactId>EmeraldsCore</artifactId>
     <name>EmeraldsCore</name>
-    <version>6.0</version>
+    <version>7.0</version>
+
     <properties>
-        <maven.compiler.target>16</maven.compiler.target>
-        <maven.compiler.source>16</maven.compiler.source>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
+
     <build>
         <plugins>
+            <!-- Java 21 Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
+
+            <!-- Shade -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -36,8 +42,7 @@
                         <configuration>
                             <artifactSet>
                                 <excludes>
-                                    <!-- Exclude plugins already on the server -->
-                                    <exclude>org.spigotmc:spigot-api</exclude>
+                                    <exclude>io.papermc.paper:paper-api</exclude>
                                     <exclude>com.github.MilkBowl:VaultAPI</exclude>
                                     <exclude>com.discordsrv:discordsrv</exclude>
                                     <exclude>com.comphenix.protocol:ProtocolLib</exclude>
@@ -48,9 +53,9 @@
                 </executions>
             </plugin>
         </plugins>
-        <!-- RESOURCE HANDLING -->
+
+        <!-- Resources -->
         <resources>
-            <!-- INCLUDE ALL .YML FILES IN RESOURCES -->
             <resource>
                 <targetPath>.</targetPath>
                 <filtering>true</filtering>
@@ -59,7 +64,6 @@
                     <include>*.yml</include>
                 </includes>
             </resource>
-            <!-- PLUGIN.YML FILTERING VERSION -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
@@ -67,55 +71,50 @@
         </resources>
     </build>
 
-    <!-- MAVEN REPOS -->
+    <!-- Repositories -->
     <repositories>
-        <!-- Spigot Repo -->
+        <!-- Paper -->
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <!-- JitPack (for Vault) Repo -->
+
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- ProtocolLib Repo -->
+
         <repository>
             <id>dmulloy2-repo</id>
             <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
-        <!-- DiscordSRV for Jobs -->
+
         <repository>
             <id>dv8tion</id>
-            <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
+
         <repository>
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>bs-repo-releases</id>
-            <url>https://repo.bsdevelopment.org/releases</url>
-        </repository>
-        <repository>
-            <id>codemc-nms</id>
-            <url>https://repo.codemc.io/repository/nms/</url>
-        </repository>
+
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
-    <!-- MAVEN DEPENDENCIES -->
+
+    <!-- Dependencies -->
     <dependencies>
-        <!-- Spigot -->
+        <!-- Paper API -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.20.2-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Vault -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -123,43 +122,50 @@
             <version>1.7</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Hikari -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
-            <scope>compile</scope>
+            <version>5.1.0</version>
         </dependency>
+
+        <!-- SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.0-alpha7</version>
-            <scope>compile</scope>
+            <version>2.0.12</version>
         </dependency>
+
         <!-- ProtocolLib -->
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.8.0</version>
+            <version>5.3.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- DiscordSRV for Jobs -->
+
+        <!-- DiscordSRV -->
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.27.0</version>
+            <version>1.28.0</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
+            <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.6</version>
+            <version>2.11.7</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

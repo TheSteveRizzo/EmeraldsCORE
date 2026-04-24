@@ -118,7 +118,7 @@ public class FireworksCommand implements CommandExecutor {
     }
 
     private void spawnFirework(Location location) {
-        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK_ROCKET);
         FireworkMeta meta = firework.getFireworkMeta();
         meta.setPower(1); // Set the power of the firework
         meta.addEffect(FireworkEffect.builder()

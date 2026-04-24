@@ -148,7 +148,6 @@ public class Main extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new SpecialGift(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RankShopCommand(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new TokenShopCommand(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new BountyKillPlayer(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new NoLongerAFK(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new WardenDeathEvent(), this);
         

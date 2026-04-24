@@ -96,14 +96,14 @@ public class BoostCommand implements CommandExecutor {
             double z = player.getLocation().getZ() + radius * Math.sin(angle);
 
             Location particleLoc = new Location(player.getWorld(), x, y, z);
-            player.spawnParticle(Particle.FIREWORKS_SPARK, particleLoc, 1);
+            player.spawnParticle(Particle.FIREWORK, particleLoc, 1);
         }
 
         // Schedule a task to stop particles after 5 seconds (100 ticks per second)
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
             // Stop particle effects
             for (int i = 0; i < 100; i++) {
-                player.spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 0);
+                player.spawnParticle(Particle.EXPLOSION, player.getLocation(), 0);
             }
         }, 5 * 20); // 5 seconds (20 ticks per second)
     }

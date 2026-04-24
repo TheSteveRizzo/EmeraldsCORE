@@ -25,7 +25,7 @@ public class SpecialTNT implements Listener {
 
     @EventHandler
     void onEntityExplode(EntityExplodeEvent e) {
-        if (e.getEntityType().equals(EntityType.PRIMED_TNT)) {
+        if (e.getEntityType().equals(EntityType.TNT)) {
 
             TNTPrimed tnt = (TNTPrimed) e.getEntity();
 

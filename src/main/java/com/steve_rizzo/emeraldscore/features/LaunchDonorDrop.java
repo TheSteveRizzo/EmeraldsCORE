@@ -235,25 +235,25 @@ public class LaunchDonorDrop implements CommandExecutor {
         itemsAt5Percent.add(new ItemStack(Material.EMERALD, 2));
         ItemStack diaSword = new ItemStack(Material.DIAMOND_SWORD, 1);
         ItemMeta diaSwordMeta = diaSword.getItemMeta();
-        diaSwordMeta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
+        diaSwordMeta.addEnchant(Enchantment.SHARPNESS, 3, true);
         diaSword.setItemMeta(diaSwordMeta);
         itemsAt5Percent.add(diaSword);
         ItemStack diaPick = new ItemStack(Material.DIAMOND_PICKAXE, 1);
         ItemMeta diaPickMeta = diaPick.getItemMeta();
-        diaPickMeta.addEnchant(Enchantment.DIG_SPEED, 3, true);
-        diaPickMeta.addEnchant(Enchantment.DURABILITY, 2, true);
+        diaPickMeta.addEnchant(Enchantment.EFFICIENCY, 3, true);
+        diaPickMeta.addEnchant(Enchantment.UNBREAKING, 2, true);
         diaPick.setItemMeta(diaPickMeta);
         itemsAt5Percent.add(diaPick);
 
         // 10% Items
         ItemStack diaHelm = new ItemStack(Material.DIAMOND_HELMET, 1);
         ItemMeta diaHelmMeta = diaHelm.getItemMeta();
-        diaHelmMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, true);
+        diaHelmMeta.addEnchant(Enchantment.PROTECTION, 2, true);
         diaHelm.setItemMeta(diaHelmMeta);
         itemsAt10Percent.add(diaHelm);
         ItemStack ironChest = new ItemStack(Material.IRON_CHESTPLATE, 1);
         ItemMeta ironChestMeta = ironChest.getItemMeta();
-        ironChestMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
+        ironChestMeta.addEnchant(Enchantment.PROTECTION, 3, true);
         ironChest.setItemMeta(ironChestMeta);
         itemsAt10Percent.add(ironChest);
 

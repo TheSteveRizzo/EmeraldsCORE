@@ -63,7 +63,7 @@ public class ServerJoinPlayer implements Listener {
 
         // Spawn 5 fireworks
         for (int i = 0; i < 5; i++) {
-            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK_ROCKET);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);
@@ -131,7 +131,7 @@ public class ServerJoinPlayer implements Listener {
             ranks.updateAndSaveData(e.getPlayer());
 
             // Spawn a single firework
-            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK);
+            Firework fw = (Firework) Bukkit.getServer().getWorld(worldName).spawnEntity(e.getPlayer().getLocation(), EntityType.FIREWORK_ROCKET);
             FireworkMeta fwm = fw.getFireworkMeta();
             fw.setMetadata("spawnfirework", new FixedMetadataValue(Main.core, true));
             addFireworkEffects(fwm);
