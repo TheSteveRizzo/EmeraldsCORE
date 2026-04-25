@@ -2,6 +2,7 @@ package com.steve_rizzo.emeraldscore;
 
 import com.steve_rizzo.emeraldscore.bedwars.ApplyBedWarsTokens;
 import com.steve_rizzo.emeraldscore.casino.CollectCommand;
+import com.steve_rizzo.emeraldscore.casino.WebLinkCommand;
 import com.steve_rizzo.emeraldscore.casino.blackjack.BlackjackCommand;
 import com.steve_rizzo.emeraldscore.casino.roulette.RouletteCommand;
 import com.steve_rizzo.emeraldscore.casino.roulette.RouletteGame;
@@ -230,6 +231,7 @@ public class Main extends JavaPlugin {
         this.getCommand("stand").setExecutor(blackjackCommand);
         this.getCommand("collect").setExecutor(new CollectCommand());
         this.getCommand("roulette").setExecutor(new RouletteCommand());
+        this.getCommand("weblink").setExecutor(new WebLinkCommand());
 
         // Database Connection
         hikari = new HikariDataSource();
@@ -244,6 +246,7 @@ public class Main extends JavaPlugin {
         createTable();
         createEconomyTable();
         createTokensTable();
+        WebLinkCommand.createTable();
         setPVPRegions();
 
         // Load Villager Features

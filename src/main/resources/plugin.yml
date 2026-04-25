@@ -143,3 +143,6 @@ commands:
     description: Stand in blackjack.
   collect:
     description: Collect your rank income.
+  weblink:
+    description: Link your Minecraft account to the eCasino website.
+    aliases: [ linkweb, casinolink ]
